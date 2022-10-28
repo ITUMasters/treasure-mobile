@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { ThemeContextProvider } from "./theme";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
-import { eyeOff, eyeOn, mail } from "./icons";
+import { eyeOff, eyeOn, facebook, google, mail } from "./icons";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -23,8 +23,8 @@ export default function App() {
   return (
     <ThemeContextProvider>
       <View style={styles.container}>
-        <Button size="medium" bending="low">
-          Faruk
+        <Button size="xlarge" bending="low" xml={facebook}>
+          Facebook
         </Button>
         <Input size="large" xml={mail} isPassword={false} title="Mail" />
       </View>
