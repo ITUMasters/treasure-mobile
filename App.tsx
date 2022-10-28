@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ThemeContextProvider } from "./theme";
 import { Button } from "./ui/Button";
+import { Input } from "./ui/Input";
+import { eyeOff, eyeOn, mail } from "./icons";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -24,6 +26,7 @@ export default function App() {
         <Button size="medium" bending="low">
           Faruk
         </Button>
+        <Input size="large" xml={mail} isPassword={false} title="Mail" />
       </View>
     </ThemeContextProvider>
   );
