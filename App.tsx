@@ -2,10 +2,12 @@ import * as SplashScreen from "expo-splash-screen";
 import { useAppFonts } from "./hooks";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { ThemeContextProvider } from "./theme";
+import { ThemeContextProvider, useTheme } from "./theme";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { eyeOff, eyeOn, facebook, google, mail } from "./icons";
+import { Theme } from "./theme/types";
+import { colors } from "./theme/colors";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -19,24 +21,26 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-
+  const { theme } = useTheme();
   return (
     <ThemeContextProvider>
-      <View style={styles.container}>
-        <Button size="xlarge" bending="low" xml={facebook}>
+      <View style={styles(theme).container}>
+        <Button size="xlarge" bending="low" xml={google}>
           Facebook
         </Button>
-        <Input size="large" xml={mail} isPassword={false} title="Mail" />
+        <Input size="large" xml={mail} isPassword={true} title="Mail" />
       </View>
     </ThemeContextProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+const styles = (theme: Theme) => {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.appBackground.backgroundColor,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+};
