@@ -17,7 +17,6 @@ export const Icon = ({
   ...props
 }: IconProps) => {
   const { theme } = useTheme();
-
   return (
     <SvgXml
       color={colorProp ?? theme.text.default.color}

@@ -83,7 +83,7 @@ const styles = (
       overflow: "hidden",
     },
     text: {
-      color: textColor,
+      color: isXmlExists ? colors.black : textColor,
       fontSize: isXmlExists ? 16 : fontSize,
       fontFamily: isXmlExists ? FONTS.PoppinsBold : FONTS.PoppinsRegular,
       paddingLeft: isXmlExists ? 4 : 0,

@@ -1,5 +1,5 @@
-import { Theme } from '../theme/types';
-import { colors } from './colors';
+import { Theme } from "../theme/types";
+import { colors } from "./colors";
 
 export const dark: Theme = {
   text: {
@@ -15,7 +15,7 @@ export const dark: Theme = {
   },
   input: {
     textColor: colors.white,
-    backgroundColor: colors.darkGrey,
+    backgroundColor: colors.mediumRoyalBlue,
     placeholderColor: colors.lightGrey,
   },
   appBackground: {

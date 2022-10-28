@@ -46,7 +46,7 @@ export function Input({
         value={value}
         editable={!disabled}
         onChangeText={onChangeText}
-        maxLength={20}
+        maxLength={30}
         secureTextEntry={isPassword}
         {...props}
         placeholderTextColor={theme.input.placeholderColor}
@@ -103,7 +103,7 @@ const styles = (
       position: "absolute",
       left: 14,
       fontSize: 13,
-      color: colors.darkGrey,
+      color: textColor,
       marginTop: size === "medium" ? 5.5 : 20,
     },
   });
