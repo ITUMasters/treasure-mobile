@@ -1,12 +1,15 @@
 import { FONTS } from "../consts";
 import React, { ComponentPropsWithoutRef, ReactNode } from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "../theme/ThemeContext";
 import { Theme } from "../theme/types";
 import {
   getButtonColorsByThemeAndColorProp,
   getButtonSizesBySizeProp,
 } from "../utils/buttonStyles";
+import { Icon } from "./Icon";
+import { google } from "../icons";
+import { colors } from "../theme/colors";
 
 export type ButtonSize = "small" | "medium" | "large" | "xlarge" | "xxlarge";
 export type ButtonBending = "low" | "high";
@@ -20,6 +23,7 @@ interface ButtonProps
   size: ButtonSize;
   color?: ButtonColor;
   bending?: ButtonBending;
+  xml?: string;
 }
 
 export function Button({
@@ -30,10 +34,11 @@ export function Button({
   size,
   color = "default",
   bending = "low",
+  xml,
   ...props
 }: ButtonProps) {
   const { theme } = useTheme();
-  const themedStyles = styles(theme, color, size, bending, disabled);
+  const themedStyles = styles(theme, color, size, bending, disabled, xml);
 
   return (
     <TouchableOpacity
@@ -43,7 +48,10 @@ export function Button({
       onPress={onPress}
       {...props}
     >
-      <Text style={themedStyles.text}>{children}</Text>
+      <View style={themedStyles.logoView}>
+        {xml !== undefined && <Icon xml={xml} />}
+        <Text style={themedStyles.text}>{children}</Text>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -55,29 +63,43 @@ const styles = (
   colorProp: ButtonColor,
   size: ButtonSize,
   bending: ButtonBending,
-  disabled?: boolean
+  disabled?: boolean,
+  xml?: string
 ) => {
   const { textColor, backgroundColor } = getButtonColorsByThemeAndColorProp(
     theme,
     colorProp
   );
   const { height, radius, fontSize } = getButtonSizesBySizeProp(size, bending);
+  const isXmlExists: boolean = xml !== undefined;
 
   return StyleSheet.create({
     wrapper: {
-      backgroundColor: backgroundColor,
+      backgroundColor: isXmlExists ? colors.white : backgroundColor,
       height: height,
       width: "100%",
       borderRadius: radius,
-      alignItems: "center",
-      justifyContent: "center",
       opacity: disabled ? 0.5 : 1,
       overflow: "hidden",
     },
     text: {
       color: textColor,
-      fontSize,
-      fontFamily: FONTS.PoppinsRegular,
+      fontSize: isXmlExists ? 16 : fontSize,
+      fontFamily: isXmlExists ? FONTS.PoppinsBold : FONTS.PoppinsRegular,
+      paddingLeft: isXmlExists ? 4 : 0,
+      paddingTop: isXmlExists ? 4.5 : 0,
+    },
+    logoView: {
+      flexDirection: "row",
+      width: "100%",
+      height: "100%",
+      borderWidth: 0.6,
+      borderRadius: 8,
+      justifyContent: "center",
+      alignItems: "center",
+      borderColor: isXmlExists
+        ? colors.lightGrey
+        : theme.appBackground.backgroundColor,
     },
   });
 };
