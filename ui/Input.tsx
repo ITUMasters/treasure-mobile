@@ -22,6 +22,7 @@ interface InputProps extends ComponentPropsWithoutRef<typeof TextInput> {
   fontSize?: number;
   isPassword?: boolean;
   title?: string;
+  onTouched?: () => void;
 }
 
 export function Input({
@@ -34,6 +35,7 @@ export function Input({
   fontSize,
   isPassword = false,
   title,
+  onTouched,
   ...props
 }: InputProps) {
   const { theme } = useTheme();
@@ -54,7 +56,7 @@ export function Input({
       />
       {xml != null && (
         <View style={themedStyles.iconStyle}>
-          <Icon xml={xml} />
+          <Icon xml={xml} onPress={onTouched} />
         </View>
       )}
       <Text style={themedStyles.titleStyle}>{title}</Text>

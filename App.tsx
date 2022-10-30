@@ -8,9 +8,12 @@ import { Input } from "./ui/Input";
 import { eyeOff, eyeOn, facebook, google, mail } from "./icons";
 import { Theme } from "./theme/types";
 import { colors } from "./theme/colors";
+import { Checkbox } from "./ui/Checkbox";
+import { LoginPage } from "./pages/LoginPage";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -21,7 +24,13 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  const { theme } = useTheme();
+  return (
+    <ThemeContextProvider>
+      <View style={styles(theme).container}>
+        <LoginPage />
+      </View>
+    </ThemeContextProvider>
+  );
   return (
     <ThemeContextProvider>
       <View style={styles(theme).container}>

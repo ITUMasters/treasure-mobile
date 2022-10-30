@@ -16,28 +16,28 @@ export const getButtonSizesBySizeProp = (
       return {
         height: 35,
         radius,
-        fontSize: 16,
+        fontSize: 14,
       };
     }
     case "medium": {
       return {
         height: 40,
         radius,
-        fontSize: 19,
+        fontSize: 15,
       };
     }
     case "large": {
       return {
         height: 45,
         radius,
-        fontSize: 22,
+        fontSize: 16,
       };
     }
     case "xlarge": {
       return {
         height: 50,
         radius,
-        fontSize: 24,
+        fontSize: 17,
       };
     }
 
@@ -45,7 +45,7 @@ export const getButtonSizesBySizeProp = (
       return {
         height: 55,
         radius,
-        fontSize: 26,
+        fontSize: 18,
       };
     }
   }
