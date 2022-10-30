@@ -85,7 +85,7 @@ const styles = (
     text: {
       color: isXmlExists ? colors.black : textColor,
       fontSize: isXmlExists ? 16 : fontSize,
-      fontFamily: isXmlExists ? FONTS.PoppinsBold : FONTS.PoppinsRegular,
+      fontFamily: isXmlExists ? FONTS.PoppinsBold : FONTS.PoppinsSemiBold,
       paddingLeft: isXmlExists ? 4 : 0,
       paddingTop: isXmlExists ? 4.5 : 0,
     },

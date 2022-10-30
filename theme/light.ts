@@ -1,5 +1,5 @@
-import { Theme } from '../theme/types';
-import { colors } from './colors';
+import { Theme } from "../theme/types";
+import { colors } from "./colors";
 
 export const light: Theme = {
   text: {
@@ -9,7 +9,7 @@ export const light: Theme = {
   },
   button: {
     default: {
-      textColor: colors.black,
+      textColor: colors.white,
       backgroundColor: colors.lightRoyalBlue,
     },
   },

@@ -7,6 +7,7 @@ type IconProps = {
   height?: string;
   xml: string;
   color?: string;
+  onPress?: () => void;
 };
 
 export const Icon = ({
@@ -14,6 +15,7 @@ export const Icon = ({
   height = "24",
   xml,
   color: colorProp,
+  onPress,
   ...props
 }: IconProps) => {
   const { theme } = useTheme();
@@ -23,6 +25,7 @@ export const Icon = ({
       width={width}
       height={height}
       xml={xml}
+      onPress={onPress}
       {...props}
     />
   );
