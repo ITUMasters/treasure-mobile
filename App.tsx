@@ -11,9 +11,11 @@ import { colors } from "./theme/colors";
 import { Checkbox } from "./ui/Checkbox";
 import { LoginPage } from "./pages/LoginPage";
 
+
 export default function App() {
   const [fontsLoaded] = useAppFonts();
   const { theme } = useTheme();
+  const [checkState, setCheckState] = useState(false);
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -24,6 +26,7 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+  
   return (
     <ThemeContextProvider>
       <View style={styles(theme).container}>
@@ -31,6 +34,7 @@ export default function App() {
       </View>
     </ThemeContextProvider>
   );
+
   return (
     <ThemeContextProvider>
       <View style={styles(theme).container}>
@@ -38,6 +42,12 @@ export default function App() {
           Facebook
         </Button>
         <Input size="large" xml={mail} isPassword={true} title="Mail" />
+        <Checkbox
+          checked={checkState}
+          onPress={() => {
+            setCheckState(!checkState);
+          }}
+        />
       </View>
     </ThemeContextProvider>
   );
