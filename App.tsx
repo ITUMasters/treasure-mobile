@@ -10,7 +10,7 @@ import { Theme } from "./theme/types";
 import { colors } from "./theme/colors";
 import { Checkbox } from "./ui/Checkbox";
 import { LoginPage } from "./pages/LoginPage";
-
+import { RegisterPage } from "./pages/RegisterPage";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -26,11 +26,11 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  
+
   return (
     <ThemeContextProvider>
       <View style={styles(theme).container}>
-        <LoginPage />
+        <RegisterPage />
       </View>
     </ThemeContextProvider>
   );
