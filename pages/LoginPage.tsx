@@ -44,7 +44,7 @@ export function LoginPage() {
           >
             <Input size="large" title="Username or Mail" xml={mail} />
           </View>
-          <View style={{ marginTop: "1.36%", width: "100%" }}>
+          <View style={{ marginTop: "3%", width: "100%" }}>
             <Input
               size="large"
               title="Password"
@@ -59,7 +59,7 @@ export function LoginPage() {
         <View
           style={{
             flexDirection: "row",
-            marginTop: "1.36%",
+            marginTop: "3%",
             alignItems: "center",
             alignContent: "flex-start",
             marginLeft: "20%",
@@ -79,7 +79,7 @@ export function LoginPage() {
           style={{
             paddingLeft: "20%",
             paddingRight: "20%",
-            marginTop: "0.72%",
+            marginTop: "2%",
             marginBottom: "1.8%",
           }}
         >
@@ -87,6 +87,7 @@ export function LoginPage() {
         </View>
         <View
           style={{
+            width: "100%",
             alignItems: "center",
             paddingLeft: "20%",
             paddingRight: "20%",
@@ -97,18 +98,24 @@ export function LoginPage() {
               Or sign in with
             </Text>
           </View>
-          <View style={{ marginTop: "1.2%", width: "100%" }}>
+          <View style={{ marginTop: "1.5%", width: "100%" }}>
             <Button size="large" xml={google}>
               Google
             </Button>
           </View>
-          <View style={{ marginTop: "1%", width: "100%" }}>
+          <View style={{ marginTop: "2%", width: "100%" }}>
             <Button size="large" xml={facebook}>
               Facebook
             </Button>
           </View>
+        </View>
+        <View style={{ width: "100%", alignItems: "center" }}>
           <View
-            style={{ width: "100%", flexDirection: "row", marginTop: "5%" }}
+            style={{
+              flexDirection: "row",
+              marginTop: "6%",
+              alignSelf: "center",
+            }}
           >
             <Text style={{ color: defaulTextColor }}>
               Don't have an account?{" "}
@@ -148,7 +155,7 @@ const styles = (theme: Theme) => {
       color: theme.text.default.color,
       fontSize: 24,
       fontFamily: FONTS.PoppinsSemiBold,
-      marginTop: "7.5%",
+      marginTop: "6%",
       alignSelf: "center",
     },
     scrollViewStyle: {
