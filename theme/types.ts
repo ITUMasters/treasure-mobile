@@ -43,9 +43,10 @@ export type Theme = {
   };
 };
 
-export type ThemeOption = "dark" | "light";
+export type ThemeOption = 'dark' | 'light';
 export type ThemeContextProps = {
   currentTheme: ThemeOption;
   toggle: () => void;
   theme: Theme;
 };
+
