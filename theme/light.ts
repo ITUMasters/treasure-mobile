@@ -1,5 +1,5 @@
-import { Theme } from "../theme/types";
-import { colors } from "./colors";
+import { Theme } from '../theme/types';
+import { colors } from './colors';
 
 export const light: Theme = {
   text: {
@@ -22,13 +22,14 @@ export const light: Theme = {
     backgroundColor: colors.white,
   },
   navButton: {
-    textColor: colors.black,
-    borderColor: colors.black,
-    backgroundColor: colors.white,
-    pressedBackgroundColor: colors.lightGrey,
+    textColor: colors.white,
+    borderColor: colors.lightRoyalBlue,
+    backgroundColor: colors.lightRoyalBlue,
+    pressedBackgroundColor: '#f0c419',
     pressedIconColor: colors.lightRoyalBlue,
   },
   icon: {
-    color: colors.black,
+    color: colors.white,
   },
 };
+

@@ -1,6 +1,6 @@
-import { SvgXml } from "react-native-svg";
-import { useTheme } from "../theme";
-import { ColorType } from "../theme/types";
+import { SvgXml } from 'react-native-svg';
+import { useTheme } from '../theme';
+import { ColorType } from '../theme/types';
 
 type IconProps = {
   width?: string;
@@ -11,8 +11,8 @@ type IconProps = {
 };
 
 export const Icon = ({
-  width = "24",
-  height = "24",
+  width = '24',
+  height = '24',
   xml,
   color: colorProp,
   onPress,
@@ -21,7 +21,7 @@ export const Icon = ({
   const { theme } = useTheme();
   return (
     <SvgXml
-      color={colorProp ?? theme.text.default.color}
+      color={colorProp ?? theme.icon.color}
       width={width}
       height={height}
       xml={xml}
@@ -30,3 +30,4 @@ export const Icon = ({
     />
   );
 };
+

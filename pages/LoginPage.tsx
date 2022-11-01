@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import { FONTS } from "../consts";
+import { useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FONTS } from '../consts';
 import {
   eyeOff,
   eyeOn,
@@ -9,20 +9,21 @@ import {
   logo,
   mail,
   treasure,
-} from "../icons";
-import { useTheme } from "../theme";
-import { colors } from "../theme/colors";
-import { Theme } from "../theme/types";
-import { Button } from "../ui/Button";
-import { Checkbox } from "../ui/Checkbox";
-import { Icon } from "../ui/Icon";
-import { Input } from "../ui/Input";
-import { Logo } from "../ui/Logo";
+} from '../icons';
+import { useTheme } from '../theme';
+import { colors } from '../theme/colors';
+import { Theme } from '../theme/types';
+import { Button } from '../ui/Button';
+import { Checkbox } from '../ui/Checkbox';
+import { Icon } from '../ui/Icon';
+import { Input } from '../ui/Input';
+import { Logo } from '../ui/Logo';
+import { NavBar } from '../ui/NavBar';
 
 export function LoginPage() {
   const [checkboxVal, setCheckboxVal] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(false);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const defaulTextColor = theme.text.default.color;
@@ -34,17 +35,17 @@ export function LoginPage() {
         </View>
         <Text style={themedStyles.signInStyle}>Sign in</Text>
         <View
-          style={{ width: "100%", paddingLeft: "20%", paddingRight: "20%" }}
+          style={{ width: '100%', paddingLeft: '20%', paddingRight: '20%' }}
         >
           <View
             style={{
-              marginTop: "2.6%",
-              width: "100%",
+              marginTop: '2.6%',
+              width: '100%',
             }}
           >
             <Input size="large" title="Username or Mail" xml={mail} />
           </View>
-          <View style={{ marginTop: "3%", width: "100%" }}>
+          <View style={{ marginTop: '3%', width: '100%' }}>
             <Input
               size="large"
               title="Password"
@@ -58,11 +59,11 @@ export function LoginPage() {
         </View>
         <View
           style={{
-            flexDirection: "row",
-            marginTop: "3%",
-            alignItems: "center",
-            alignContent: "flex-start",
-            marginLeft: "20%",
+            flexDirection: 'row',
+            marginTop: '3%',
+            alignItems: 'center',
+            alignContent: 'flex-start',
+            marginLeft: '20%',
           }}
         >
           <Checkbox
@@ -71,54 +72,54 @@ export function LoginPage() {
               setCheckboxVal(!checkboxVal);
             }}
           />
-          <Text style={{ marginLeft: "1.2%", color: defaulTextColor }}>
+          <Text style={{ marginLeft: '1.2%', color: defaulTextColor }}>
             Remember me
           </Text>
         </View>
         <View
           style={{
-            paddingLeft: "20%",
-            paddingRight: "20%",
-            marginTop: "2%",
-            marginBottom: "1.8%",
+            paddingLeft: '20%',
+            paddingRight: '20%',
+            marginTop: '2%',
+            marginBottom: '1.8%',
           }}
         >
           <Button size="xlarge">Sign in</Button>
         </View>
         <View
           style={{
-            width: "100%",
-            alignItems: "center",
-            paddingLeft: "20%",
-            paddingRight: "20%",
+            width: '100%',
+            alignItems: 'center',
+            paddingLeft: '20%',
+            paddingRight: '20%',
           }}
         >
-          <View style={{ marginBottom: "1.2%" }}>
+          <View style={{ marginBottom: '1.2%' }}>
             <Text style={{ fontSize: 14, color: defaulTextColor }}>
               Or sign in with
             </Text>
           </View>
-          <View style={{ marginTop: "1.5%", width: "100%" }}>
+          <View style={{ marginTop: '1.5%', width: '100%' }}>
             <Button size="large" xml={google}>
               Google
             </Button>
           </View>
-          <View style={{ marginTop: "2%", width: "100%" }}>
+          <View style={{ marginTop: '2%', width: '100%' }}>
             <Button size="large" xml={facebook}>
               Facebook
             </Button>
           </View>
         </View>
-        <View style={{ width: "100%", alignItems: "center" }}>
+        <View style={{ width: '100%', alignItems: 'center' }}>
           <View
             style={{
-              flexDirection: "row",
-              marginTop: "6%",
-              alignSelf: "center",
+              flexDirection: 'row',
+              marginTop: '6%',
+              alignSelf: 'center',
             }}
           >
             <Text style={{ color: defaulTextColor }}>
-              Don't have an account?{" "}
+              Don't have an account?{' '}
             </Text>
             <Text
               style={{
@@ -144,23 +145,24 @@ const styles = (theme: Theme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      width: "100%",
+      width: '100%',
       backgroundColor: theme.appBackground.backgroundColor,
     },
     logoStyle: {
-      marginTop: "5.83%",
-      alignItems: "center",
+      marginTop: '5.83%',
+      alignItems: 'center',
     },
     signInStyle: {
       color: theme.text.default.color,
       fontSize: 24,
       fontFamily: FONTS.PoppinsSemiBold,
-      marginTop: "6%",
-      alignSelf: "center",
+      marginTop: '6%',
+      alignSelf: 'center',
     },
     scrollViewStyle: {
-      width: "100%",
+      width: '100%',
       flex: 1,
     },
   });
 };
+
