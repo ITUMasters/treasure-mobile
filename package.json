@@ -30,6 +30,6 @@
   },
   "private": true,
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**' '!**/*.{js,jsx,vue}": "prettier --write --ignore-unknown"
   }
 }

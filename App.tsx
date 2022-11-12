@@ -12,6 +12,7 @@ import { Checkbox } from './ui/Checkbox';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { NavBar } from './ui/NavBar';
+import { OTP_VerificationPage } from './pages/OTP_VerificationPage';
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -31,7 +32,7 @@ export default function App() {
   return (
     <ThemeContextProvider>
       <View style={styles(theme).container}>
-        <LoginPage />
+        <OTP_VerificationPage />
       </View>
       <View>
         <NavBar />
