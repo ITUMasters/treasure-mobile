@@ -29,7 +29,7 @@ export const light: Theme = {
     pressedIconColor: colors.lightRoyalBlue,
   },
   icon: {
-    color: colors.white,
+    color: colors.black,
   },
 };
 

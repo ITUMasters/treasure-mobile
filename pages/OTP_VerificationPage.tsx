@@ -31,6 +31,7 @@ export function OTP_VerificationPage() {
               onChangeText={setPassword}
               isPassword={!passwordVisibility}
               onTouched={() => setPasswordVisibility(!passwordVisibility)}
+              keyboardType="number-pad"
             />
           </View>
           <View style={themedStyles.remainingTimeOutWrapper}>
@@ -92,6 +93,8 @@ const styles = (theme: Theme) => {
       height: '100%',
     },
     remainingTimeText: {
+      color: theme.text.default.color,
+
       textAlign: 'right',
       fontSize: 13,
     },
