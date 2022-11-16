@@ -1,19 +1,20 @@
-import * as SplashScreen from 'expo-splash-screen';
-import { useAppFonts } from './hooks';
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { ThemeContextProvider, useTheme } from './theme';
-import { Button } from './ui/Button';
-import { Input } from './ui/Input';
-import { eyeOff, eyeOn, facebook, google, mail } from './icons';
-import { Theme } from './theme/types';
-import { colors } from './theme/colors';
-import { Checkbox } from './ui/Checkbox';
-import { LoginPage } from './pages/LoginPage';
-import { RegisterPage } from './pages/RegisterPage';
-import { NavBar } from './ui/NavBar';
-import { InGamePlage } from './pages/InGamePage';
-import { OTP_VerificationPage } from './pages/OTP_VerificationPage';
+import * as SplashScreen from "expo-splash-screen";
+import { useAppFonts } from "./hooks";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { ThemeContextProvider, useTheme } from "./theme";
+import { Button } from "./ui/Button";
+import { Input } from "./ui/Input";
+import { eyeOff, eyeOn, facebook, google, mail } from "./icons";
+import { Theme } from "./theme/types";
+import { colors } from "./theme/colors";
+import { Checkbox } from "./ui/Checkbox";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
+import { NavBar } from "./ui/NavBar";
+import { InGamePlage } from "./pages/InGamePage";
+import { OTP_VerificationPage } from "./pages/OTP_VerificationPage";
+import { ProfilePage } from "./pages/ProfilePage";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -33,7 +34,7 @@ export default function App() {
   return (
     <ThemeContextProvider>
       <View style={styles(theme).container}>
-        <OTP_VerificationPage />
+        <ProfilePage />
       </View>
       <View>
         <NavBar />
@@ -64,9 +65,8 @@ const styles = (theme: Theme) => {
     container: {
       flex: 1,
       backgroundColor: theme.appBackground.backgroundColor,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
     },
   });
 };
-

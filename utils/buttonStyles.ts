@@ -10,7 +10,7 @@ export const getButtonSizesBySizeProp = (
   size: ButtonSize,
   bending: ButtonBending
 ): ButtonSizesReturnType => {
-  const radius = bending === "low" ? 8 : 20;
+  const radius = bending === "low" ? 8 : 24;
   switch (size) {
     case "small": {
       return {

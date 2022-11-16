@@ -9,6 +9,7 @@ export type ColorType = {
   lightGrey: string;
   darkGrey: string;
   mediumRoyalBlue: string;
+  blue: string;
 };
 
 export type Theme = {
