@@ -1,5 +1,5 @@
-import { Theme } from '../theme/types';
-import { colors } from './colors';
+import { Theme } from "../theme/types";
+import { colors } from "./colors";
 
 export const dark: Theme = {
   text: {
@@ -25,11 +25,10 @@ export const dark: Theme = {
     textColor: colors.white,
     borderColor: colors.lightRoyalBlue,
     backgroundColor: colors.lightRoyalBlue,
-    pressedBackgroundColor: '#f0c419',
+    pressedBackgroundColor: "#f0c419",
     pressedIconColor: colors.lightRoyalBlue,
   },
   icon: {
     color: colors.white,
   },
 };
-

@@ -11,4 +11,5 @@ export const colors: ColorType = {
   lightGrey: "#E0E0E0",
   darkGrey: "#828282",
   mediumRoyalBlue: "#05225A",
+  blue: "#0095E0",
 };
