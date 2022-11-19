@@ -1,25 +1,26 @@
+import "react-native-gesture-handler";
 import * as SplashScreen from "expo-splash-screen";
 import { useAppFonts } from "./hooks";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ThemeContextProvider, useTheme } from "./theme";
-import { Button } from "./ui/Button";
-import { Input } from "./ui/Input";
-import { eyeOff, eyeOn, facebook, google, mail } from "./icons";
 import { Theme } from "./theme/types";
-import { colors } from "./theme/colors";
-import { Checkbox } from "./ui/Checkbox";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { NavBar } from "./ui/NavBar";
-import { InGamePlage } from "./pages/InGamePage";
+import { InGamePage } from "./pages/InGamePage";
 import { OTP_VerificationPage } from "./pages/OTP_VerificationPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import {
+  createDrawerNavigator,
+  DrawerNavigationOptions,
+} from "@react-navigation/drawer";
+import { NavigationContainer } from "@react-navigation/native";
+import { getHeaderStylesByTheme } from "./utils/HeaderStyles";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
   const { theme } = useTheme();
-  const [checkState, setCheckState] = useState(false);
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -32,31 +33,44 @@ export default function App() {
   }
 
   return (
-    <ThemeContextProvider>
-      <View style={styles(theme).container}>
-        <ProfilePage />
-      </View>
-      <View>
-        <NavBar />
-      </View>
-    </ThemeContextProvider>
+    <NavigationContainer>
+      <ThemeContextProvider>
+        <AppEntrance />
+      </ThemeContextProvider>
+    </NavigationContainer>
   );
+}
+
+function AppEntrance() {
+  const { theme } = useTheme();
+  const navbarHeaderOptions = getHeaderStylesByTheme(theme);
+  const Drawer = createDrawerNavigator();
 
   return (
-    <ThemeContextProvider>
-      <View style={styles(theme).container}>
-        <Button size="xlarge" bending="low" xml={google}>
-          Facebook
-        </Button>
-        <Input size="large" xml={mail} isPassword={true} title="Mail" />
-        <Checkbox
-          checked={checkState}
-          onPress={() => {
-            setCheckState(!checkState);
-          }}
+    <>
+      <Drawer.Navigator initialRouteName="Login">
+        <Drawer.Screen
+          name="Login"
+          component={LoginPage}
+          options={{ ...navbarHeaderOptions, title: "Login Page" }}
         />
-      </View>
-    </ThemeContextProvider>
+        <Drawer.Screen
+          name="Register"
+          component={RegisterPage}
+          options={{ ...navbarHeaderOptions, title: "Register Page" }}
+        />
+        <Drawer.Screen
+          name="Profile"
+          component={ProfilePage}
+          options={{ ...navbarHeaderOptions, title: "Profile Page" }}
+        />
+        <Drawer.Screen
+          name="InGame"
+          component={InGamePage}
+          options={{ ...navbarHeaderOptions, title: "In Game Page" }}
+        />
+      </Drawer.Navigator>
+    </>
   );
 }
 

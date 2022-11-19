@@ -18,6 +18,8 @@ module.exports = function (api) {
           },
         },
       ],
+      'react-native-reanimated/plugin',
+      '@babel/plugin-proposal-export-namespace-from',
     ]
   };
 };

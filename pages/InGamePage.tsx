@@ -14,7 +14,7 @@ import { Button } from "../ui/Button";
 import { NavBar } from "../ui/NavBar";
 import { TopBar } from "../ui/TopBar";
 
-export function InGamePlage() {
+export function InGamePage() {
   const { theme } = useTheme();
   const themedStyles = styles(theme, "Medium", "Accepted");
   return (

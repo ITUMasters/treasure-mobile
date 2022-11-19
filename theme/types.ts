@@ -42,6 +42,10 @@ export type Theme = {
   icon: {
     color: string;
   };
+  drawerNavbarTopHeader: {
+    backgroundColor: string;
+    textColor: string;
+  };
 };
 
 export type ThemeOption = "dark" | "light";
