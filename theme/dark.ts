@@ -31,4 +31,8 @@ export const dark: Theme = {
   icon: {
     color: colors.white,
   },
+  drawerNavbarTopHeader: {
+    backgroundColor: colors.lightRoyalBlue,
+    textColor: colors.white,
+  },
 };
