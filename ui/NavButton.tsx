@@ -1,14 +1,14 @@
-import { FONTS } from '../consts';
-import { PATHS } from '../consts/paths';
-import React, { ComponentPropsWithoutRef } from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { useTheme } from '../theme/ThemeContext';
-import { Theme } from '../theme/types';
-import { getNavBarColorsByTheme } from '../utils/navBarStyles';
+import { FONTS } from "../consts";
+import { PATHS } from "../consts/paths";
+import React, { ComponentPropsWithoutRef } from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useTheme } from "../theme/ThemeContext";
+import { Theme } from "../theme/types";
+import { getNavBarColorsByTheme } from "../utils/navBarStyles";
 
-import { Icon } from './Icon';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { colors } from '../theme/colors';
+import { Icon } from "./Icon";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { colors } from "../theme/colors";
 
 interface NavButtonProps
   extends ComponentPropsWithoutRef<typeof TouchableOpacity> {
@@ -34,7 +34,7 @@ export function NavButton({
   const { theme } = useTheme();
   const themedStyles = styles(theme, buttonWidth, isCurrentPage);
   let currentColor;
-  if (text === 'HOME') {
+  if (text === "HOME") {
     if (isCurrentPage) {
       currentColor = theme.navButton.pressedBackgroundColor;
     } else {
@@ -45,8 +45,8 @@ export function NavButton({
   return (
     <TouchableOpacity
       activeOpacity={activeOpacity}
-      onPress={onPress}
       style={themedStyles.wrapper}
+      onPress={onPress}
       {...props}
     >
       <Icon color={currentColor} xml={xml} width="52" height="28" />
@@ -75,15 +75,15 @@ const styles = (theme: Theme, buttonWidth: string, isCurrentPage: boolean) => {
       borderWidth: 0.5,
       width: buttonWidth,
       padding: 4,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
     },
     textStyle: {
       fontSize: 10,
       marginBottom: 8,
       color: isCurrentPage ? pressedIconColor : textColor,
       fontFamily: FONTS.PoppinsBold,
-      position: 'relative',
+      position: "relative",
     },
     icon: {
       marginBottom: 4,
@@ -91,4 +91,3 @@ const styles = (theme: Theme, buttonWidth: string, isCurrentPage: boolean) => {
     },
   });
 };
-
