@@ -48,7 +48,7 @@ function AppEntrance() {
 
   return (
     <>
-      <Drawer.Navigator initialRouteName="Login">
+      <Drawer.Navigator>
         <Drawer.Screen
           name="Login"
           component={LoginPage}

@@ -1,23 +1,32 @@
-import { account, mail, treasure } from '../icons';
-import { StyleSheet } from 'react-native';
-import { View } from 'react-native';
+import { account, mail, treasure } from "../icons";
+import { StyleSheet } from "react-native";
+import { View } from "react-native";
 
-import { Logo } from './Logo';
-import { useState } from 'react';
-import { NavButton } from './NavButton';
-import { PATHS } from '../consts/paths';
-import { Icon } from './Icon';
+import { Logo } from "./Logo";
+import { useState } from "react";
+import { NavButton } from "./NavButton";
+import { PATHS } from "../consts/paths";
+import { Icon } from "./Icon";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { InGamePage } from "../pages/InGamePage";
+import { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 
-export const NavBar = () => {
+type navbarType = {
+  pageNo: string;
+};
+export const NavBar = ({ pageNo }: navbarType) => {
   const themedStyles = styles();
-  // const router = useRouter(route);
-  const [currentPage, setCurrentPage] = useState(2);
+  const navigator = useNavigation();
+
+  const [currentPage, setCurrentPage] = useState(parseInt(pageNo));
 
   return (
     <View style={themedStyles.wrapper}>
       <NavButton
         as={PATHS.ACCOUNT}
-        onPress={() => setCurrentPage(0)}
+        onPress={() => {
+          navigator.navigate("Profile" as never, {} as never);
+        }}
         isCurrentPage={currentPage === 0}
         text="ACCOUNT"
         xml={account}
@@ -25,7 +34,9 @@ export const NavBar = () => {
       />
       <NavButton
         as={PATHS.LEADERBOARD}
-        onPress={() => setCurrentPage(1)}
+        onPress={() => {
+          navigator.navigate("Login" as never, {} as never);
+        }}
         isCurrentPage={currentPage === 1}
         text="JOIN"
         xml={mail}
@@ -34,7 +45,9 @@ export const NavBar = () => {
 
       <NavButton
         as={PATHS.HOME}
-        onPress={() => setCurrentPage(2)}
+        onPress={() => {
+          navigator.navigate("Profile" as never, {} as never);
+        }}
         isCurrentPage={currentPage === 2}
         text="HOME"
         xml={mail}
@@ -47,7 +60,9 @@ export const NavBar = () => {
 
       <NavButton
         as={PATHS.PLAY}
-        onPress={() => setCurrentPage(3)}
+        onPress={() => {
+          navigator.navigate("InGame" as never, {} as never);
+        }}
         isCurrentPage={currentPage === 3}
         text="PLAY"
         xml={mail}
@@ -55,7 +70,9 @@ export const NavBar = () => {
       />
       <NavButton
         as={PATHS.SETTINGS}
-        onPress={() => setCurrentPage(4)}
+        onPress={() => {
+          navigator.navigate("Register" as never, {} as never);
+        }}
         isCurrentPage={currentPage === 4}
         text="SETTINGS"
         xml={mail}
@@ -69,15 +86,14 @@ export const NavBar = () => {
 const styles = () => {
   return StyleSheet.create({
     wrapper: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
+      flexDirection: "row",
+      justifyContent: "flex-end",
       height: 64,
     },
     treasure: {
-      position: 'absolute',
-      top: '-58%',
+      position: "absolute",
+      top: "-58%",
       zIndex: 10,
     },
   });
 };
-

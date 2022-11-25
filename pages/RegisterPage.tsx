@@ -1,3 +1,4 @@
+import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { FONTS } from "../consts";
@@ -18,6 +19,7 @@ import { Checkbox } from "../ui/Checkbox";
 import { Icon } from "../ui/Icon";
 import { Input } from "../ui/Input";
 import { Logo } from "../ui/Logo";
+import { NavBar } from "../ui/NavBar";
 
 export function RegisterPage() {
   const [passwordVisibility1, setPasswordVisibility1] = useState(false);
@@ -27,6 +29,7 @@ export function RegisterPage() {
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const defaulTextColor = theme.text.default.color;
+
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView
@@ -115,6 +118,7 @@ export function RegisterPage() {
           </Text>
         </View>
       </ScrollView>
+      <NavBar pageNo="4" />
     </SafeAreaView>
   );
 }
