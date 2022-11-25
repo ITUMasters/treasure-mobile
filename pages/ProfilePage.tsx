@@ -7,6 +7,8 @@ import { FONTS } from "../consts";
 import { Button } from "../ui/Button";
 import { colors } from "../theme/colors";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import { NavBar } from "../ui/NavBar";
+import { useRoute } from "@react-navigation/native";
 
 export function ProfilePage() {
   const { theme, toggle, currentTheme } = useTheme();
@@ -85,6 +87,7 @@ export function ProfilePage() {
           </View>
         </View>
       </ScrollView>
+      <NavBar pageNo="0" />
     </SafeAreaView>
   );
 }

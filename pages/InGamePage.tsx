@@ -1,3 +1,4 @@
+import { useRoute } from "@react-navigation/native";
 import {
   Image,
   SafeAreaView,
@@ -17,9 +18,9 @@ import { TopBar } from "../ui/TopBar";
 export function InGamePage() {
   const { theme } = useTheme();
   const themedStyles = styles(theme, "Medium", "Accepted");
+
   return (
     <SafeAreaView style={themedStyles.container}>
-      <TopBar />
       <ScrollView style={themedStyles.scrollViewStyle}>
         <Text style={themedStyles.questionNameStyle}>1. Bee Road</Text>
         <Text
@@ -71,6 +72,7 @@ export function InGamePage() {
           </View>
         </View>
       </ScrollView>
+      <NavBar pageNo="3" />
     </SafeAreaView>
   );
 }
