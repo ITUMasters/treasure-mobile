@@ -46,7 +46,7 @@ export const NavBar = ({ pageNo }: navbarType) => {
       <NavButton
         as={PATHS.HOME}
         onPress={() => {
-          navigator.navigate("Profile" as never, {} as never);
+          navigator.navigate("Home" as never, {} as never);
         }}
         isCurrentPage={currentPage === 2}
         text="HOME"

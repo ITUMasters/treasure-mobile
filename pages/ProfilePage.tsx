@@ -9,6 +9,9 @@ import { colors } from "../theme/colors";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { NavBar } from "../ui/NavBar";
 import { useRoute } from "@react-navigation/native";
+import { Icon } from "../ui/Icon";
+import { Achievement } from "../ui/Achievement";
+import { FriendCard } from "../ui/FriendCard";
 
 export function ProfilePage() {
   const { theme, toggle, currentTheme } = useTheme();
@@ -86,6 +89,35 @@ export function ProfilePage() {
             </Text>
           </View>
         </View>
+
+       
+          <View style={themedStyles.achievementsWrapper}>
+            <View style={themedStyles.achivementsHead}>
+              <Text style={themedStyles.achievementText}>Achivements</Text>
+              <Image
+                source={require("../assets/images/trophy.png")}
+                style={themedStyles.trophy}
+              ></Image>
+            </View>
+            <View style={themedStyles.achievementsBody}>
+              <Achievement challengeName="Biweekly-1" rank="3rd"></Achievement>
+              <Achievement challengeName="Biweekly-2" rank="1st"></Achievement>
+              <Achievement challengeName="Biweekly-3" rank="2nd"></Achievement>
+            </View>
+          </View>
+          <View style={themedStyles.friendsWrapper}>
+            <View style={themedStyles.achievementsWrapper}>
+              <View style={themedStyles.achivementsHead}>
+                <Text style={themedStyles.achievementText}>Friends</Text>
+              </View>
+              <View style={themedStyles.achievementsBody}>
+                <FriendCard name="Punisher"></FriendCard>
+                <FriendCard name="Warchere"></FriendCard>
+                <FriendCard name="MkaanTheKing"></FriendCard>
+              </View>
+            </View>
+          </View>
+        
       </ScrollView>
       <NavBar pageNo="0" />
     </SafeAreaView>
@@ -165,5 +197,36 @@ const styles = (theme: Theme) => {
     switchStyle: {
       marginLeft: 20,
     },
+    
+    achievementsWrapper:{
+      flex: 1,
+      marginTop: 30,
+    },
+    achivementsHead: {
+      justifyContent: 'center',
+      flexDirection: 'row',
+    },
+    achievementsTitle: {
+      flex: 1,
+    },
+    achievementText: {
+      color: theme.text.default.color,
+      fontWeight: 'bold',
+      fontSize: 24,
+      justifyContent: "center",
+    },
+    trophy: {
+      marginTop: 2.5,
+      marginLeft: 17.5,
+      width: 24,
+      height: 24,
+    },
+    achievementsBody: {
+      justifyContent: 'center',
+    },
+    friendsWrapper:{
+      marginTop: 20,
+      flex: 1,
+    } 
   });
 };
