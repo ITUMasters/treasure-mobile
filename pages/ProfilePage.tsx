@@ -6,16 +6,21 @@ import { Theme } from "../theme/types";
 import { FONTS } from "../consts";
 import { Button } from "../ui/Button";
 import { colors } from "../theme/colors";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import { NavBar } from "../ui/NavBar";
+
+import { useNavigation } from "@react-navigation/native";
+import { PATHS } from "../consts/paths";
+
 import { useRoute } from "@react-navigation/native";
 import { Icon } from "../ui/Icon";
 import { Achievement } from "../ui/Achievement";
 import { FriendCard } from "../ui/FriendCard";
 
+
 export function ProfilePage() {
   const { theme, toggle, currentTheme } = useTheme();
   const themedStyles = styles(theme);
+  const navigator = useNavigation();
 
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -59,7 +64,13 @@ export function ProfilePage() {
         >
           <View style={{ flex: 0.35, alignItems: "center" }}>
             <View style={{ width: 112 }}>
-              <Button size="xlarge" bending="high">
+              <Button
+                size="xlarge"
+                bending="high"
+                onPress={() => {
+                  navigator.navigate(PATHS.EDIT_PROFILE as never);
+                }}
+              >
                 Edit Profile
               </Button>
             </View>
