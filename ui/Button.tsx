@@ -8,7 +8,6 @@ import {
   getButtonSizesBySizeProp,
 } from "../utils/buttonStyles";
 import { Icon } from "./Icon";
-import { google } from "../icons";
 import { colors } from "../theme/colors";
 
 export type ButtonSize = "small" | "medium" | "large" | "xlarge" | "xxlarge";
@@ -24,6 +23,7 @@ interface ButtonProps
   color?: ButtonColor;
   bending?: ButtonBending;
   xml?: string;
+  iconAtTheRight?: string;
 }
 
 export function Button({
@@ -35,6 +35,7 @@ export function Button({
   color = "default",
   bending = "low",
   xml,
+  iconAtTheRight,
   ...props
 }: ButtonProps) {
   const { theme } = useTheme();
@@ -51,6 +52,11 @@ export function Button({
       <View style={themedStyles.logoView}>
         {xml !== undefined && <Icon xml={xml} />}
         <Text style={themedStyles.text}>{children}</Text>
+        {iconAtTheRight !== undefined && (
+          <View style={themedStyles.rightIcon}>
+            <Icon xml={iconAtTheRight} />
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -100,6 +106,12 @@ const styles = (
       borderColor: isXmlExists
         ? colors.lightGrey
         : theme.appBackground.backgroundColor,
+    },
+    rightIcon: {
+      marginLeft: 4,
+      alignSelf: "center",
+      justifyContent: "flex-end",
+      marginRight: 0,
     },
   });
 };

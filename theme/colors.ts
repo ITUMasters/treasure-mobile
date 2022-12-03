@@ -12,4 +12,5 @@ export const colors: ColorType = {
   darkGrey: "#828282",
   mediumRoyalBlue: "#05225A",
   blue: "#0095E0",
+  lightPurple: "#8571F1",
 };
