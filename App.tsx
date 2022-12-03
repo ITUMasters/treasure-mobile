@@ -17,9 +17,13 @@ import {
 } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { getHeaderStylesByTheme } from "./utils/HeaderStyles";
+
+import { EditProfilePage } from "./pages/EditProfilePage";
+
 import { HomePage } from "./pages/HomePage";
 import { color } from "react-native-reanimated";
 import { colors } from "./theme/colors";
+
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -76,6 +80,15 @@ function AppEntrance() {
           name="InGame"
           component={InGamePage}
           options={{ ...navbarHeaderOptions, title: "In Game Page" }}
+        />
+        <Drawer.Screen
+          name="EditProfile"
+          component={EditProfilePage}
+          options={{
+            ...navbarHeaderOptions,
+            title: "Edit Profile Page",
+            drawerItemStyle: { height: 0 },
+          }}
         />
       </Drawer.Navigator>
     </>
