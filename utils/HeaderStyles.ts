@@ -1,4 +1,5 @@
 import { DrawerNavigationOptions } from "@react-navigation/drawer";
+import { colors } from "../theme/colors";
 import { Theme } from "../theme/types";
 
 export const getHeaderStylesByTheme = (
