@@ -17,7 +17,13 @@ import {
 } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { getHeaderStylesByTheme } from "./utils/HeaderStyles";
+
 import { EditProfilePage } from "./pages/EditProfilePage";
+
+import { HomePage } from "./pages/HomePage";
+import { color } from "react-native-reanimated";
+import { colors } from "./theme/colors";
+
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -46,10 +52,10 @@ function AppEntrance() {
   const { theme } = useTheme();
   const navbarHeaderOptions = getHeaderStylesByTheme(theme);
   const Drawer = createDrawerNavigator();
-
+  const usedStyles = styles(theme);
   return (
     <>
-      <Drawer.Navigator>
+      <Drawer.Navigator screenOptions={{drawerType: 'front', headerTintColor: colors.white,drawerStyle: usedStyles.drawerStyle, drawerLabelStyle: {color: colors.white}}}>
         <Drawer.Screen
           name="Login"
           component={LoginPage}
@@ -59,6 +65,11 @@ function AppEntrance() {
           name="Register"
           component={RegisterPage}
           options={{ ...navbarHeaderOptions, title: "Register Page" }}
+        />
+        <Drawer.Screen
+          name="Home"
+          component={HomePage}
+          options={{ ...navbarHeaderOptions, title: "Home Page" }}
         />
         <Drawer.Screen
           name="Profile"
@@ -92,5 +103,8 @@ const styles = (theme: Theme) => {
       alignItems: "center",
       justifyContent: "center",
     },
+    drawerStyle: {
+      backgroundColor: colors.lightRoyalBlue,
+    }
   });
 };
