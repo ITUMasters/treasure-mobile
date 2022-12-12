@@ -127,3 +127,10 @@ export const addFriend = `<svg width="24" height="24" viewBox="0 0 24 24" fill="
 <path d="M21.1776 10.1339H17.0876" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 `;
+
+export const go = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M24 42.4995C34.216 42.4995 42.5 34.2175 42.5 23.9995C42.5 13.7835 34.216 5.49951 24 5.49951C13.784 5.49951 5.5 13.7835 5.5 23.9995C5.5 34.2175 13.784 42.4995 24 42.4995Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M21.1154 30.9419L28.0874 23.9999L21.1154 17.0579" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+`;
+
