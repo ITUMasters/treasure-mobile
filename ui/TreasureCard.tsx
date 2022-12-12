@@ -91,8 +91,8 @@ export function TreasureCard({ id, name , zone, creator , difficulty }: Treasure
         </Text>
       </View>
     </View>
-    <View style={themedStyles.button}>
-      <Button size="large">Go</Button>
+    <View style={themedStyles.buttonWrapper}>
+      <Button size="large">GO</Button>
     </View>
   </View>
         
@@ -104,13 +104,12 @@ const styles = (theme: Theme) => {
     return StyleSheet.create({
         wrapper: {
             padding: 10,
-            
             backgroundColor: colors.lightRoyalBlue,
             flexDirection: 'row',
             borderRadius: 10,
             marginTop: 10,
           },
-          button: {
+          buttonWrapper: {
             flex: 2,
             justifyContent: 'center',
           },
