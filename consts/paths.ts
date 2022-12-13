@@ -4,7 +4,7 @@ export enum PATHS {
   "ACCOUNT" = "ACCOUNT",
   "HOME" = "HOME",
   "LEADERBOARD" = "LEADERBOARD",
-  "SETTINGS" = "SETTINGS",
+  "SETTINGS" = "Settings",
   "PLAY" = "PLAY",
   "EDIT_PROFILE" = "EditProfile",
 }

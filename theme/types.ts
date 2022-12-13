@@ -23,6 +23,7 @@ export type Theme = {
     default: {
       textColor: string;
       backgroundColor: string;
+      disabledBackgroundColor: string;
     };
   };
   input: {

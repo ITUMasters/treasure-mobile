@@ -23,7 +23,7 @@ import { EditProfilePage } from "./pages/EditProfilePage";
 import { HomePage } from "./pages/HomePage";
 import { color } from "react-native-reanimated";
 import { colors } from "./theme/colors";
-
+import { SettingsPage } from "./pages/SettingsPage";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -55,7 +55,14 @@ function AppEntrance() {
   const usedStyles = styles(theme);
   return (
     <>
-      <Drawer.Navigator screenOptions={{drawerType: 'front', headerTintColor: colors.white,drawerStyle: usedStyles.drawerStyle, drawerLabelStyle: {color: colors.white}}}>
+      <Drawer.Navigator
+        screenOptions={{
+          drawerType: "front",
+          headerTintColor: colors.white,
+          drawerStyle: usedStyles.drawerStyle,
+          drawerLabelStyle: { color: colors.white },
+        }}
+      >
         <Drawer.Screen
           name="Login"
           component={LoginPage}
@@ -82,6 +89,14 @@ function AppEntrance() {
           options={{ ...navbarHeaderOptions, title: "In Game Page" }}
         />
         <Drawer.Screen
+          name="Settings"
+          component={SettingsPage}
+          options={{
+            ...navbarHeaderOptions,
+            title: "Settings Page",
+          }}
+        />
+        <Drawer.Screen
           name="EditProfile"
           component={EditProfilePage}
           options={{
@@ -105,6 +120,6 @@ const styles = (theme: Theme) => {
     },
     drawerStyle: {
       backgroundColor: colors.lightRoyalBlue,
-    }
+    },
   });
 };

@@ -66,5 +66,11 @@ export const getButtonColorsByThemeAndColorProp = (
         backgroundColor: theme.button.default.backgroundColor,
       };
     }
+    case "faded": {
+      return {
+        textColor: theme.button.default.textColor,
+        backgroundColor: theme.button.default.disabledBackgroundColor,
+      };
+    }
   }
 };

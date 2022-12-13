@@ -11,6 +11,7 @@ export const dark: Theme = {
     default: {
       textColor: colors.white,
       backgroundColor: colors.lightRoyalBlue,
+      disabledBackgroundColor: colors.lightPurple,
     },
   },
   input: {
