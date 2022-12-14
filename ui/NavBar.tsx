@@ -1,15 +1,15 @@
-import { account, emptySettings, mail, settings, treasure } from "../icons";
-import { StyleSheet } from "react-native";
-import { View } from "react-native";
+import { account, emptySettings, mail, settings, treasure } from '../icons';
+import { StyleSheet } from 'react-native';
+import { View } from 'react-native';
 
-import { Logo } from "./Logo";
-import { useState } from "react";
-import { NavButton } from "./NavButton";
-import { PATHS } from "../consts/paths";
-import { Icon } from "./Icon";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { InGamePage } from "../pages/InGamePage";
-import { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
+import { Logo } from './Logo';
+import { useState } from 'react';
+import { NavButton } from './NavButton';
+import { PATHS } from '../consts/paths';
+import { Icon } from './Icon';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { InGamePage } from '../pages/InGamePage';
+import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 
 type navbarType = {
   pageNo: string;
@@ -25,7 +25,7 @@ export const NavBar = ({ pageNo }: navbarType) => {
       <NavButton
         as={PATHS.ACCOUNT}
         onPress={() => {
-          navigator.navigate("Profile" as never, {} as never);
+          navigator.navigate('Profile' as never, {} as never);
         }}
         isCurrentPage={currentPage === 0}
         text="ACCOUNT"
@@ -33,9 +33,9 @@ export const NavBar = ({ pageNo }: navbarType) => {
         buttonWidth="20%"
       />
       <NavButton
-        as={PATHS.LEADERBOARD}
+        as={PATHS.JOIN}
         onPress={() => {
-          navigator.navigate("Login" as never, {} as never);
+          navigator.navigate('Join' as never, {} as never);
         }}
         isCurrentPage={currentPage === 1}
         text="JOIN"
@@ -46,7 +46,7 @@ export const NavBar = ({ pageNo }: navbarType) => {
       <NavButton
         as={PATHS.HOME}
         onPress={() => {
-          navigator.navigate("Home" as never, {} as never);
+          navigator.navigate('Home' as never, {} as never);
         }}
         isCurrentPage={currentPage === 2}
         text="HOME"
@@ -61,11 +61,11 @@ export const NavBar = ({ pageNo }: navbarType) => {
       <NavButton
         as={PATHS.PLAY}
         onPress={() => {
-          navigator.navigate("InGame" as never, {} as never);
+          navigator.navigate('InGame' as never, {} as never);
         }}
         isCurrentPage={currentPage === 3}
         text="PLAY"
-        xml={mail}
+        xml={go}
         buttonWidth="20%"
       />
       <NavButton
@@ -86,14 +86,15 @@ export const NavBar = ({ pageNo }: navbarType) => {
 const styles = () => {
   return StyleSheet.create({
     wrapper: {
-      flexDirection: "row",
-      justifyContent: "flex-end",
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
       height: 64,
     },
     treasure: {
-      position: "absolute",
-      top: "-58%",
+      position: 'absolute',
+      top: '-58%',
       zIndex: 10,
     },
   });
 };
+

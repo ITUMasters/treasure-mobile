@@ -48,11 +48,16 @@ export type Theme = {
     backgroundColor: string;
     textColor: string;
   };
+  bottomSheet: {
+    bg: string;
+    thumb: string;
+  };
 };
 
-export type ThemeOption = "dark" | "light";
+export type ThemeOption = 'dark' | 'light';
 export type ThemeContextProps = {
   currentTheme: ThemeOption;
   toggle: () => void;
   theme: Theme;
 };
+
