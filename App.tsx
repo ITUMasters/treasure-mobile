@@ -18,13 +18,15 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { getHeaderStylesByTheme } from './utils/HeaderStyles';
 
+import { RecoilRoot } from 'recoil';
+import { JoinPage } from './pages/JoinPage';
+
 import { EditProfilePage } from './pages/EditProfilePage';
 
 import { HomePage } from './pages/HomePage';
 import { color } from 'react-native-reanimated';
 import { colors } from './theme/colors';
-import { RecoilRoot } from 'recoil';
-import { JoinPage } from './pages/JoinPage';
+import { SettingsPage } from './pages/SettingsPage';
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
