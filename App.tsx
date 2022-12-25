@@ -106,6 +106,11 @@ function AppEntrance() {
             component={JoinPage}
             options={{ ...navbarHeaderOptions, title: 'Join Page' }}
           />
+          <Drawer.Screen
+            name="SETTINGS"
+            component={SettingsPage}
+            options={{ ...navbarHeaderOptions, title: 'Settings Page' }}
+          />
         </Drawer.Navigator>
       </>
     </RecoilRoot>

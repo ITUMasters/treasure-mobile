@@ -1,4 +1,4 @@
-import { account, emptySettings, mail, settings, treasure } from '../icons';
+import { account, emptySettings, go, mail, settings, treasure } from '../icons';
 import { StyleSheet } from 'react-native';
 import { View } from 'react-native';
 
