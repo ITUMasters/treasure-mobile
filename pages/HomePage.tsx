@@ -30,7 +30,7 @@ export function HomePage({ route }: any) {
   const navigator = useNavigation();
   const categories = ["ITU", "METU", "Boğaziçi", "Bilkent", "Koç"];
 
-  const { name } = route.params;
+  const { name } = route.params ?? undefined;
   useEffect(() => {
     setSelectedCategory(name !== undefined ? name : "MAP");
   }, [name]);
