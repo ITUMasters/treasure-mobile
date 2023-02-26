@@ -1,4 +1,4 @@
-import { account, go, mail, settings, treasure } from '../icons';
+import { account, emptySettings, go, mail, settings, treasure } from '../icons';
 import { StyleSheet } from 'react-native';
 import { View } from 'react-native';
 
@@ -71,11 +71,11 @@ export const NavBar = ({ pageNo }: navbarType) => {
       <NavButton
         as={PATHS.SETTINGS}
         onPress={() => {
-          navigator.navigate('Register' as never, {} as never);
+          navigator.navigate(PATHS.SETTINGS as never, {} as never);
         }}
         isCurrentPage={currentPage === 4}
         text="SETTINGS"
-        xml={settings}
+        xml={emptySettings}
         buttonWidth="20%"
       />
     </View>

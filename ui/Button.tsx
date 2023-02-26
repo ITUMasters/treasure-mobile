@@ -12,7 +12,7 @@ import { colors } from "../theme/colors";
 
 export type ButtonSize = "small" | "medium" | "large" | "xlarge" | "xxlarge";
 export type ButtonBending = "low" | "high";
-export type ButtonColor = "default";
+export type ButtonColor = "default" | "faded";
 
 interface ButtonProps
   extends ComponentPropsWithoutRef<typeof TouchableOpacity> {
@@ -24,6 +24,7 @@ interface ButtonProps
   bending?: ButtonBending;
   xml?: string;
   iconAtTheRight?: string;
+  givenFontSize?: number;
 }
 
 export function Button({
@@ -36,10 +37,19 @@ export function Button({
   bending = "low",
   xml,
   iconAtTheRight,
+  givenFontSize,
   ...props
 }: ButtonProps) {
   const { theme } = useTheme();
-  const themedStyles = styles(theme, color, size, bending, disabled, xml);
+  const themedStyles = styles(
+    theme,
+    color,
+    size,
+    bending,
+    disabled,
+    xml,
+    givenFontSize
+  );
 
   return (
     <TouchableOpacity
@@ -70,7 +80,8 @@ const styles = (
   size: ButtonSize,
   bending: ButtonBending,
   disabled?: boolean,
-  xml?: string
+  xml?: string,
+  givenFontSize?: number
 ) => {
   const { textColor, backgroundColor } = getButtonColorsByThemeAndColorProp(
     theme,
@@ -90,7 +101,7 @@ const styles = (
     },
     text: {
       color: isXmlExists ? colors.black : textColor,
-      fontSize: isXmlExists ? 16 : fontSize,
+      fontSize: givenFontSize ? givenFontSize : isXmlExists ? 16 : fontSize,
       fontFamily: isXmlExists ? FONTS.PoppinsBold : FONTS.PoppinsSemiBold,
       paddingLeft: isXmlExists ? 4 : 0,
       paddingTop: isXmlExists ? 4.5 : 0,
