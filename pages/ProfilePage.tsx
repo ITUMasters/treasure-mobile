@@ -1,6 +1,6 @@
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { useTheme } from "../theme";
-import { View, Image, Text, Switch } from "react-native";
+import { View, Image, Text, Switch, TouchableOpacity } from "react-native";
 
 import { Theme } from "../theme/types";
 import { FONTS } from "../consts";
@@ -11,11 +11,8 @@ import { NavBar } from "../ui/NavBar";
 import { useNavigation } from "@react-navigation/native";
 import { PATHS } from "../consts/paths";
 
-import { useRoute } from "@react-navigation/native";
-import { Icon } from "../ui/Icon";
 import { Achievement } from "../ui/Achievement";
 import { FriendCard } from "../ui/FriendCard";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 export function ProfilePage() {
   const { theme, toggle, currentTheme } = useTheme();
