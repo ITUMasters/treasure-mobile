@@ -20,6 +20,7 @@ import { SearchBottomSheet } from "../ui/SearchBottomSheet";
 import { useSetNavbarOpen } from "../recoil-store/navbar/NavbarStoreHooks";
 import { RecoilRoot } from "recoil";
 import { useEffect } from "react";
+import { PATHS } from "../consts/paths";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
@@ -68,7 +69,7 @@ export function HomePage({ route }: any) {
             </View>
             <View style={themedStyles.searchButton}>
               <Button
-                onPress={() => navigator.navigate("MAPS" as never, {} as never)}
+                onPress={() => navigator.navigate(PATHS.MAPS as never)}
                 size="xlarge"
               >
                 {selectedCategory}

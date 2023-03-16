@@ -11,11 +11,12 @@ import { Theme } from "../theme/types";
 import { useState } from "react";
 import MapView, { Callout, Circle, Marker } from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
+import { PATHS } from "../consts/paths";
 
 export function MapPageTries() {
   const { theme } = useTheme();
   const themedStyles = styles(theme);
-  const navigator = useNavigation();
+  const navigator = useNavigation<any>();
   const mockLocations = [
     {
       name: "ITU",
@@ -47,10 +48,7 @@ export function MapPageTries() {
               }}
               pinColor={"red"}
               onPress={() => {
-                navigator.navigate(
-                  "Home" as never,
-                  { name: element.name } as never
-                );
+                navigator.navigate(PATHS.HOME, { name: element.name });
               }}
             ></Marker>
             <Circle

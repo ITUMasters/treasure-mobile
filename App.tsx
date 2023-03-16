@@ -28,6 +28,7 @@ import { color } from "react-native-reanimated";
 import { colors } from "./theme/colors";
 import { SettingsPage } from "./pages/SettingsPage";
 import { MapPageTries } from "./pages/MapPageTries";
+import { FinishedMapsOnMap } from "./pages/FinishedTreasuresOnMap";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -115,7 +116,20 @@ function AppEntrance() {
           <Drawer.Screen
             name="MAPS"
             component={MapPageTries}
-            options={{ ...navbarHeaderOptions, title: "Map Page" }}
+            options={{
+              ...navbarHeaderOptions,
+              title: "Map Page",
+              drawerItemStyle: { height: 0 },
+            }}
+          />
+          <Drawer.Screen
+            name="FINISHED_TREASURES"
+            component={FinishedMapsOnMap}
+            options={{
+              ...navbarHeaderOptions,
+              title: "Completed Treasures",
+              drawerItemStyle: { height: 0 },
+            }}
           />
         </Drawer.Navigator>
       </>
