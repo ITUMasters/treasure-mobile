@@ -1,6 +1,6 @@
 export enum PATHS {
-  "LOGIN" = "LOGIN",
-  "REGISTER" = "REGISTER",
+  "LOGIN" = "Login",
+  "REGISTER" = "Register",
   "ACCOUNT" = "ACCOUNT",
   "HOME" = "Home",
   "LEADERBOARD" = "LEADERBOARD",

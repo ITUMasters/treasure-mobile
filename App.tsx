@@ -30,6 +30,8 @@ import { SettingsPage } from "./pages/SettingsPage";
 import { MapPageTries } from "./pages/MapPageTries";
 import { FinishedMapsOnMap } from "./pages/FinishedTreasuresOnMap";
 import { useAuth } from "./recoil-store/auth/AuthStoreHooks";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { authorizedQueryClient, unauthorizedQueryClient } from "./react-query";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -70,7 +72,7 @@ function AuthorizedApp() {
 
   const usedStyles = styles(theme);
   return (
-    <>
+    <QueryClientProvider client={authorizedQueryClient}>
       <Drawer1.Navigator
         screenOptions={{
           drawerType: "front",
@@ -132,7 +134,7 @@ function AuthorizedApp() {
           }}
         />
       </Drawer1.Navigator>
-    </>
+    </QueryClientProvider>
   );
 }
 const Drawer = createDrawerNavigator();
@@ -142,7 +144,7 @@ function UnauthorizedApp() {
 
   const usedStyles = styles(theme);
   return (
-    <>
+    <QueryClientProvider client={unauthorizedQueryClient}>
       <Drawer.Navigator
         screenOptions={{
           drawerType: "front",
@@ -162,7 +164,7 @@ function UnauthorizedApp() {
           options={{ ...navbarHeaderOptions, title: "Register Page" }}
         />
       </Drawer.Navigator>
-    </>
+    </QueryClientProvider>
   );
 }
 

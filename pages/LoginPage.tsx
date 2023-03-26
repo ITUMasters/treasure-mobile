@@ -1,4 +1,4 @@
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { FONTS } from "../consts";
@@ -20,6 +20,7 @@ import { Icon } from "../ui/Icon";
 import { Input } from "../ui/Input";
 import { Logo } from "../ui/Logo";
 import { NavBar } from "../ui/NavBar";
+import { PATHS } from "../consts/paths";
 
 export function LoginPage() {
   const [checkboxVal, setCheckboxVal] = useState(false);
@@ -28,6 +29,7 @@ export function LoginPage() {
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const defaulTextColor = theme.text.default.color;
+  const navigator = useNavigation();
 
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -123,6 +125,7 @@ export function LoginPage() {
                 color: colors.lightRoyalBlue,
                 fontFamily: FONTS.PoppinsSemiBold,
               }}
+              onPress={() => navigator.navigate(PATHS.REGISTER as never)}
             >
               Create Account
             </Text>
