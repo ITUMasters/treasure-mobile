@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { apiGetAllQuizzes, apiLogin } from "./queries";
+import { apiGetAllQuizzes, apiLogin, apiRegister } from "./queries";
 import { QUERY_KEYS } from "./queryKeys";
-import { Author, QuizResponseData } from "./types";
+import { QuizResponseData } from "./types";
 
 type CustomMutationProps = {
   onSuccess?: (data: any) => void;
@@ -9,6 +9,21 @@ type CustomMutationProps = {
 };
 
 const defaultQueryOptions = { cacheTime: 0, refetchOnWindowFocus: false };
+
+export const useRegisterMutation = ({
+  onSuccess,
+  onError,
+}: CustomMutationProps = {}) => {
+  return useMutation({
+    mutationFn: apiRegister,
+    onSuccess: (data) => {
+      onSuccess?.(data);
+    },
+    onError: (err) => {
+      onError?.(err);
+    },
+  });
+};
 
 export const useLoginMutation = ({
   onSuccess,

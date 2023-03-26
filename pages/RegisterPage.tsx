@@ -1,34 +1,68 @@
-import { useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { FONTS } from "../consts";
-import {
-  eyeOff,
-  eyeOn,
-  facebook,
-  google,
-  logo,
-  mail,
-  treasure,
-} from "../icons";
+import { eyeOff, eyeOn, google, mail, userIcon } from "../icons";
 import { useTheme } from "../theme";
 import { colors } from "../theme/colors";
 import { Theme } from "../theme/types";
 import { Button } from "../ui/Button";
-import { Checkbox } from "../ui/Checkbox";
-import { Icon } from "../ui/Icon";
+
 import { Input } from "../ui/Input";
 import { Logo } from "../ui/Logo";
-import { NavBar } from "../ui/NavBar";
+
+import { useRegisterMutation } from "../react-query/hooks";
+import { getDefaultErrorMessage, showAlert } from "../utils/alert";
+import { isValidEmail } from "../utils/validators";
+import { useNavigation } from "@react-navigation/native";
+import { PATHS } from "../consts/paths";
 
 export function RegisterPage() {
   const [passwordVisibility1, setPasswordVisibility1] = useState(false);
   const [passwordVisibility2, setPasswordVisibility2] = useState(false);
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const defaulTextColor = theme.text.default.color;
+  const navigator = useNavigation();
+
+  const RegisterMutation = useRegisterMutation({
+    onSuccess: async (res) => {
+      navigator.navigate(PATHS.LOGIN as never);
+    },
+    onError: (err) => {
+      showAlert("Error happened", {
+        message: getDefaultErrorMessage(err) as any,
+      });
+    },
+  });
+
+  const register = () => {
+    RegisterMutation.mutate({
+      username: username,
+      email: email,
+      photo_link: null,
+      name: name,
+      surname: surname,
+      password: password1,
+      coin: 0,
+    });
+  };
+
+  const isButtonDisabled = useMemo(() => {
+    const c1 = !isValidEmail(email);
+    const c2 = password1.trim() === "";
+    const c3 = password1 !== password2;
+    const c4 = name.trim() === "";
+    const c5 = surname.trim() === "";
+    const c6 = username.trim() === "";
+
+    return c1 || c2 || c3 || c4 || c5 || c6;
+  }, [email, password1, password2, surname, name, username]);
 
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -41,12 +75,41 @@ export function RegisterPage() {
         </View>
         <Text style={themedStyles.registerTitle}>Register</Text>
         <View style={themedStyles.inputContainer}>
-          <Input size="medium" title="Name" xml={mail} />
+          <Input
+            size="medium"
+            title="Name"
+            xml={userIcon}
+            value={name}
+            onChangeText={(e) => {
+              setName(e);
+            }}
+          />
           <View style={{ marginTop: "1.25%" }}>
-            <Input size="medium" title="Surname" xml={mail} />
+            <Input
+              size="medium"
+              title="Surname"
+              xml={userIcon}
+              value={surname}
+              onChangeText={(e) => setSurname(e)}
+            />
           </View>
           <View style={{ marginTop: "1.25%" }}>
-            <Input size="medium" title="Mail" xml={mail} />
+            <Input
+              size="medium"
+              title="Username"
+              xml={userIcon}
+              value={username}
+              onChangeText={(e) => setUsername(e)}
+            />
+          </View>
+          <View style={{ marginTop: "1.25%" }}>
+            <Input
+              size="medium"
+              title="Mail"
+              xml={mail}
+              value={email}
+              onChangeText={(e) => setEmail(e)}
+            />
           </View>
           <View style={{ marginTop: "1.25%" }}>
             <Input
@@ -71,7 +134,15 @@ export function RegisterPage() {
             />
           </View>
           <View style={{ marginTop: "1.875%" }}>
-            <Button size="xlarge">Register</Button>
+            <Button
+              size="xlarge"
+              onPress={() => {
+                register();
+              }}
+              disabled={isButtonDisabled}
+            >
+              Register
+            </Button>
           </View>
         </View>
         <View style={{ marginTop: "3.125%" }}>
@@ -102,6 +173,7 @@ export function RegisterPage() {
                 color: colors.lightRoyalBlue,
                 fontFamily: FONTS.PoppinsSemiBold,
               }}
+              onPress={() => navigator.navigate(PATHS.LOGIN as never)}
             >
               Log In
             </Text>
