@@ -1,24 +1,16 @@
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { useTheme } from "../theme";
 import { View, Image, Text, Switch } from "react-native";
-
 import { Theme } from "../theme/types";
-import { FONTS } from "../consts";
 import { Button } from "../ui/Button";
-import { colors } from "../theme/colors";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import { NavBar } from "../ui/NavBar";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Icon } from "../ui/Icon";
-import { Achievement } from "../ui/Achievement";
-import { FriendCard } from "../ui/FriendCard";
 import { Input } from "../ui/Input";
 import { useState } from "react";
 import { TreasureCard } from "../ui/TreasureCard";
 import { useModal } from "../hooks/useModal";
 import { SearchBottomSheet } from "../ui/SearchBottomSheet";
 import { useSetNavbarOpen } from "../recoil-store/navbar/NavbarStoreHooks";
-import { RecoilRoot } from "recoil";
 import { useEffect } from "react";
 import { PATHS } from "../consts/paths";
 
@@ -31,10 +23,12 @@ export function HomePage({ route }: any) {
   const navigator = useNavigation();
   const categories = ["ITU", "METU", "Boğaziçi", "Bilkent", "Koç"];
 
-  const { name } = route.params ?? undefined;
+  const name2 = route.params ?? route.params;
   useEffect(() => {
-    setSelectedCategory(name !== undefined ? name : "MAP");
-  }, [name]);
+    setSelectedCategory(
+      name2 !== undefined && name2.name !== undefined ? name2.name : "MAP"
+    );
+  }, [name2]);
 
   const mockTreasureCards = [
     {

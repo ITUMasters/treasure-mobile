@@ -29,6 +29,9 @@ import { colors } from "./theme/colors";
 import { SettingsPage } from "./pages/SettingsPage";
 import { MapPageTries } from "./pages/MapPageTries";
 import { FinishedMapsOnMap } from "./pages/FinishedTreasuresOnMap";
+import { useAuth } from "./recoil-store/auth/AuthStoreHooks";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { authorizedQueryClient, unauthorizedQueryClient } from "./react-query";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -45,95 +48,123 @@ export default function App() {
   }
 
   return (
+    <RecoilRoot>
+      <AppWithRecoil />
+    </RecoilRoot>
+  );
+}
+
+function AppWithRecoil() {
+  const auth = useAuth();
+
+  return (
     <NavigationContainer>
       <ThemeContextProvider>
-        <AppEntrance />
+        {auth ? <AuthorizedApp /> : <UnauthorizedApp />}
       </ThemeContextProvider>
     </NavigationContainer>
   );
 }
-
-function AppEntrance() {
+const Drawer1 = createDrawerNavigator();
+function AuthorizedApp() {
   const { theme } = useTheme();
   const navbarHeaderOptions = getHeaderStylesByTheme(theme);
-  const Drawer = createDrawerNavigator();
+
   const usedStyles = styles(theme);
   return (
-    <RecoilRoot>
-      <>
-        <Drawer.Navigator
-          screenOptions={{
-            drawerType: "front",
-            headerTintColor: colors.white,
-            drawerStyle: usedStyles.drawerStyle,
-            drawerLabelStyle: { color: colors.white },
+    <QueryClientProvider client={authorizedQueryClient}>
+      <Drawer1.Navigator
+        screenOptions={{
+          drawerType: "front",
+          headerTintColor: colors.white,
+          drawerStyle: usedStyles.drawerStyle,
+          drawerLabelStyle: { color: colors.white },
+        }}
+      >
+        <Drawer1.Screen
+          name="Profile"
+          component={ProfilePage}
+          options={{ ...navbarHeaderOptions, title: "Profile Page" }}
+        />
+        <Drawer1.Screen
+          name="Home"
+          component={HomePage}
+          options={{ ...navbarHeaderOptions, title: "Home Page" }}
+        />
+        <Drawer1.Screen
+          name="InGame"
+          component={InGamePage}
+          options={{ ...navbarHeaderOptions, title: "In Game Page" }}
+        />
+        <Drawer1.Screen
+          name="EditProfile"
+          component={EditProfilePage}
+          options={{
+            ...navbarHeaderOptions,
+            title: "Edit Profile Page",
+            drawerItemStyle: { height: 0 },
           }}
-        >
-          <Drawer.Screen
-            name="Login"
-            component={LoginPage}
-            options={{ ...navbarHeaderOptions, title: "Login Page" }}
-          />
-          <Drawer.Screen
-            name="Register"
-            component={RegisterPage}
-            options={{ ...navbarHeaderOptions, title: "Register Page" }}
-          />
-          <Drawer.Screen
-            name="Home"
-            component={HomePage}
-            options={{ ...navbarHeaderOptions, title: "Home Page" }}
-          />
-          <Drawer.Screen
-            name="Profile"
-            component={ProfilePage}
-            options={{ ...navbarHeaderOptions, title: "Profile Page" }}
-          />
-          <Drawer.Screen
-            name="InGame"
-            component={InGamePage}
-            options={{ ...navbarHeaderOptions, title: "In Game Page" }}
-          />
-          <Drawer.Screen
-            name="EditProfile"
-            component={EditProfilePage}
-            options={{
-              ...navbarHeaderOptions,
-              title: "Edit Profile Page",
-              drawerItemStyle: { height: 0 },
-            }}
-          />
-          <Drawer.Screen
-            name="Join"
-            component={JoinPage}
-            options={{ ...navbarHeaderOptions, title: "Join Page" }}
-          />
-          <Drawer.Screen
-            name="SETTINGS"
-            component={SettingsPage}
-            options={{ ...navbarHeaderOptions, title: "Settings Page" }}
-          />
-          <Drawer.Screen
-            name="MAPS"
-            component={MapPageTries}
-            options={{
-              ...navbarHeaderOptions,
-              title: "Map Page",
-              drawerItemStyle: { height: 0 },
-            }}
-          />
-          <Drawer.Screen
-            name="FINISHED_TREASURES"
-            component={FinishedMapsOnMap}
-            options={{
-              ...navbarHeaderOptions,
-              title: "Completed Treasures",
-              drawerItemStyle: { height: 0 },
-            }}
-          />
-        </Drawer.Navigator>
-      </>
-    </RecoilRoot>
+        />
+        <Drawer1.Screen
+          name="Join"
+          component={JoinPage}
+          options={{ ...navbarHeaderOptions, title: "Join Page" }}
+        />
+        <Drawer1.Screen
+          name="SETTINGS"
+          component={SettingsPage}
+          options={{ ...navbarHeaderOptions, title: "Settings Page" }}
+        />
+        <Drawer1.Screen
+          name="MAPS"
+          component={MapPageTries}
+          options={{
+            ...navbarHeaderOptions,
+            title: "Map Page",
+            drawerItemStyle: { height: 0 },
+          }}
+        />
+        <Drawer1.Screen
+          name="FINISHED_TREASURES"
+          component={FinishedMapsOnMap}
+          options={{
+            ...navbarHeaderOptions,
+            title: "Completed Treasures",
+            drawerItemStyle: { height: 0 },
+          }}
+        />
+      </Drawer1.Navigator>
+    </QueryClientProvider>
+  );
+}
+const Drawer = createDrawerNavigator();
+function UnauthorizedApp() {
+  const { theme } = useTheme();
+  const navbarHeaderOptions = getHeaderStylesByTheme(theme);
+
+  const usedStyles = styles(theme);
+  return (
+    <QueryClientProvider client={unauthorizedQueryClient}>
+      <Drawer.Navigator
+        screenOptions={{
+          drawerType: "front",
+          headerTintColor: colors.white,
+          drawerStyle: usedStyles.drawerStyle,
+          drawerLabelStyle: { color: colors.white },
+        }}
+      >
+        <Drawer.Screen
+          name="Login"
+          component={LoginPage}
+          options={{ ...navbarHeaderOptions, title: "Login Page" }}
+        />
+        <Drawer.Screen
+          name="Register"
+          component={RegisterPage}
+          options={{ ...navbarHeaderOptions, title: "Register Page" }}
+        />
+      </Drawer.Navigator>
+    </QueryClientProvider>
   );
 }
 
