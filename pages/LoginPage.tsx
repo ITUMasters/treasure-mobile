@@ -25,7 +25,7 @@ import { useLoginMutation } from "../react-query/hooks";
 import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { useSetId } from "../recoil-store/auth/IdStoreHooks";
-import { getItem, setItem } from "../utils/storage";
+import { getItem, removeItem, setItem } from "../utils/storage";
 import jwtDecode from "jwt-decode";
 
 export function LoginPage() {
@@ -42,10 +42,10 @@ export function LoginPage() {
 
   const LoginMutation = useLoginMutation({
     onSuccess: async (res) => {
-      setAuth(true);
       setId(res.data.user.id);
       await setItem("access_token", res.data.token);
       await setItem("remember_me", checkboxVal ? "true" : "false");
+      setAuth(true);
     },
     onError: (err) => {
       showAlert("Login Failed", {
