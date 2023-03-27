@@ -1,7 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { apiGetAllQuizzes, apiLogin, apiRegister } from "./queries";
+import {
+  apiChangeAccountInfo,
+  apiGetAllQuizzes,
+  apiGetUser,
+  apiLogin,
+  apiRegister,
+} from "./queries";
 import { QUERY_KEYS } from "./queryKeys";
-import { QuizResponseData } from "./types";
+import { QuizResponseData, User } from "./types";
 
 type CustomMutationProps = {
   onSuccess?: (data: any) => void;
@@ -31,6 +37,31 @@ export const useLoginMutation = ({
 }: CustomMutationProps = {}) => {
   return useMutation({
     mutationFn: apiLogin,
+    onSuccess: (data) => {
+      onSuccess?.(data);
+    },
+    onError: (err) => {
+      onError?.(err);
+    },
+  });
+};
+
+export const useUser = (userId: number) => {
+  const { data, ...rest } = useQuery({
+    queryKey: QUERY_KEYS.user,
+    queryFn: () => apiGetUser(userId),
+    ...defaultQueryOptions,
+  });
+  const user: User = data?.data;
+  return { user: user, ...rest };
+};
+
+export const useAccountChangeMutation = ({
+  onSuccess,
+  onError,
+}: CustomMutationProps = {}) => {
+  return useMutation({
+    mutationFn: apiChangeAccountInfo,
     onSuccess: (data) => {
       onSuccess?.(data);
     },
