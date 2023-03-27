@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { FONTS } from "../consts";
 import {
@@ -21,15 +21,69 @@ import { Input } from "../ui/Input";
 import { Logo } from "../ui/Logo";
 import { NavBar } from "../ui/NavBar";
 import { PATHS } from "../consts/paths";
+import { useLoginMutation } from "../react-query/hooks";
+import { getDefaultErrorMessage, showAlert } from "../utils/alert";
+import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
+import { useSetId } from "../recoil-store/auth/IdStoreHooks";
+import { getItem, setItem } from "../utils/storage";
+import jwtDecode from "jwt-decode";
 
 export function LoginPage() {
   const [checkboxVal, setCheckboxVal] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const defaulTextColor = theme.text.default.color;
   const navigator = useNavigation();
+  const setAuth = useSetAuth();
+  const setId = useSetId();
+
+  const LoginMutation = useLoginMutation({
+    onSuccess: async (res) => {
+      setAuth(true);
+      setId(res.data.user.id);
+      await setItem("access_token", res.data.token);
+      await setItem("remember_me", checkboxVal ? "true" : "false");
+    },
+    onError: (err) => {
+      showAlert("Login Failed", {
+        message: getDefaultErrorMessage(err) as any,
+      });
+    },
+  });
+
+  const login = () => {
+    LoginMutation.mutate({
+      email: email,
+      password: password,
+    });
+  };
+
+  useEffect(() => {
+    const checkRememberMe = async () => {
+      const accessToken = await getItem("access_token");
+      const rememberMe = await getItem("remember_me");
+
+      if (
+        rememberMe === "true" &&
+        accessToken != null &&
+        typeof accessToken === "string"
+      ) {
+        try {
+          const { _id } = jwtDecode(accessToken) as { _id?: string };
+          if (_id != null) {
+            setAuth(true);
+            setId(Number(_id));
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+    checkRememberMe();
+  }, []);
 
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -47,7 +101,13 @@ export function LoginPage() {
               width: "100%",
             }}
           >
-            <Input size="large" title="Username or Mail" xml={mail} />
+            <Input
+              size="large"
+              title="Username or Mail"
+              xml={mail}
+              onChangeText={(e) => setEmail(e)}
+              value={email}
+            />
           </View>
           <View style={{ marginTop: "3%", width: "100%" }}>
             <Input
@@ -88,7 +148,9 @@ export function LoginPage() {
             marginBottom: "1.8%",
           }}
         >
-          <Button size="xlarge">Sign in</Button>
+          <Button size="xlarge" onPress={login}>
+            Sign in
+          </Button>
         </View>
         <View
           style={{
