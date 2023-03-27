@@ -151,6 +151,7 @@ function UnauthorizedApp() {
           headerTintColor: colors.white,
           drawerStyle: usedStyles.drawerStyle,
           drawerLabelStyle: { color: colors.white },
+          unmountOnBlur: true, //Reset local screen states.
         }}
       >
         <Drawer.Screen
