@@ -9,6 +9,18 @@ export type User = {
   coin: number;
 };
 
+export type Treasure = {
+  id: number;
+  locationId: number;
+  gift: number;
+  photoLink?: string | null;
+  timeLimit?: number;
+  hardness: Hardness;
+  regionName?: string;
+};
+
+export type Hardness = "easy" | "medium" | "hard" | "insane";
+
 export type Author = {
   id: number;
   name: string;

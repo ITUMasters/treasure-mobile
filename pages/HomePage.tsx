@@ -13,6 +13,9 @@ import { SearchBottomSheet } from "../ui/SearchBottomSheet";
 import { useSetNavbarOpen } from "../recoil-store/navbar/NavbarStoreHooks";
 import { useEffect } from "react";
 import { PATHS } from "../consts/paths";
+import { useAllTreasures } from "../react-query/hooks";
+import { Loading } from "./Loading";
+import { Pagination } from "../ui/Pagination";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
@@ -22,6 +25,8 @@ export function HomePage({ route }: any) {
   const setNavbarOpen = useSetNavbarOpen();
   const navigator = useNavigation();
   const categories = ["ITU", "METU", "Boğaziçi", "Bilkent", "Koç"];
+  const { treasures, isFetching } = useAllTreasures();
+  const [currentPage, setCurrentPage] = useState(1);
 
   const name2 = route.params ?? route.params;
   useEffect(() => {
@@ -53,6 +58,10 @@ export function HomePage({ route }: any) {
       difficulty: "Hard",
     },
   ];
+  if (isFetching) {
+    return <Loading />;
+  }
+
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
@@ -71,7 +80,7 @@ export function HomePage({ route }: any) {
             </View>
           </View>
           <View style={themedStyles.treasures}>
-            {mockTreasureCards
+            {/*mockTreasureCards
               .filter(
                 (element) =>
                   element.zone === selectedCategory ||
@@ -86,7 +95,25 @@ export function HomePage({ route }: any) {
                   creator={element.creator}
                   difficulty={element.difficulty}
                 />
-              ))}
+              ))*/}
+            {treasures.map((element, index) => (
+              <TreasureCard
+                key={index + 1}
+                id={(index + 1).toString()}
+                name={"Isim Olayi gelecek"}
+                zone={"SIMDILIK ITU"}
+                creator={"SIMDILIK FARUK"}
+                difficulty={element.hardness}
+              />
+            ))}
+          </View>
+          <View style={{ marginTop: 12, marginBottom: 40 }}>
+            <Pagination
+              currentPage={currentPage}
+              maxPage={12}
+              backPage={() => setCurrentPage(currentPage - 1)}
+              nextPage={() => setCurrentPage(currentPage + 1)}
+            />
           </View>
         </View>
       </ScrollView>

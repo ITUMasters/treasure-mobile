@@ -52,12 +52,14 @@ export type Theme = {
     bg: string;
     thumb: string;
   };
+  pagination: {
+    bg: string;
+  };
 };
 
-export type ThemeOption = 'dark' | 'light';
+export type ThemeOption = "dark" | "light";
 export type ThemeContextProps = {
   currentTheme: ThemeOption;
   toggle: () => void;
   theme: Theme;
 };
-
