@@ -2,12 +2,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   apiChangeAccountInfo,
   apiGetAllQuizzes,
+  apiGetAllTreasures,
   apiGetUser,
   apiLogin,
   apiRegister,
 } from "./queries";
 import { QUERY_KEYS } from "./queryKeys";
-import { QuizResponseData, User } from "./types";
+import { QuizResponseData, Treasure, User } from "./types";
 
 type CustomMutationProps = {
   onSuccess?: (data: any) => void;
@@ -69,6 +70,16 @@ export const useAccountChangeMutation = ({
       onError?.(err);
     },
   });
+};
+
+export const useAllTreasures = () => {
+  const { data, ...rest } = useQuery({
+    queryKey: QUERY_KEYS.allTreasures,
+    queryFn: apiGetAllTreasures,
+    ...defaultQueryOptions,
+  });
+  const treasures: Treasure[] = data?.data.entities;
+  return { treasures: treasures, ...rest };
 };
 
 export const useQuizzes = () => {

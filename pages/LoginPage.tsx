@@ -103,7 +103,7 @@ export function LoginPage() {
           >
             <Input
               size="large"
-              title="Username or Mail"
+              title="Mail"
               xml={mail}
               onChangeText={(e) => setEmail(e)}
               value={email}

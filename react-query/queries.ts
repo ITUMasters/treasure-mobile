@@ -23,6 +23,10 @@ export const apiChangeAccountInfo = (data: {
   return axios({ url: "/user/" + data.id.toString(), method: "put", data });
 };
 
+export const apiGetAllTreasures = () => {
+  return axios({ url: "/treasure/", method: "get" });
+};
+
 export const apiGetAllQuizzes = () => {
   return axios({ url: "/quiz", method: "get" });
 };
