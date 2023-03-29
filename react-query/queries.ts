@@ -27,6 +27,6 @@ export const apiGetAllTreasures = () => {
   return axios({ url: "/treasure/", method: "get" });
 };
 
-export const apiGetAllQuizzes = () => {
-  return axios({ url: "/quiz", method: "get" });
+export const apiGetTreasureById = (treasureId: number) => {
+  return axios({ url: "/treasure/" + treasureId.toString(), method: "get" });
 };

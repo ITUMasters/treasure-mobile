@@ -5,7 +5,7 @@ export enum PATHS {
   "HOME" = "Home",
   "LEADERBOARD" = "LEADERBOARD",
   "SETTINGS" = "SETTINGS",
-  "PLAY" = "PLAY",
+  "PLAY" = "InGame",
   "EDIT_PROFILE" = "EditProfile",
   "JOIN" = "JOIN",
   "MAPS" = "MAPS",

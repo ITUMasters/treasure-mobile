@@ -61,7 +61,6 @@ export function HomePage({ route }: any) {
   if (isFetching) {
     return <Loading />;
   }
-
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
@@ -104,6 +103,7 @@ export function HomePage({ route }: any) {
                 zone={"SIMDILIK ITU"}
                 creator={"SIMDILIK FARUK"}
                 difficulty={element.hardness}
+                treasureId={element.id}
               />
             ))}
           </View>

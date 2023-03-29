@@ -4,6 +4,8 @@ import { useTheme } from "../theme";
 import { colors } from "../theme/colors";
 import { Button } from "./Button";
 import { diff } from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
+import { PATHS } from "../consts/paths";
 
 interface TreasureCardProps {
   id: string;
@@ -11,6 +13,7 @@ interface TreasureCardProps {
   zone: string;
   creator: string;
   difficulty: string;
+  treasureId: number;
 }
 
 export function TreasureCard({
@@ -19,6 +22,7 @@ export function TreasureCard({
   zone,
   creator,
   difficulty,
+  treasureId,
 }: TreasureCardProps) {
   const { theme, currentTheme } = useTheme();
   const themedStyles = styles(theme);
@@ -34,6 +38,7 @@ export function TreasureCard({
   difficulty =
     difficulty[0].toUpperCase() + difficulty.substring(1, difficulty.length);
 
+  const navigator = useNavigation<any>();
   return (
     <View style={themedStyles.wrapper}>
       <Image
@@ -94,7 +99,14 @@ export function TreasureCard({
         </View>
       </View>
       <View style={themedStyles.buttonWrapper}>
-        <Button size="large">GO</Button>
+        <Button
+          size="large"
+          onPress={() =>
+            navigator.navigate(PATHS.PLAY, { treasureId: treasureId })
+          }
+        >
+          GO
+        </Button>
       </View>
     </View>
   );
