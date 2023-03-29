@@ -25,7 +25,7 @@ import { useLoginMutation } from "../react-query/hooks";
 import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { useSetId } from "../recoil-store/auth/IdStoreHooks";
-import { getItem, removeItem, setItem } from "../utils/storage";
+import { getItem, setItem } from "../utils/storage";
 import jwtDecode from "jwt-decode";
 
 export function LoginPage() {
