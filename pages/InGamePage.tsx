@@ -1,4 +1,5 @@
 import { useRoute } from "@react-navigation/native";
+import { useState } from "react";
 import {
   Image,
   SafeAreaView,
@@ -17,16 +18,39 @@ import { NavBar } from "../ui/NavBar";
 import { TopBar } from "../ui/TopBar";
 import { useTreasureById } from "../react-query/hooks";
 import { Loading } from "./Loading";
+import * as Location from "expo-location";
+import { showAlert } from "../utils/alert";
 
 export function InGamePage({ route }: any) {
   const { theme } = useTheme();
 
   const treasureId = route.params.treasureId;
   const treasureById = useTreasureById(treasureId);
+  const [location, setLocation] = useState("");
+
+  const submitLocation = () => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        showAlert("You should give permission");
+        return;
+      }
+
+      try {
+        let location = await Location.getCurrentPositionAsync({
+          accuracy: Location.LocationAccuracy.BestForNavigation,
+        });
+        setLocation(JSON.stringify(location));
+      } catch (e) {
+        showAlert("We could not find your location!");
+      }
+    })();
+  };
 
   if (treasureById.isFetching) {
     return <Loading />;
   }
+  console.log("Location: ", location);
   const treasure = treasureById.treasure;
   const hardness =
     treasure.hardness[0].toUpperCase() +
@@ -36,6 +60,7 @@ export function InGamePage({ route }: any) {
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
+        <Text>{location}</Text>
         <Text style={themedStyles.questionNameStyle}>1. Bee Road</Text>
         <Text
           style={{
@@ -79,7 +104,9 @@ export function InGamePage({ route }: any) {
               justifyContent: "center",
             }}
           >
-            <Button size="xxlarge">SUBMIT</Button>
+            <Button size="xxlarge" onPress={submitLocation}>
+              SUBMIT
+            </Button>
           </View>
         </View>
         <Text style={themedStyles.hint}>Hints</Text>

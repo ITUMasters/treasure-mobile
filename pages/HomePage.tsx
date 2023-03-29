@@ -58,6 +58,7 @@ export function HomePage({ route }: any) {
       difficulty: "Hard",
     },
   ];
+
   if (isFetching) {
     return <Loading />;
   }
