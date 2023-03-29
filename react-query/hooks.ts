@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   apiChangeAccountInfo,
-  apiGetAllQuizzes,
   apiGetAllTreasures,
+  apiGetTreasureById,
   apiGetUser,
   apiLogin,
   apiRegister,
@@ -82,12 +82,12 @@ export const useAllTreasures = () => {
   return { treasures: treasures, ...rest };
 };
 
-export const useQuizzes = () => {
+export const useTreasureById = (treasureId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: QUERY_KEYS.quizzes,
-    queryFn: apiGetAllQuizzes,
+    queryKey: QUERY_KEYS.treasureById,
+    queryFn: () => apiGetTreasureById(treasureId),
     ...defaultQueryOptions,
   });
-  const quizzes: QuizResponseData[] = data?.data?.quizzes;
-  return { quizzes: quizzes ?? [], ...rest };
+  const treasure: Treasure = data?.data;
+  return { treasure: treasure, ...rest };
 };
