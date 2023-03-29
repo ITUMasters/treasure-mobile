@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import * as SplashScreen from "expo-splash-screen";
 import { useAppFonts } from "./hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ThemeContextProvider, useTheme } from "./theme";
 import { Theme } from "./theme/types";
@@ -79,6 +79,7 @@ function AuthorizedApp() {
           headerTintColor: colors.white,
           drawerStyle: usedStyles.drawerStyle,
           drawerLabelStyle: { color: colors.white },
+          unmountOnBlur: true,
         }}
       >
         <Drawer1.Screen
