@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native';
+import { useRoute } from "@react-navigation/native";
 import {
   Image,
   SafeAreaView,
@@ -6,20 +6,33 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-import { FONTS } from '../consts';
-import { useTheme } from '../theme';
-import { colors } from '../theme/colors';
-import { Theme } from '../theme/types';
-import { Button } from '../ui/Button';
-import { HintCard } from '../ui/HintCard';
-import { NavBar } from '../ui/NavBar';
-import { TopBar } from '../ui/TopBar';
+} from "react-native";
+import { FONTS } from "../consts";
+import { useTheme } from "../theme";
+import { colors } from "../theme/colors";
+import { Theme } from "../theme/types";
+import { Button } from "../ui/Button";
+import { HintCard } from "../ui/HintCard";
+import { NavBar } from "../ui/NavBar";
+import { TopBar } from "../ui/TopBar";
+import { useTreasureById } from "../react-query/hooks";
+import { Loading } from "./Loading";
 
-export function InGamePage() {
+export function InGamePage({ route }: any) {
   const { theme } = useTheme();
-  const themedStyles = styles(theme, 'Medium', 'Accepted');
 
+  const treasureId = route.params.treasureId;
+  const treasureById = useTreasureById(treasureId);
+
+  if (treasureById.isFetching) {
+    return <Loading />;
+  }
+  const treasure = treasureById.treasure;
+  const hardness =
+    treasure.hardness[0].toUpperCase() +
+    treasure.hardness.substring(1, treasure.hardness.length);
+
+  const themedStyles = styles(theme, hardness, "Accepted");
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
@@ -33,25 +46,25 @@ export function InGamePage() {
         >
           Istanbul Technical University
         </Text>
-        <Text style={themedStyles.hardness}>Medium</Text>
+        <Text style={themedStyles.hardness}>{hardness}</Text>
         <Image
           style={{
             width: 300,
             height: 400,
-            alignSelf: 'center',
+            alignSelf: "center",
             marginRight: 20,
             marginTop: 4,
             borderRadius: 40,
           }}
-          source={require('../assets/images/BeeArea.png')}
+          source={require("../assets/images/BeeArea.png")}
         />
 
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
             marginTop: 20,
             flex: 1,
-            alignItems: 'center',
+            alignItems: "center",
             marginBottom: 20,
           }}
         >
@@ -59,11 +72,11 @@ export function InGamePage() {
           <View
             style={{
               flex: 0.5,
-              width: '100%',
+              width: "100%",
               paddingRight: 24,
-              alignItems: 'flex-end',
+              alignItems: "flex-end",
               paddingLeft: 100,
-              justifyContent: 'center',
+              justifyContent: "center",
             }}
           >
             <Button size="xxlarge">SUBMIT</Button>
@@ -92,11 +105,11 @@ const styles = (theme: Theme, hardness: string, status: string) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      width: '100%',
+      width: "100%",
       backgroundColor: theme.appBackground.backgroundColor,
     },
     scrollViewStyle: {
-      width: '100%',
+      width: "100%",
       flex: 1,
       marginLeft: 20,
       marginRight: 20,
@@ -110,9 +123,9 @@ const styles = (theme: Theme, hardness: string, status: string) => {
     },
     hardness: {
       color:
-        hardness === 'Easy'
+        hardness === "Easy"
           ? colors.green
-          : hardness === 'Medium'
+          : hardness === "Medium"
           ? colors.orange
           : colors.red,
       fontFamily: FONTS.PoppinsSemiBold,
@@ -126,13 +139,12 @@ const styles = (theme: Theme, hardness: string, status: string) => {
       marginTop: 8,
     },
     statusStyle: {
-      color: status === 'Accepted' ? colors.green : colors.red,
+      color: status === "Accepted" ? colors.green : colors.red,
       fontFamily: FONTS.PoppinsBold,
       flex: 0.5,
-      justifyContent: 'flex-start',
-      alignSelf: 'center',
-      alignItems: 'center',
+      justifyContent: "flex-start",
+      alignSelf: "center",
+      alignItems: "center",
     },
   });
 };
-
