@@ -92,11 +92,17 @@ function AuthorizedApp() {
           component={HomePage}
           options={{ ...navbarHeaderOptions, title: "Home Page" }}
         />
-        <Drawer1.Screen
-          name="InGame"
-          component={InGamePage}
-          options={{ ...navbarHeaderOptions, title: "In Game Page" }}
-        />
+        {
+          <Drawer1.Screen
+            name="InGame"
+            component={InGamePage}
+            options={{
+              ...navbarHeaderOptions,
+              title: "In Game Page",
+              drawerItemStyle: { height: 0 },
+            }}
+          />
+        }
         <Drawer1.Screen
           name="EditProfile"
           component={EditProfilePage}
@@ -111,11 +117,11 @@ function AuthorizedApp() {
           component={JoinPage}
           options={{ ...navbarHeaderOptions, title: "Join Page" }}
         />
-        <Drawer1.Screen
+        {/*<Drawer1.Screen
           name="SETTINGS"
           component={SettingsPage}
           options={{ ...navbarHeaderOptions, title: "Settings Page" }}
-        />
+        />*/}
         <Drawer1.Screen
           name="MAPS"
           component={MapPageTries}

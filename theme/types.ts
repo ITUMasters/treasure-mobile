@@ -55,6 +55,13 @@ export type Theme = {
   pagination: {
     bg: string;
   };
+
+  navbarBorderColor: {
+    color: string;
+  };
+  pin: {
+    placeholderColor: string;
+  };
 };
 
 export type ThemeOption = "dark" | "light";

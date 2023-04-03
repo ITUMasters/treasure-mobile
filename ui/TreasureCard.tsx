@@ -54,11 +54,11 @@ export function TreasureCard({
               color: colors.white,
             }}
           >
-            {id + "- " + name}
+            {"#" + id + " " + name}
           </Text>
           <Text
             style={{
-              marginTop: -3,
+              marginTop: 2,
               color: difficultyColor,
               fontSize: 13,
             }}
@@ -67,34 +67,12 @@ export function TreasureCard({
           </Text>
           <Text
             style={{
-              marginTop: -3,
+              marginTop: 2,
               color: colors.white,
               fontSize: 13,
             }}
           >
             {zone}
-          </Text>
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            source={require("../assets/images/alpImage.png")}
-            style={themedStyles.image}
-          />
-          <Text
-            style={{
-              marginLeft: 5,
-              color: colors.white,
-            }}
-            ellipsizeMode={"tail"}
-            numberOfLines={1}
-          >
-            {creator}
           </Text>
         </View>
       </View>

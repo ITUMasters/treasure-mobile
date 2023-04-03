@@ -50,7 +50,7 @@ export function InGamePage({ route }: any) {
   if (treasureById.isFetching) {
     return <Loading />;
   }
-  console.log("Location: ", location);
+
   const treasure = treasureById.treasure;
   const hardness =
     treasure.hardness[0].toUpperCase() +
@@ -61,7 +61,9 @@ export function InGamePage({ route }: any) {
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
         <Text>{location}</Text>
-        <Text style={themedStyles.questionNameStyle}>1. Bee Road</Text>
+        <Text style={themedStyles.questionNameStyle}>
+          {treasure.id.toString() + ". " + treasure.name}{" "}
+        </Text>
         <Text
           style={{
             marginTop: 8,
@@ -69,7 +71,7 @@ export function InGamePage({ route }: any) {
             color: theme.text.default.color,
           }}
         >
-          Istanbul Technical University
+          {treasure.location.region.name}
         </Text>
         <Text style={themedStyles.hardness}>{hardness}</Text>
         <Image
