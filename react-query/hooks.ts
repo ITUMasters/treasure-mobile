@@ -3,6 +3,7 @@ import {
   apiChangeAccountInfo,
   apiGetAllTreasures,
   apiGetTreasureById,
+  apiGetTreasureByPageId,
   apiGetUser,
   apiLogin,
   apiRegister,
@@ -90,4 +91,17 @@ export const useTreasureById = (treasureId: number) => {
   });
   const treasure: Treasure = data?.data;
   return { treasure: treasure, ...rest };
+};
+
+export const useTreasureByPageId = (pageId: number) => {
+  const { data, ...rest } = useQuery({
+    queryKey: [QUERY_KEYS.treasureByPageId, pageId],
+    queryFn: () => apiGetTreasureByPageId(pageId),
+    ...defaultQueryOptions,
+  });
+
+  const treasures: Treasure[] = data?.data.entities;
+  const pageCount: number = data?.data.pageCount;
+
+  return { treasures: treasures, pageCount: pageCount, ...rest };
 };

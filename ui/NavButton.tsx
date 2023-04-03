@@ -32,7 +32,7 @@ export function NavButton({
   ...props
 }: NavButtonProps) {
   const { theme } = useTheme();
-  const themedStyles = styles(theme, buttonWidth, isCurrentPage);
+  const themedStyles = styles(theme, buttonWidth, isCurrentPage, text);
   let currentColor;
   if (text === "HOME") {
     if (isCurrentPage) {
@@ -59,7 +59,12 @@ export function NavButton({
 }
 
 // Styles
-const styles = (theme: Theme, buttonWidth: string, isCurrentPage: boolean) => {
+const styles = (
+  theme: Theme,
+  buttonWidth: string,
+  isCurrentPage: boolean,
+  text: string
+) => {
   const {
     textColor,
     pressedBackgroundColor,
@@ -73,6 +78,8 @@ const styles = (theme: Theme, buttonWidth: string, isCurrentPage: boolean) => {
       backgroundColor: isCurrentPage ? pressedBackgroundColor : backgroundColor,
       borderColor: borderColor,
       borderWidth: 0.5,
+      //borderTopLeftRadius: text === "ACCOUNT" ? 40 : 0,
+      //borderTopRightRadius: text === "JOIN" ? 40 : 0,
       width: buttonWidth,
       padding: 4,
       alignItems: "center",

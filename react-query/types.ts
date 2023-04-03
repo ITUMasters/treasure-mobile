@@ -11,12 +11,18 @@ export type User = {
 
 export type Treasure = {
   id: number;
+  name: string;
   locationId: number;
   gift: number;
   photoLink?: string | null;
   timeLimit?: number;
   hardness: Hardness;
-  regionName?: string;
+  location: { id: number; region: Region };
+};
+
+export type Region = {
+  id: number;
+  name: string;
 };
 
 export type Hardness = "easy" | "medium" | "hard" | "insane";
