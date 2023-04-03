@@ -1,77 +1,97 @@
-import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
-import { useTheme } from "../theme";
-import { View, Image, Text, Switch } from "react-native";
-import { Theme } from "../theme/types";
-import { Button } from "../ui/Button";
-import { NavBar } from "../ui/NavBar";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { Input } from "../ui/Input";
-import { useState } from "react";
-import { TreasureCard } from "../ui/TreasureCard";
-import { useModal } from "../hooks/useModal";
-import { SearchBottomSheet } from "../ui/SearchBottomSheet";
-import { useSetNavbarOpen } from "../recoil-store/navbar/NavbarStoreHooks";
-import { useEffect } from "react";
-import { PATHS } from "../consts/paths";
-import { useAllTreasures, useTreasureByPageId } from "../react-query/hooks";
-import { Loading } from "./Loading";
-import { Pagination } from "../ui/Pagination";
-import { authorizedQueryClient } from "../react-query";
-import { QUERY_KEYS } from "../react-query/queryKeys";
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { useTheme } from '../theme';
+import { View, Image, Text, Switch } from 'react-native';
+import { Theme } from '../theme/types';
+import { Button } from '../ui/Button';
+import { NavBar } from '../ui/NavBar';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { Input } from '../ui/Input';
+import { useState } from 'react';
+import { TreasureCard } from '../ui/TreasureCard';
+import { useModal } from '../hooks/useModal';
+import { SearchBottomSheet } from '../ui/SearchBottomSheet';
+import { useSetNavbarOpen } from '../recoil-store/navbar/NavbarStoreHooks';
+import { useEffect } from 'react';
+import { PATHS } from '../consts/paths';
+import { useAllTreasures, useTreasureByPageId } from '../react-query/hooks';
+import { Loading } from './Loading';
+import { Pagination } from '../ui/Pagination';
+import { authorizedQueryClient } from '../react-query';
+import { QUERY_KEYS } from '../react-query/queryKeys';
+import { Treasure } from '../react-query/types';
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const bottomSheetController = useModal();
-  const [selectedCategory, setSelectedCategory] = useState("MAP");
+  const [selectedCategory, setSelectedCategory] = useState('MAP');
   const setNavbarOpen = useSetNavbarOpen();
   const navigator = useNavigation();
-  const categories = ["ITU", "METU", "Boğaziçi", "Bilkent", "Koç"];
+  const categories = ['ITU', 'METU', 'Boğaziçi', 'Bilkent', 'Koç'];
+  const [foundTreasures, setFoundTreasures] = useState([] as Treasure[]);
+  const [initializingFlag, setInitializingFlag] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { treasures, pageCount, isFetching } = useTreasureByPageId(currentPage);
+  let { treasures, pageCount, isFetching } = useTreasureByPageId(currentPage);
   const name2 = route.params ?? route.params;
   useEffect(() => {
     setSelectedCategory(
-      name2 !== undefined && name2.name !== undefined ? name2.name : "MAP"
+      name2 !== undefined && name2.name !== undefined ? name2.name : 'MAP',
     );
   }, [name2]);
 
   const mockTreasureCards = [
     {
-      id: "1",
-      name: "Bee Road",
-      zone: "ITU",
-      creator: "Alp Kartal",
-      difficulty: "Medium",
+      id: '1',
+      name: 'Bee Road',
+      zone: 'ITU',
+      creator: 'Alp Kartal',
+      difficulty: 'Medium',
     },
     {
-      id: "2",
-      name: "Dogs",
-      zone: "ITU",
-      creator: "Alp Kartal",
-      difficulty: "Easy",
+      id: '2',
+      name: 'Dogs',
+      zone: 'ITU',
+      creator: 'Alp Kartal',
+      difficulty: 'Easy',
     },
     {
-      id: "3",
-      name: "SecretPlace",
-      zone: "METU",
-      creator: "Faruk",
-      difficulty: "Hard",
+      id: '3',
+      name: 'SecretPlace',
+      zone: 'METU',
+      creator: 'Faruk',
+      difficulty: 'Hard',
     },
   ];
 
   if (isFetching) {
     return <Loading />;
   }
+
+  function searchTreasures(input: string) {
+    setFoundTreasures(
+      treasures.filter((element) => {
+        return (
+          element.name.slice(0, input.length).toLowerCase() ==
+          input.toLowerCase()
+        );
+      }),
+    );
+    setInitializingFlag(true);
+  }
+
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
         <View style={themedStyles.wrapper}>
           <View style={themedStyles.searchBar}>
             <View style={themedStyles.searchInput}>
-              <Input size="medium" title="Search Treasure" />
+              <Input
+                size="medium"
+                title="Search Treasure"
+                onChangeText={(text) => searchTreasures(text)}
+              />
             </View>
             <View style={themedStyles.searchButton}>
               <Button
@@ -99,17 +119,19 @@ export function HomePage({ route }: any) {
                   difficulty={element.difficulty}
                 />
               ))*/}
-            {treasures.map((element, index) => (
-              <TreasureCard
-                key={index + 1}
-                id={element.id.toString()}
-                name={element.name}
-                zone={element.location.region.name}
-                creator={"SIMDILIK FARUK"}
-                difficulty={element.hardness}
-                treasureId={element.id}
-              />
-            ))}
+            {(initializingFlag ? foundTreasures : treasures).map(
+              (element, index) => (
+                <TreasureCard
+                  key={index + 1}
+                  id={element.id.toString()}
+                  name={element.name}
+                  zone={element.location.region.name}
+                  creator={'SIMDILIK FARUK'}
+                  difficulty={element.hardness}
+                  treasureId={element.id}
+                />
+              ),
+            )}
           </View>
           <View style={{ marginTop: 12, marginBottom: 40 }}>
             <Pagination
@@ -118,14 +140,14 @@ export function HomePage({ route }: any) {
               backPage={() => {
                 setCurrentPage(currentPage - 1);
                 authorizedQueryClient.refetchQueries([
-                  "treasureByPageId",
+                  'treasureByPageId',
                   currentPage - 1,
                 ]);
               }}
               nextPage={() => {
                 setCurrentPage(currentPage + 1);
                 authorizedQueryClient.refetchQueries([
-                  "treasureByPageId",
+                  'treasureByPageId',
                   currentPage + 1,
                 ]);
               }}
@@ -152,11 +174,11 @@ const styles = (theme: Theme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      width: "100%",
+      width: '100%',
       backgroundColor: theme.appBackground.backgroundColor,
     },
     scrollViewStyle: {
-      width: "100%",
+      width: '100%',
       flex: 1,
     },
     wrapper: {
@@ -164,7 +186,7 @@ const styles = (theme: Theme) => {
       marginHorizontal: 25,
     },
     searchBar: {
-      flexDirection: "row",
+      flexDirection: 'row',
     },
     searchInput: {
       borderRadius: 10,
@@ -179,3 +201,4 @@ const styles = (theme: Theme) => {
     },
   });
 };
+
