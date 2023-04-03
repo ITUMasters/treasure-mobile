@@ -43,4 +43,10 @@ export const dark: Theme = {
   pagination: {
     bg: colors.lightRoyalBlue,
   },
+  navbarBorderColor: {
+    color: colors.darkRoyalBlue,
+  },
+  pin: {
+    placeholderColor: colors.lightRoyalBlue,
+  },
 };

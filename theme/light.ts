@@ -43,4 +43,10 @@ export const light: Theme = {
   pagination: {
     bg: colors.lightRoyalBlue,
   },
+  navbarBorderColor: {
+    color: colors.white,
+  },
+  pin: {
+    placeholderColor: colors.black,
+  },
 };

@@ -1,21 +1,25 @@
-import { account, emptySettings, go, mail, settings, treasure } from '../icons';
-import { StyleSheet } from 'react-native';
-import { View } from 'react-native';
+import { account, emptySettings, go, mail, settings, treasure } from "../icons";
+import { StyleSheet } from "react-native";
+import { View } from "react-native";
 
-import { Logo } from './Logo';
-import { useState } from 'react';
-import { NavButton } from './NavButton';
-import { PATHS } from '../consts/paths';
-import { Icon } from './Icon';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { InGamePage } from '../pages/InGamePage';
-import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
+import { Logo } from "./Logo";
+import { useState } from "react";
+import { NavButton } from "./NavButton";
+import { PATHS } from "../consts/paths";
+import { Icon } from "./Icon";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { InGamePage } from "../pages/InGamePage";
+import { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
+import { colors } from "../theme/colors";
+import { useTheme } from "../theme";
+import { Theme } from "../theme/types";
 
 type navbarType = {
   pageNo: string;
 };
 export const NavBar = ({ pageNo }: navbarType) => {
-  const themedStyles = styles();
+  const { theme } = useTheme();
+  const themedStyles = styles(theme);
   const navigator = useNavigation();
 
   const [currentPage, setCurrentPage] = useState(parseInt(pageNo));
@@ -25,40 +29,41 @@ export const NavBar = ({ pageNo }: navbarType) => {
       <NavButton
         as={PATHS.ACCOUNT}
         onPress={() => {
-          navigator.navigate('Profile' as never, {} as never);
+          navigator.navigate("Profile" as never, {} as never);
         }}
         isCurrentPage={currentPage === 0}
         text="ACCOUNT"
         xml={account}
-        buttonWidth="20%"
-      />
-      <NavButton
-        as={PATHS.JOIN}
-        onPress={() => {
-          navigator.navigate('Join' as never, {} as never);
-        }}
-        isCurrentPage={currentPage === 1}
-        text="JOIN"
-        xml={mail}
-        buttonWidth="20%"
+        buttonWidth="33.3%"
       />
 
       <NavButton
         as={PATHS.HOME}
         onPress={() => {
-          navigator.navigate('Home' as never, {} as never);
+          navigator.navigate("Home" as never, {} as never);
         }}
-        isCurrentPage={currentPage === 2}
+        isCurrentPage={currentPage === 1}
         text="HOME"
         xml={mail}
-        buttonWidth="20%"
+        buttonWidth="33.3%"
       >
-        <View style={styles().treasure}>
+        <View style={themedStyles.treasure}>
           <Icon xml={treasure} width="65" height="65" />
         </View>
       </NavButton>
 
       <NavButton
+        as={PATHS.JOIN}
+        onPress={() => {
+          navigator.navigate("Join" as never, {} as never);
+        }}
+        isCurrentPage={currentPage === 2}
+        text="JOIN"
+        xml={mail}
+        buttonWidth="33.3%"
+      />
+
+      {/*<NavButton
         as={PATHS.PLAY}
         onPress={() => {
           navigator.navigate('InGame' as never, {} as never);
@@ -77,24 +82,25 @@ export const NavBar = ({ pageNo }: navbarType) => {
         text="SETTINGS"
         xml={emptySettings}
         buttonWidth="20%"
-      />
+      />*/}
     </View>
   );
 };
 
 // Styles
-const styles = () => {
+const styles = (theme: Theme) => {
   return StyleSheet.create({
     wrapper: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
+      borderTopWidth: 0.5,
+      borderColor: theme.navbarBorderColor.color,
+      flexDirection: "row",
+      justifyContent: "center",
       height: 64,
     },
     treasure: {
-      position: 'absolute',
-      top: '-58%',
+      position: "absolute",
+      top: "-58%",
       zIndex: 10,
     },
   });
 };
-

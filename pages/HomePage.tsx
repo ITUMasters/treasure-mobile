@@ -13,9 +13,11 @@ import { SearchBottomSheet } from "../ui/SearchBottomSheet";
 import { useSetNavbarOpen } from "../recoil-store/navbar/NavbarStoreHooks";
 import { useEffect } from "react";
 import { PATHS } from "../consts/paths";
-import { useAllTreasures } from "../react-query/hooks";
+import { useAllTreasures, useTreasureByPageId } from "../react-query/hooks";
 import { Loading } from "./Loading";
 import { Pagination } from "../ui/Pagination";
+import { authorizedQueryClient } from "../react-query";
+import { QUERY_KEYS } from "../react-query/queryKeys";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
@@ -25,9 +27,10 @@ export function HomePage({ route }: any) {
   const setNavbarOpen = useSetNavbarOpen();
   const navigator = useNavigation();
   const categories = ["ITU", "METU", "Boğaziçi", "Bilkent", "Koç"];
-  const { treasures, isFetching } = useAllTreasures();
+
   const [currentPage, setCurrentPage] = useState(1);
 
+  const { treasures, pageCount, isFetching } = useTreasureByPageId(currentPage);
   const name2 = route.params ?? route.params;
   useEffect(() => {
     setSelectedCategory(
@@ -99,9 +102,9 @@ export function HomePage({ route }: any) {
             {treasures.map((element, index) => (
               <TreasureCard
                 key={index + 1}
-                id={(index + 1).toString()}
-                name={"Isim Olayi gelecek"}
-                zone={"SIMDILIK ITU"}
+                id={element.id.toString()}
+                name={element.name}
+                zone={element.location.region.name}
                 creator={"SIMDILIK FARUK"}
                 difficulty={element.hardness}
                 treasureId={element.id}
@@ -111,9 +114,21 @@ export function HomePage({ route }: any) {
           <View style={{ marginTop: 12, marginBottom: 40 }}>
             <Pagination
               currentPage={currentPage}
-              maxPage={12}
-              backPage={() => setCurrentPage(currentPage - 1)}
-              nextPage={() => setCurrentPage(currentPage + 1)}
+              maxPage={pageCount}
+              backPage={() => {
+                setCurrentPage(currentPage - 1);
+                authorizedQueryClient.refetchQueries([
+                  "treasureByPageId",
+                  currentPage - 1,
+                ]);
+              }}
+              nextPage={() => {
+                setCurrentPage(currentPage + 1);
+                authorizedQueryClient.refetchQueries([
+                  "treasureByPageId",
+                  currentPage + 1,
+                ]);
+              }}
             />
           </View>
         </View>
@@ -128,7 +143,7 @@ export function HomePage({ route }: any) {
         onOpen={() => setNavbarOpen(false)}
       />
 
-      <NavBar pageNo="2" />
+      <NavBar pageNo="1" />
     </SafeAreaView>
   );
 }

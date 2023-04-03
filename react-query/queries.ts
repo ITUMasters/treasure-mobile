@@ -19,8 +19,7 @@ export const apiChangeAccountInfo = (data: {
   username: string;
   id: number;
 }) => {
-  console.log(data);
-  return axios({ url: "/user/" + data.id.toString(), method: "put", data });
+  return axios({ url: "/user/", method: "put", data });
 };
 
 export const apiGetAllTreasures = () => {
@@ -29,4 +28,8 @@ export const apiGetAllTreasures = () => {
 
 export const apiGetTreasureById = (treasureId: number) => {
   return axios({ url: "/treasure/" + treasureId.toString(), method: "get" });
+};
+
+export const apiGetTreasureByPageId = (pageId: number) => {
+  return axios({ url: "/treasure/page/" + pageId.toString(), method: "get" });
 };
