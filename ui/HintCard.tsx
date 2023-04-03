@@ -37,7 +37,9 @@ export function HintCard({
   return (
     <View style={themedStyles.wrapper}>
       <Text style={themedStyles.hintHeader}>Hint {hintNumber}</Text>
-      <Text textBreakStrategy="simple">{hintText}</Text>
+      <View style={{ flexShrink: 1 }}>
+        <Text style={{ color: colors.white }}>{hintText}</Text>
+      </View>
     </View>
   );
 }
@@ -46,7 +48,6 @@ const styles = (theme: Theme) => {
   return StyleSheet.create({
     wrapper: {
       marginRight: 20,
-      height: 50,
       padding: 10,
       backgroundColor: colors.lightRoyalBlue,
       flexDirection: 'column',
