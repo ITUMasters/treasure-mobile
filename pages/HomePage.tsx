@@ -1,52 +1,56 @@
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
-import { useTheme } from '../theme';
-import { View, Image, Text, Switch } from 'react-native';
-import { Theme } from '../theme/types';
-import { Button } from '../ui/Button';
-import { NavBar } from '../ui/NavBar';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Input } from '../ui/Input';
-import { useState } from 'react';
-import { TreasureCard } from '../ui/TreasureCard';
-import { useModal } from '../hooks/useModal';
-import { SearchBottomSheet } from '../ui/SearchBottomSheet';
-import { useSetNavbarOpen } from '../recoil-store/navbar/NavbarStoreHooks';
-import { useEffect } from 'react';
-import { PATHS } from '../consts/paths';
-import { useAllTreasures, useTreasureByPageId } from '../react-query/hooks';
-import { Loading } from './Loading';
-import { Pagination } from '../ui/Pagination';
-import { authorizedQueryClient } from '../react-query';
-import { QUERY_KEYS } from '../react-query/queryKeys';
-import { Treasure } from '../react-query/types';
-import { StateSetter } from '../ui/StateSetter';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { useTheme } from "../theme";
+import { View, Image, Text, Switch } from "react-native";
+import { Theme } from "../theme/types";
+import { Button } from "../ui/Button";
+import { NavBar } from "../ui/NavBar";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { Input } from "../ui/Input";
+import { useState } from "react";
+import { TreasureCard } from "../ui/TreasureCard";
+import { useModal } from "../hooks/useModal";
+import { SearchBottomSheet } from "../ui/SearchBottomSheet";
+import { useSetNavbarOpen } from "../recoil-store/navbar/NavbarStoreHooks";
+import { useEffect } from "react";
+import { PATHS } from "../consts/paths";
+import { useAllTreasures, useTreasureByPageId } from "../react-query/hooks";
+import { Loading } from "./Loading";
+import { Pagination } from "../ui/Pagination";
+import { authorizedQueryClient } from "../react-query";
+import { QUERY_KEYS } from "../react-query/queryKeys";
+import { Treasure } from "../react-query/types";
+import { StateSetter } from "../ui/StateSetter";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const bottomSheetController = useModal();
-  const [selectedCategory, setSelectedCategory] = useState('MAP');
-  const [selectedRegionId, setSelectedRegionId] = useState(7);
+  const [selectedCategory, setSelectedCategory] = useState("MAP");
+  const [selectedRegionId, setSelectedRegionId] = useState(-1);
   const setNavbarOpen = useSetNavbarOpen();
   const navigator = useNavigation();
-  const categories = ['ITU', 'METU', 'Boğaziçi', 'Bilkent', 'Koç'];
+  const categories = ["ITU", "METU", "Boğaziçi", "Bilkent", "Koç"];
   const [foundTreasures, setFoundTreasures] = useState([] as Treasure[]);
   const [initializingFlag, setInitializingFlag] = useState(false);
-  const [searchedText, setSearchedText] = useState('');
+  const [searchedText, setSearchedText] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  let { treasures, pageCount, isFetching } = useTreasureByPageId(
-    currentPage,
-    selectedRegionId !== -1 ? selectedRegionId : 7, //TODO: BURAYI DUZELTMEK LAZIM SIMDILIK DEFAULT REGIONA ITU ATIYORUM.
-  );
   const name2 = route.params ?? route.params;
   useEffect(() => {
     setSelectedCategory(
-      name2 !== undefined && name2.name !== undefined ? name2.name : 'MAP',
+      name2 !== undefined && name2.name !== undefined ? name2.name : "MAP"
+    );
+    setSelectedRegionId(
+      name2 !== undefined && name2.regionId !== undefined ? name2.regionId : -1
     );
   }, [name2]);
+
+  let { treasures, pageCount, isFetching } = useTreasureByPageId(
+    currentPage,
+    selectedRegionId !== -1 ? selectedRegionId : null
+  );
 
   if (isFetching) {
     return <Loading />;
@@ -106,11 +110,11 @@ export function HomePage({ route }: any) {
                   id={element.id.toString()}
                   name={element.name}
                   zone={element.location.region.name}
-                  creator={'SIMDILIK FARUK'}
+                  creator={"SIMDILIK FARUK"}
                   difficulty={element.hardness}
                   treasureId={element.id}
                 />
-              ),
+              )
             )}
           </View>
           <View style={{ marginTop: 12, marginBottom: 40 }}>
@@ -120,7 +124,7 @@ export function HomePage({ route }: any) {
               backPage={() => {
                 setCurrentPage(currentPage - 1);
                 authorizedQueryClient.refetchQueries([
-                  'treasureByPageId',
+                  "treasureByPageId",
                   currentPage - 1,
                   selectedRegionId,
                 ]);
@@ -129,7 +133,7 @@ export function HomePage({ route }: any) {
               nextPage={() => {
                 setCurrentPage(currentPage + 1);
                 authorizedQueryClient.refetchQueries([
-                  'treasureByPageId',
+                  "treasureByPageId",
                   currentPage + 1,
                   selectedRegionId,
                 ]);
@@ -158,11 +162,11 @@ const styles = (theme: Theme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      width: '100%',
+      width: "100%",
       backgroundColor: theme.appBackground.backgroundColor,
     },
     scrollViewStyle: {
-      width: '100%',
+      width: "100%",
       flex: 1,
     },
     wrapper: {
@@ -170,7 +174,7 @@ const styles = (theme: Theme) => {
       marginHorizontal: 25,
     },
     searchBar: {
-      flexDirection: 'row',
+      flexDirection: "row",
     },
     searchInput: {
       borderRadius: 10,
@@ -185,10 +189,9 @@ const styles = (theme: Theme) => {
     },
     notFound: {
       color: theme.input.textColor,
-      alignSelf: 'center',
+      alignSelf: "center",
       marginTop: 15,
       fontSize: 20,
     },
   });
 };
-
