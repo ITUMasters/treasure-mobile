@@ -25,6 +25,13 @@ export type Region = {
   name: string;
 };
 
+export type Hint = {
+  id: number;
+  content: string | null;
+  cost: number;
+  isowned: boolean;
+};
+
 export type Hardness = "easy" | "medium" | "hard" | "insane";
 
 export type Author = {
