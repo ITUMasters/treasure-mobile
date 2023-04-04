@@ -95,7 +95,7 @@ export const useTreasureById = (treasureId: number) => {
   return { treasure: treasure, ...rest };
 };
 
-export const useTreasureByPageId = (pageId: number, regionId = 25) => {
+export const useTreasureByPageId = (pageId: number, regionId: number | null) => {
   const { data, ...rest } = useQuery({
     queryKey: [QUERY_KEYS.treasureByPageId, pageId, regionId],
     queryFn: () => apiGetTreasureByPageId(pageId, regionId),
