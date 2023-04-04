@@ -20,12 +20,15 @@ import {
   useHintsByTreasureId,
   useTreasureById,
   useTreasureSubmission,
+  useTreasureSubmissionByInteractionId,
   useUser,
 } from "../react-query/hooks";
 import { Loading } from "./Loading";
 import * as Location from "expo-location";
 import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 import { authorizedQueryClient } from "../react-query";
+
+export type statusType = "Accepted" | "Wrong" | "Not Solved";
 
 export function InGamePage({ route }: any) {
   const { theme } = useTheme();
@@ -34,9 +37,15 @@ export function InGamePage({ route }: any) {
   const interactionId = route.params.interactionId;
   const treasureById = useTreasureById(treasureId);
   const hints = useHintsByTreasureId(treasureId);
+  const treasureSubmissions =
+    useTreasureSubmissionByInteractionId(interactionId);
   const TreasureSubmissionMutation = useTreasureSubmission({
     onSuccess: async (res) => {
       console.log("Success.");
+      authorizedQueryClient.refetchQueries([
+        "TreasureSubmissionByInteractionId",
+        interactionId,
+      ]);
     },
     onError: (err) => {
       showAlert("Treasure Submission is failed", {
@@ -91,7 +100,11 @@ export function InGamePage({ route }: any) {
     });
   };
 
-  if (treasureById.isFetching || hints.isFetching) {
+  if (
+    treasureById.isFetching ||
+    hints.isFetching ||
+    treasureSubmissions.isFetching
+  ) {
     return <Loading />;
   }
 
@@ -100,9 +113,17 @@ export function InGamePage({ route }: any) {
     treasure.hardness[0].toUpperCase() +
     treasure.hardness.substring(1, treasure.hardness.length);
 
-  const themedStyles = styles(theme, hardness, "Accepted");
   const unlockedHints = hints.hints.filter((e) => e.isowned === true);
   const lockedHints = hints.hints.filter((e) => e.isowned === false);
+  const treasureSubmits = treasureSubmissions.treasureSubmissions;
+  const status: statusType =
+    treasureSubmits.length === 0
+      ? "Not Solved"
+      : treasureSubmits[treasureSubmits.length - 1].isSuccess
+      ? "Accepted"
+      : "Wrong";
+
+  const themedStyles = styles(theme, hardness, status);
 
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -141,7 +162,7 @@ export function InGamePage({ route }: any) {
             marginBottom: 20,
           }}
         >
-          <Text style={themedStyles.statusStyle}>Status: Accepted</Text>
+          <Text style={themedStyles.statusStyle}>Status: {status}</Text>
           <View
             style={{
               flex: 0.5,
@@ -185,7 +206,7 @@ export function InGamePage({ route }: any) {
   );
 }
 
-const styles = (theme: Theme, hardness: string, status: string) => {
+const styles = (theme: Theme, hardness: string, status: statusType) => {
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -223,7 +244,12 @@ const styles = (theme: Theme, hardness: string, status: string) => {
       marginTop: 8,
     },
     statusStyle: {
-      color: status === "Accepted" ? colors.green : colors.red,
+      color:
+        status === "Accepted"
+          ? colors.green
+          : status === "Wrong"
+          ? colors.red
+          : colors.orange,
       fontFamily: FONTS.PoppinsBold,
       flex: 0.5,
       justifyContent: "flex-start",

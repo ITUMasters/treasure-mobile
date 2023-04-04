@@ -69,3 +69,13 @@ export const apiTreasureSubmission = (data: TreasureSubmission) => {
     data,
   });
 };
+
+export const apiGetTreasureSubmissionByInteractionId = (
+  interactionId: number
+) => {
+  return axios({
+    url: "/treasureSubmission",
+    method: "get",
+    params: { interactionId: interactionId },
+  });
+};
