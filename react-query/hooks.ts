@@ -5,6 +5,7 @@ import {
   apiGetHintsByTreasureId,
   apiGetTreasureById,
   apiGetTreasureByPageId,
+  apiGetTreasureSubmissionByInteractionId,
   apiGetUser,
   apiJoin,
   apiLogin,
@@ -13,7 +14,13 @@ import {
   apiTreasureSubmission,
 } from "./queries";
 import { QUERY_KEYS } from "./queryKeys";
-import { Hint, QuizResponseData, Treasure, User } from "./types";
+import {
+  Hint,
+  QuizResponseData,
+  Treasure,
+  TreasureSubmission,
+  User,
+} from "./types";
 
 type CustomMutationProps = {
   onSuccess?: (data: any) => void;
@@ -167,4 +174,15 @@ export const useTreasureSubmission = ({
       onError?.(err);
     },
   });
+};
+
+export const useTreasureSubmissionByInteractionId = (interactionId: number) => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["TreasureSubmissionByInteractionId", interactionId],
+    queryFn: () => apiGetTreasureSubmissionByInteractionId(interactionId),
+    ...defaultQueryOptions,
+  });
+  const treasureSubmissions: TreasureSubmission[] = data?.data.entities;
+
+  return { treasureSubmissions: treasureSubmissions, ...rest };
 };
