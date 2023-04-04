@@ -6,9 +6,11 @@ import {
   apiGetTreasureById,
   apiGetTreasureByPageId,
   apiGetUser,
+  apiJoin,
   apiLogin,
   apiPurchaseHint,
   apiRegister,
+  apiTreasureSubmission,
 } from "./queries";
 import { QUERY_KEYS } from "./queryKeys";
 import { Hint, QuizResponseData, Treasure, User } from "./types";
@@ -95,7 +97,10 @@ export const useTreasureById = (treasureId: number) => {
   return { treasure: treasure, ...rest };
 };
 
-export const useTreasureByPageId = (pageId: number, regionId: number | null) => {
+export const useTreasureByPageId = (
+  pageId: number,
+  regionId: number | null
+) => {
   const { data, ...rest } = useQuery({
     queryKey: [QUERY_KEYS.treasureByPageId, pageId, regionId],
     queryFn: () => apiGetTreasureByPageId(pageId, regionId),
@@ -125,6 +130,36 @@ export const useHintPurchaseMutation = ({
 }: CustomMutationProps = {}) => {
   return useMutation({
     mutationFn: apiPurchaseHint,
+    onSuccess: (data) => {
+      onSuccess?.(data);
+    },
+    onError: (err) => {
+      onError?.(err);
+    },
+  });
+};
+
+export const useJoinMutation = ({
+  onSuccess,
+  onError,
+}: CustomMutationProps = {}) => {
+  return useMutation({
+    mutationFn: apiJoin,
+    onSuccess: (data) => {
+      onSuccess?.(data);
+    },
+    onError: (err) => {
+      onError?.(err);
+    },
+  });
+};
+
+export const useTreasureSubmission = ({
+  onSuccess,
+  onError,
+}: CustomMutationProps = {}) => {
+  return useMutation({
+    mutationFn: apiTreasureSubmission,
     onSuccess: (data) => {
       onSuccess?.(data);
     },

@@ -13,11 +13,12 @@ import { NavBar } from "../ui/NavBar";
 import { addFriend } from "../icons/index";
 import { TextInput } from "react-native-gesture-handler";
 import { colors } from "../theme/colors";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { PATHS } from "../consts/paths";
-import { useTreasureById } from "../react-query/hooks";
+import { useJoinMutation, useTreasureById } from "../react-query/hooks";
 import { Loading } from "./Loading";
+import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 
 export function JoinPage() {
   const { theme } = useTheme();
@@ -28,6 +29,32 @@ export function JoinPage() {
     theme.pin.placeholderColor
   );
   const [curPlaceholder, setCurPlaceholder] = useState("PIN");
+
+  const JoinMutation = useJoinMutation({
+    onSuccess: async (res) => {
+      navigator.navigate(
+        PATHS.PLAY as never,
+        { treasureId: res.data.treasureId, interactionId: res.data.id } as never
+      );
+    },
+    onError: (err) => {
+      showAlert("Join Error", {
+        message: getDefaultErrorMessage(err) as any,
+      });
+    },
+  });
+
+  const join = (treasureId: number) => {
+    JoinMutation.mutate({
+      treasureId: treasureId,
+    });
+  };
+
+  const isButtonDisabled = useMemo(() => {
+    const c1 = pin.trim() === "";
+    const c2 = !Number.isInteger(parseInt(pin));
+    return c1 || c2;
+  }, [pin]);
 
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -58,7 +85,12 @@ export function JoinPage() {
             />
             <View style={{ width: "80%", alignSelf: "center" }}>
               <View style={{ marginTop: "10%" }}>
-                <Button size="xlarge" color="default">
+                <Button
+                  size="xlarge"
+                  color="default"
+                  onPress={() => join(parseInt(pin))}
+                  disabled={isButtonDisabled}
+                >
                   JOIN
                 </Button>
               </View>
