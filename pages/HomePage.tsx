@@ -19,18 +19,20 @@ import { Pagination } from "../ui/Pagination";
 import { authorizedQueryClient } from "../react-query";
 import { QUERY_KEYS } from "../react-query/queryKeys";
 import { Treasure } from "../react-query/types";
+import { StateSetter } from "../ui/StateSetter";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const bottomSheetController = useModal();
   const [selectedCategory, setSelectedCategory] = useState("MAP");
-  const [selectedRegionId, setSelectedRegionId] = useState(-1);
+  const [selectedRegionId, setSelectedRegionId] = useState(7);
   const setNavbarOpen = useSetNavbarOpen();
   const navigator = useNavigation();
   const categories = ["ITU", "METU", "Boğaziçi", "Bilkent", "Koç"];
   const [foundTreasures, setFoundTreasures] = useState([] as Treasure[]);
   const [initializingFlag, setInitializingFlag] = useState(false);
+  const [searchedText, setSearchedText] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -45,56 +47,38 @@ export function HomePage({ route }: any) {
     );
   }, [name2]);
 
-  const mockTreasureCards = [
-    {
-      id: "1",
-      name: "Bee Road",
-      zone: "ITU",
-      creator: "Alp Kartal",
-      difficulty: "Medium",
-    },
-    {
-      id: "2",
-      name: "Dogs",
-      zone: "ITU",
-      creator: "Alp Kartal",
-      difficulty: "Easy",
-    },
-    {
-      id: "3",
-      name: "SecretPlace",
-      zone: "METU",
-      creator: "Faruk",
-      difficulty: "Hard",
-    },
-  ];
-
   if (isFetching) {
     return <Loading />;
   }
 
   function searchTreasures(input: string) {
-    setFoundTreasures(
-      treasures.filter((element) => {
-        return (
-          element.name.slice(0, input.length).toLowerCase() ==
-          input.toLowerCase()
-        );
-      })
-    );
+    let filteredTreasures = treasures.filter((element) => {
+      return (
+        element.name.slice(0, input.length).toLowerCase() == input.toLowerCase()
+      );
+    });
+    if (filteredTreasures.length === 0) {
+      filteredTreasures = treasures;
+    }
+    setFoundTreasures(filteredTreasures);
     setInitializingFlag(true);
   }
 
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
+        <StateSetter setSpecificState={() => searchTreasures(searchedText)} />
         <View style={themedStyles.wrapper}>
           <View style={themedStyles.searchBar}>
             <View style={themedStyles.searchInput}>
               <Input
                 size="medium"
                 title="Search Treasure"
-                onChangeText={(text) => searchTreasures(text)}
+                value={searchedText}
+                onChangeText={(text) => {
+                  setSearchedText(text);
+                  searchTreasures(text);
+                }}
               />
             </View>
             <View style={themedStyles.searchButton}>
@@ -107,22 +91,6 @@ export function HomePage({ route }: any) {
             </View>
           </View>
           <View style={themedStyles.treasures}>
-            {/*mockTreasureCards
-              .filter(
-                (element) =>
-                  element.zone === selectedCategory ||
-                  selectedCategory === "MAP"
-              )
-              .map((element) => (
-                <TreasureCard
-                  key={element.id}
-                  id={element.id}
-                  name={element.name}
-                  zone={element.zone}
-                  creator={element.creator}
-                  difficulty={element.difficulty}
-                />
-              ))*/}
             {(initializingFlag ? foundTreasures : treasures).map(
               (element, index) => (
                 <TreasureCard
@@ -146,14 +114,18 @@ export function HomePage({ route }: any) {
                 authorizedQueryClient.refetchQueries([
                   "treasureByPageId",
                   currentPage - 1,
+                  selectedRegionId,
                 ]);
+                setInitializingFlag(false);
               }}
               nextPage={() => {
                 setCurrentPage(currentPage + 1);
                 authorizedQueryClient.refetchQueries([
                   "treasureByPageId",
                   currentPage + 1,
+                  selectedRegionId,
                 ]);
+                setInitializingFlag(false);
               }}
             />
           </View>
