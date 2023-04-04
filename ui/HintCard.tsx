@@ -1,16 +1,17 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { Theme } from '../theme/types';
-import { useTheme } from '../theme';
-import { colors } from '../theme/colors';
-import { Button } from './Button';
-import { diff } from 'react-native-reanimated';
-import { useState } from 'react';
+import { Image, StyleSheet, Text, View } from "react-native";
+import { Theme } from "../theme/types";
+import { useTheme } from "../theme";
+import { colors } from "../theme/colors";
+import { Button } from "./Button";
+import { diff } from "react-native-reanimated";
+import { useState } from "react";
 
 interface HintCardProps {
   hintNumber: string;
   hintText: string;
   cost: string;
   isLocked: Boolean;
+  purchase?: () => void;
 }
 
 export function HintCard({
@@ -18,20 +19,23 @@ export function HintCard({
   hintText,
   cost,
   isLocked,
+  purchase,
 }: HintCardProps) {
-  const { theme, currentTheme } = useTheme();
+  const { theme } = useTheme();
   const themedStyles = styles(theme);
-  const [lockedState, setLockedState] = useState(isLocked);
 
-  if (lockedState) {
+  if (isLocked) {
     return (
-      <Button
-        onPress={() => setLockedState(false)}
-        style={themedStyles.wrapper}
-        size="large"
-      >
-        Pay {cost} gold to unlock Hint {hintNumber}
-      </Button>
+      <View style={themedStyles.wrapper}>
+        <Button
+          onPress={() => {
+            purchase !== undefined ? purchase() : null;
+          }}
+          size="large"
+        >
+          Pay {cost} gold to unlock Hint {hintNumber}
+        </Button>
+      </View>
     );
   }
   return (
@@ -50,15 +54,14 @@ const styles = (theme: Theme) => {
       marginRight: 20,
       padding: 10,
       backgroundColor: colors.lightRoyalBlue,
-      flexDirection: 'column',
+      flexDirection: "column",
       borderRadius: 10,
       marginTop: 10,
       marginBottom: 10,
     },
     hintHeader: {
       color: colors.white,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
   });
 };
-

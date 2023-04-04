@@ -30,6 +30,24 @@ export const apiGetTreasureById = (treasureId: number) => {
   return axios({ url: "/treasure/" + treasureId.toString(), method: "get" });
 };
 
-export const apiGetTreasureByPageId = (pageId: number) => {
-  return axios({ url: "/treasure/page/" + pageId.toString(), method: "get" });
+export const apiGetHintsByTreasureId = (treasureId: number) => {
+  return axios({
+    url: "/hint/treasure/" + treasureId.toString(),
+    method: "get",
+  });
+};
+
+export const apiGetTreasureByPageId = (pageId: number, regionId = 25) => {
+  return axios({
+    url: "/treasure/page/" + pageId.toString(),
+    method: "get",
+    params: { regionId: regionId },
+  });
+};
+
+export const apiPurchaseHint = (data: { hintId: number }) => {
+  return axios({
+    url: "/hint/" + data.hintId.toString() + "/purchase",
+    method: "post",
+  });
 };

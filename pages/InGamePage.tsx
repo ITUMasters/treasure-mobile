@@ -15,17 +15,23 @@ import { Theme } from "../theme/types";
 import { Button } from "../ui/Button";
 import { HintCard } from "../ui/HintCard";
 import { NavBar } from "../ui/NavBar";
-import { TopBar } from "../ui/TopBar";
-import { useTreasureById } from "../react-query/hooks";
+import {
+  useHintPurchaseMutation,
+  useHintsByTreasureId,
+  useTreasureById,
+  useUser,
+} from "../react-query/hooks";
 import { Loading } from "./Loading";
 import * as Location from "expo-location";
-import { showAlert } from "../utils/alert";
+import { getDefaultErrorMessage, showAlert } from "../utils/alert";
+import { authorizedQueryClient } from "../react-query";
 
 export function InGamePage({ route }: any) {
   const { theme } = useTheme();
 
   const treasureId = route.params.treasureId;
   const treasureById = useTreasureById(treasureId);
+  const hints = useHintsByTreasureId(treasureId);
   const [location, setLocation] = useState("");
 
   const submitLocation = () => {
@@ -47,7 +53,25 @@ export function InGamePage({ route }: any) {
     })();
   };
 
-  if (treasureById.isFetching) {
+  const HintPurchaseMutation = useHintPurchaseMutation({
+    onSuccess: async (res) => {
+      console.log("Success.");
+      authorizedQueryClient.refetchQueries(["HintsByTreasureId", treasureId]);
+    },
+    onError: (err) => {
+      showAlert("Purchase failed", {
+        message: getDefaultErrorMessage(err) as any,
+      });
+    },
+  });
+
+  const purchaseHint = (hintId: number) => {
+    HintPurchaseMutation.mutate({
+      hintId: hintId,
+    });
+  };
+
+  if (treasureById.isFetching || hints.isFetching) {
     return <Loading />;
   }
 
@@ -57,6 +81,9 @@ export function InGamePage({ route }: any) {
     treasure.hardness.substring(1, treasure.hardness.length);
 
   const themedStyles = styles(theme, hardness, "Accepted");
+  const unlockedHints = hints.hints.filter((e) => e.isowned === true);
+  const lockedHints = hints.hints.filter((e) => e.isowned === false);
+
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
@@ -112,18 +139,27 @@ export function InGamePage({ route }: any) {
           </View>
         </View>
         <Text style={themedStyles.hint}>Hints</Text>
-        <HintCard
-          hintNumber="1"
-          hintText="A one can hear duck noises if listens careful enough..."
-          cost="30"
-          isLocked={false}
-        ></HintCard>
-        <HintCard
-          hintNumber="2"
-          hintText="Rumours say that this place is located between a road to Lojman's and Gölet..."
-          cost="40"
-          isLocked={true}
-        ></HintCard>
+        {unlockedHints.map((e, index) => (
+          <HintCard
+            key={index}
+            cost={e.cost.toString()}
+            hintNumber={(index + 1).toString()}
+            hintText={e.content as string}
+            isLocked={false}
+          />
+        ))}
+        {lockedHints.map((e, index) => (
+          <>
+            <HintCard
+              key={index}
+              cost={e.cost.toString()}
+              hintNumber={(index + 1).toString()}
+              hintText={e.content as string}
+              isLocked={true}
+              purchase={() => purchaseHint(e.id)}
+            ></HintCard>
+          </>
+        ))}
       </ScrollView>
       <NavBar pageNo="3" />
     </SafeAreaView>
