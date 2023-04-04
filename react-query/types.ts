@@ -37,6 +37,9 @@ export type TreasureSubmission = {
   altitude?: number;
   longitude: number;
   latitude: number;
+  totalTime?: number | null;
+  totalDistance?: number | null;
+  isSuccess?: boolean;
 };
 
 export type Hardness = "easy" | "medium" | "hard" | "insane";
