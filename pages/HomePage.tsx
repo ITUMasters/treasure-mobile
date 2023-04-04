@@ -13,7 +13,11 @@ import { SearchBottomSheet } from "../ui/SearchBottomSheet";
 import { useSetNavbarOpen } from "../recoil-store/navbar/NavbarStoreHooks";
 import { useEffect } from "react";
 import { PATHS } from "../consts/paths";
-import { useAllTreasures, useTreasureByPageId } from "../react-query/hooks";
+import {
+  useAllTreasures,
+  useJoinMutation,
+  useTreasureByPageId,
+} from "../react-query/hooks";
 import { Loading } from "./Loading";
 import { Pagination } from "../ui/Pagination";
 import { authorizedQueryClient } from "../react-query";
@@ -21,6 +25,7 @@ import { QUERY_KEYS } from "../react-query/queryKeys";
 import { Treasure } from "../react-query/types";
 import { StateSetter } from "../ui/StateSetter";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
@@ -51,6 +56,26 @@ export function HomePage({ route }: any) {
     currentPage,
     selectedRegionId !== -1 ? selectedRegionId : null
   );
+
+  const JoinMutation = useJoinMutation({
+    onSuccess: async (res) => {
+      navigator.navigate(
+        PATHS.PLAY as never,
+        { treasureId: res.data.treasureId, interactionId: res.data.id } as never
+      );
+    },
+    onError: (err) => {
+      showAlert("Join Error", {
+        message: getDefaultErrorMessage(err) as any,
+      });
+    },
+  });
+
+  const join = (treasureId: number) => {
+    JoinMutation.mutate({
+      treasureId: treasureId,
+    });
+  };
 
   if (isFetching) {
     return <Loading />;
@@ -113,6 +138,7 @@ export function HomePage({ route }: any) {
                   creator={"SIMDILIK FARUK"}
                   difficulty={element.hardness}
                   treasureId={element.id}
+                  joinTreasure={() => join(element.id)}
                 />
               )
             )}

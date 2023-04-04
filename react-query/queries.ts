@@ -1,5 +1,5 @@
 import { axios } from "../react-query";
-import { User } from "./types";
+import { TreasureSubmission, User } from "./types";
 
 export const apiRegister = (data: User) => {
   return axios({ url: "/user/register", method: "post", data });
@@ -52,5 +52,20 @@ export const apiPurchaseHint = (data: { hintId: number }) => {
   return axios({
     url: "/hint/" + data.hintId.toString() + "/purchase",
     method: "post",
+  });
+};
+
+export const apiJoin = (data: { treasureId: number }) => {
+  return axios({
+    url: "/treasure/" + data.treasureId.toString() + "/join",
+    method: "post",
+  });
+};
+
+export const apiTreasureSubmission = (data: TreasureSubmission) => {
+  return axios({
+    url: "/treasureSubmission",
+    method: "post",
+    data,
   });
 };

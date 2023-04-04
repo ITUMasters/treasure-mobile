@@ -19,6 +19,7 @@ import {
   useHintPurchaseMutation,
   useHintsByTreasureId,
   useTreasureById,
+  useTreasureSubmission,
   useUser,
 } from "../react-query/hooks";
 import { Loading } from "./Loading";
@@ -30,9 +31,28 @@ export function InGamePage({ route }: any) {
   const { theme } = useTheme();
 
   const treasureId = route.params.treasureId;
+  const interactionId = route.params.interactionId;
   const treasureById = useTreasureById(treasureId);
   const hints = useHintsByTreasureId(treasureId);
-  const [location, setLocation] = useState("");
+  const TreasureSubmissionMutation = useTreasureSubmission({
+    onSuccess: async (res) => {
+      console.log("Success.");
+    },
+    onError: (err) => {
+      showAlert("Treasure Submission is failed", {
+        message: getDefaultErrorMessage(err) as any,
+      });
+    },
+  });
+
+  const submitTreasure = (latitude: number, longitude: number) => {
+    TreasureSubmissionMutation.mutate({
+      interactionId: interactionId,
+      latitude: latitude,
+      longitude: longitude,
+      altitude: 1,
+    });
+  };
 
   const submitLocation = () => {
     (async () => {
@@ -46,7 +66,7 @@ export function InGamePage({ route }: any) {
         let location = await Location.getCurrentPositionAsync({
           accuracy: Location.LocationAccuracy.BestForNavigation,
         });
-        setLocation(JSON.stringify(location));
+        submitTreasure(location.coords.latitude, location.coords.longitude);
       } catch (e) {
         showAlert("We could not find your location!");
       }
@@ -87,7 +107,6 @@ export function InGamePage({ route }: any) {
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
-        <Text>{location}</Text>
         <Text style={themedStyles.questionNameStyle}>
           {treasure.id.toString() + ". " + treasure.name}{" "}
         </Text>

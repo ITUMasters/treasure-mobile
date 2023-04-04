@@ -14,6 +14,7 @@ interface TreasureCardProps {
   creator: string;
   difficulty: string;
   treasureId: number;
+  joinTreasure: () => void;
 }
 
 export function TreasureCard({
@@ -23,6 +24,7 @@ export function TreasureCard({
   creator,
   difficulty,
   treasureId,
+  joinTreasure,
 }: TreasureCardProps) {
   const { theme, currentTheme } = useTheme();
   const themedStyles = styles(theme);
@@ -77,12 +79,7 @@ export function TreasureCard({
         </View>
       </View>
       <View style={themedStyles.buttonWrapper}>
-        <Button
-          size="large"
-          onPress={() =>
-            navigator.navigate(PATHS.PLAY, { treasureId: treasureId })
-          }
-        >
+        <Button size="large" onPress={joinTreasure}>
           GO
         </Button>
       </View>

@@ -32,6 +32,13 @@ export type Hint = {
   isowned: boolean;
 };
 
+export type TreasureSubmission = {
+  interactionId: number;
+  altitude?: number;
+  longitude: number;
+  latitude: number;
+};
+
 export type Hardness = "easy" | "medium" | "hard" | "insane";
 
 export type Author = {
