@@ -22,8 +22,14 @@ export function MapPageTries() {
       name: "ITU",
       latitude: 41.10826473247252,
       longitude: 29.02571209390856,
+      id: 7,
     },
-    { name: "METU", latitude: 39.89455861403798, longitude: 32.78077025408293 },
+    {
+      name: "METU",
+      latitude: 39.89455861403798,
+      longitude: 32.78077025408293,
+      id: 25,
+    },
   ];
 
   return (
@@ -48,7 +54,10 @@ export function MapPageTries() {
               }}
               pinColor={"red"}
               onPress={() => {
-                navigator.navigate(PATHS.HOME, { name: element.name });
+                navigator.navigate(PATHS.HOME, {
+                  name: element.name,
+                  regionId: element.id,
+                });
               }}
             ></Marker>
             <Circle

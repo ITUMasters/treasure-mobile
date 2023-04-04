@@ -37,7 +37,10 @@ export const apiGetHintsByTreasureId = (treasureId: number) => {
   });
 };
 
-export const apiGetTreasureByPageId = (pageId: number, regionId = 25) => {
+export const apiGetTreasureByPageId = (
+  pageId: number,
+  regionId: number | null
+) => {
   return axios({
     url: "/treasure/page/" + pageId.toString(),
     method: "get",
