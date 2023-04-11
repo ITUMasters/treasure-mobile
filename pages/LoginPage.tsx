@@ -1,6 +1,13 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { FONTS } from "../consts";
 import {
   eyeOff,
@@ -27,6 +34,10 @@ import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { useSetId } from "../recoil-store/auth/IdStoreHooks";
 import { getItem, setItem } from "../utils/storage";
 import jwtDecode from "jwt-decode";
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+
+WebBrowser.maybeCompleteAuthSession();
 
 export function LoginPage() {
   const [checkboxVal, setCheckboxVal] = useState(false);
@@ -39,6 +50,14 @@ export function LoginPage() {
   const navigator = useNavigation();
   const setAuth = useSetAuth();
   const setId = useSetId();
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId:
+      "281768903486-036diacpu9ugmr7c1l12cp30rs51c2vm.apps.googleusercontent.com",
+    iosClientId:
+      "281768903486-3od8psbkj5b9g1er7f1fl5lojefevt06.apps.googleusercontent.com",
+    expoClientId:
+      "281768903486-obbl2fmgvq5t4snsjlu2pfoco95ss7g6.apps.googleusercontent.com",
+  });
 
   const LoginMutation = useLoginMutation({
     onSuccess: async (res) => {
@@ -84,6 +103,33 @@ export function LoginPage() {
     };
     checkRememberMe();
   }, []);
+
+  const [token, setToken] = useState("");
+  const [userInfo, setUserInfo] = useState(null);
+  useEffect(() => {
+    if (response?.type === "success" && response?.authentication !== null) {
+      setToken(response.authentication.accessToken);
+      getUserInfo();
+    }
+  }, [response, token]);
+
+  const getUserInfo = async () => {
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const user = await response.json();
+      setUserInfo(user);
+      console.log("USER", user);
+      console.log("Token", token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -166,7 +212,14 @@ export function LoginPage() {
             </Text>
           </View>
           <View style={{ marginTop: "1.5%", width: "100%" }}>
-            <Button size="large" xml={google}>
+            <Button
+              size="large"
+              xml={google}
+              disabled={!request}
+              onPress={() => {
+                promptAsync({ useProxy: true });
+              }}
+            >
               Google
             </Button>
           </View>

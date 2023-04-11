@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "treasure-mobile",
     "name": "treasure-mobile",
     "slug": "treasure-mobile",
     "version": "1.0.0",
@@ -14,20 +15,28 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.itumasters.treasure"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
-      
+      },
+      "package": "com.itumasters.treasure"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "34dc8c7c-1790-4a94-bc8b-e43efa55d2e5"
+      }
     }
   }
 }
