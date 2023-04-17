@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import {
   apiChangeAccountInfo,
   apiGetAllTreasures,
@@ -12,15 +12,15 @@ import {
   apiPurchaseHint,
   apiRegister,
   apiTreasureSubmission,
-} from "./queries";
-import { QUERY_KEYS } from "./queryKeys";
+} from './queries';
+import { QUERY_KEYS } from './queryKeys';
 import {
   Hint,
   QuizResponseData,
   Treasure,
   TreasureSubmission,
   User,
-} from "./types";
+} from './types';
 
 type CustomMutationProps = {
   onSuccess?: (data: any) => void;
@@ -106,23 +106,60 @@ export const useTreasureById = (treasureId: number) => {
 
 export const useTreasureByPageId = (
   pageId: number,
-  regionId: number | null
+  regionId: number | null,
 ) => {
   const { data, ...rest } = useQuery({
     queryKey: [QUERY_KEYS.treasureByPageId, pageId, regionId],
     queryFn: () => apiGetTreasureByPageId(pageId, regionId),
     ...defaultQueryOptions,
   });
-
   const treasures: Treasure[] = data?.data.entities;
   const pageCount: number = data?.data.pageCount;
 
   return { treasures: treasures, pageCount: pageCount, ...rest };
 };
 
+function parseURL(url: string) {
+  let size = url.length;
+  let answer = '';
+  for (let i = size - 1; i >= 0; i--) {
+    if (url[i] !== '/') {
+      answer += url[i];
+    } else {
+      break;
+    }
+  }
+  return Number(answer.split('').reverse());
+}
+
+export const useInfiniteTreasureByPageId = (
+  pageId: number,
+  regionId: number | null,
+) => {
+  const { data, ...rest } = useInfiniteQuery({
+    queryKey: [QUERY_KEYS.infiniteTreasureByPageId, pageId, regionId],
+    queryFn: ({ pageParam = 1 }) => apiGetTreasureByPageId(pageParam, regionId),
+
+    getNextPageParam: (lastPage, allPages) => {
+      const pageParam = parseURL(lastPage.request.responseURL);
+      if (lastPage.data.pageCount !== pageParam) {
+        return pageParam + 1;
+      }
+    },
+  });
+
+  let treasures: Treasure[] = [];
+  for (let i = 0; data?.pages && i < data?.pages.length; i++) {
+    treasures.push(data?.pages[i].data.entities);
+  }
+  const pageCount: number = data?.pages[0]?.data.pageCount;
+
+  return { treasures: treasures.flat(), pageCount: pageCount, ...rest };
+};
+
 export const useHintsByTreasureId = (treasureId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: ["HintsByTreasureId", treasureId],
+    queryKey: ['HintsByTreasureId', treasureId],
     queryFn: () => apiGetHintsByTreasureId(treasureId),
     ...defaultQueryOptions,
   });
@@ -178,7 +215,7 @@ export const useTreasureSubmission = ({
 
 export const useTreasureSubmissionByInteractionId = (interactionId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: ["TreasureSubmissionByInteractionId", interactionId],
+    queryKey: ['TreasureSubmissionByInteractionId', interactionId],
     queryFn: () => apiGetTreasureSubmissionByInteractionId(interactionId),
     ...defaultQueryOptions,
   });
@@ -186,3 +223,4 @@ export const useTreasureSubmissionByInteractionId = (interactionId: number) => {
 
   return { treasureSubmissions: treasureSubmissions, ...rest };
 };
+
