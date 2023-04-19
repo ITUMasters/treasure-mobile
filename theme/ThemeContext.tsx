@@ -5,38 +5,40 @@ import {
   useContext,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
-import { dark } from "../theme/dark";
-import { light } from "../theme/light";
-import { ThemeContextProps, ThemeOption } from "../theme/types";
+import { dark } from '../theme/dark';
+import { light } from '../theme/light';
+import {
+  PaginationContextProps,
+  ThemeContextProps,
+  ThemeOption,
+} from '../theme/types';
 
 const ThemeContext = createContext<ThemeContextProps>({
-  currentTheme: "light",
+  currentTheme: 'light',
   theme: light,
   toggle: () => undefined,
 });
 
-type ThemeContextProviderProps = {
+type ContextProviderProps = {
   children: ReactNode;
 };
 
-export const ThemeContextProvider = ({
-  children,
-}: ThemeContextProviderProps) => {
-  const [currentTheme, setCurrentTheme] = useState<ThemeOption>("light");
+export const ThemeContextProvider = ({ children }: ContextProviderProps) => {
+  const [currentTheme, setCurrentTheme] = useState<ThemeOption>('light');
 
   const toggle = useCallback(() => {
-    setCurrentTheme(currentTheme === "dark" ? "light" : "dark");
+    setCurrentTheme(currentTheme === 'dark' ? 'light' : 'dark');
   }, [currentTheme]);
 
   const themeContextValueMemoized = useMemo(
     () => ({
       currentTheme,
       toggle,
-      theme: currentTheme === "dark" ? dark : light,
+      theme: currentTheme === 'dark' ? dark : light,
     }),
-    [currentTheme, toggle]
+    [currentTheme, toggle],
   );
 
   return (
@@ -49,3 +51,4 @@ export const ThemeContextProvider = ({
 export const useTheme = () => {
   return useContext(ThemeContext);
 };
+
