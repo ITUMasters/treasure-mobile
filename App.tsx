@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import * as SplashScreen from 'expo-splash-screen';
 import { useAppFonts } from './hooks';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ThemeContextProvider, useTheme } from './theme';
 import { Theme } from './theme/types';
@@ -33,10 +33,34 @@ import { useAuth } from './recoil-store/auth/AuthStoreHooks';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { authorizedQueryClient, unauthorizedQueryClient } from './react-query';
 import { PaginationContextProvider } from './context/PaginationContext';
+import { ShareTreasure } from './pages/ShareTreasure';
+import * as Linking from 'expo-linking';
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
   const { theme } = useTheme();
+  const [url, setURL] = useState(null);
+
+  function handleDeepLink(event: any) {
+    let url: any = Linking.parse(event.url);
+    setURL(url);
+  }
+
+  useEffect(() => {
+    async function getInitialURL() {
+      const initialURL = await Linking.getInitialURL();
+      if (initialURL) {
+        let url: any = Linking.parse(initialURL);
+        setURL(url);
+      }
+    }
+    const subscription = Linking.addEventListener('url', handleDeepLink);
+    if (!url) {
+      getInitialURL();
+    }
+
+    return () => subscription.remove();
+  }, []);
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -57,9 +81,24 @@ export default function App() {
 
 function AppWithRecoil() {
   const auth = useAuth();
-
+  const prefix = Linking.createURL('/');
+  const linking = {
+    prefixes: [prefix],
+    config: {
+      screens: {
+        InGame: {
+          path: 'game/:treasureId/:interactionId',
+          parse: {
+            treasureId: (treasureId: string) => `${treasureId}`,
+            interactionId: (interactionId: string) => `${interactionId}`,
+          },
+        },
+      },
+    },
+    param: {},
+  };
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
       <PaginationContextProvider>
         <ThemeContextProvider>
           {auth ? <AuthorizedApp /> : <UnauthorizedApp />}
@@ -140,6 +179,15 @@ function AuthorizedApp() {
           options={{
             ...navbarHeaderOptions,
             title: 'Completed Treasures',
+            drawerItemStyle: { height: 0 },
+          }}
+        />
+        <Drawer1.Screen
+          name="SHARE_TREASURE"
+          component={ShareTreasure}
+          options={{
+            ...navbarHeaderOptions,
+            title: 'Share Treasure',
             drawerItemStyle: { height: 0 },
           }}
         />
