@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import {
   apiChangeAccountInfo,
   apiGetAllTreasures,
@@ -12,15 +12,18 @@ import {
   apiPurchaseHint,
   apiRegister,
   apiTreasureSubmission,
-} from './queries';
-import { QUERY_KEYS } from './queryKeys';
+} from "./queries";
+import { QUERY_KEYS } from "./queryKeys";
 import {
   Hint,
   QuizResponseData,
   Treasure,
   TreasureSubmission,
   User,
-} from './types';
+} from "./types";
+import { useSetId } from "../recoil-store/auth/IdStoreHooks";
+import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
+import { removeItem } from "../utils/storage";
 
 type CustomMutationProps = {
   onSuccess?: (data: any) => void;
@@ -66,7 +69,7 @@ export const useUser = (userId: number) => {
     ...defaultQueryOptions,
   });
   const user: User = data?.data;
-  return { user: user, ...rest };
+  return { user: user, statusCode: data?.status, ...rest };
 };
 
 export const useAccountChangeMutation = ({
@@ -91,7 +94,7 @@ export const useAllTreasures = () => {
     ...defaultQueryOptions,
   });
   const treasures: Treasure[] = data?.data.entities;
-  return { treasures: treasures, ...rest };
+  return { treasures: treasures, statusCode: data?.status, ...rest };
 };
 
 export const useTreasureById = (treasureId: number) => {
@@ -101,12 +104,12 @@ export const useTreasureById = (treasureId: number) => {
     ...defaultQueryOptions,
   });
   const treasure: Treasure = data?.data;
-  return { treasure: treasure, ...rest };
+  return { treasure: treasure, statusCode: data?.status, ...rest };
 };
 
 export const useTreasureByPageId = (
   pageId: number,
-  regionId: number | null,
+  regionId: number | null
 ) => {
   const { data, ...rest } = useQuery({
     queryKey: [QUERY_KEYS.treasureByPageId, pageId, regionId],
@@ -116,25 +119,30 @@ export const useTreasureByPageId = (
   const treasures: Treasure[] = data?.data.entities;
   const pageCount: number = data?.data.pageCount;
 
-  return { treasures: treasures, pageCount: pageCount, ...rest };
+  return {
+    treasures: treasures,
+    pageCount: pageCount,
+    statusCode: data?.status,
+    ...rest,
+  };
 };
 
 function parseURL(url: string) {
   let size = url.length;
-  let answer = '';
+  let answer = "";
   for (let i = size - 1; i >= 0; i--) {
-    if (url[i] !== '/') {
+    if (url[i] !== "/") {
       answer += url[i];
     } else {
       break;
     }
   }
-  return Number(answer.split('').reverse());
+  return Number(answer.split("").reverse());
 }
 
 export const useInfiniteTreasureByPageId = (
   pageId: number,
-  regionId: number | null,
+  regionId: number | null
 ) => {
   const { data, ...rest } = useInfiniteQuery({
     queryKey: [QUERY_KEYS.infiniteTreasureByPageId, pageId, regionId],
@@ -154,18 +162,23 @@ export const useInfiniteTreasureByPageId = (
   }
   const pageCount: number = data?.pages[0]?.data.pageCount;
 
-  return { treasures: treasures.flat(), pageCount: pageCount, ...rest };
+  return {
+    treasures: treasures.flat(),
+    pageCount: pageCount,
+    InfQuerystatusCode: pageCount > 0 ? data?.pages[0]?.status : 200,
+    ...rest,
+  };
 };
 
 export const useHintsByTreasureId = (treasureId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: ['HintsByTreasureId', treasureId],
+    queryKey: ["HintsByTreasureId", treasureId],
     queryFn: () => apiGetHintsByTreasureId(treasureId),
     ...defaultQueryOptions,
   });
   const hints: Hint[] = data?.data.entities;
 
-  return { hints: hints, ...rest };
+  return { hints: hints, statusCode: data?.status, ...rest };
 };
 
 export const useHintPurchaseMutation = ({
@@ -215,12 +228,15 @@ export const useTreasureSubmission = ({
 
 export const useTreasureSubmissionByInteractionId = (interactionId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: ['TreasureSubmissionByInteractionId', interactionId],
+    queryKey: ["TreasureSubmissionByInteractionId", interactionId],
     queryFn: () => apiGetTreasureSubmissionByInteractionId(interactionId),
     ...defaultQueryOptions,
   });
   const treasureSubmissions: TreasureSubmission[] = data?.data.entities;
 
-  return { treasureSubmissions: treasureSubmissions, ...rest };
+  return {
+    treasureSubmissions: treasureSubmissions,
+    statusCode: data?.status,
+    ...rest,
+  };
 };
-

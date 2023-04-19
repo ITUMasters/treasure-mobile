@@ -1,25 +1,25 @@
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
-import { useTheme } from '../theme';
-import { View, Image, Text, Switch, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { useTheme } from "../theme";
+import { View, Image, Text, Switch, TouchableOpacity } from "react-native";
 
-import { Theme } from '../theme/types';
-import { FONTS } from '../consts';
-import { Button } from '../ui/Button';
-import { colors } from '../theme/colors';
-import { NavBar } from '../ui/NavBar';
+import { Theme } from "../theme/types";
+import { FONTS } from "../consts";
+import { Button } from "../ui/Button";
+import { colors } from "../theme/colors";
+import { NavBar } from "../ui/NavBar";
 
-import { useNavigation } from '@react-navigation/native';
-import { PATHS } from '../consts/paths';
+import { useNavigation } from "@react-navigation/native";
+import { PATHS } from "../consts/paths";
 
-import { Achievement } from '../ui/Achievement';
-import { FriendCard } from '../ui/FriendCard';
-import { useId, useSetId } from '../recoil-store/auth/IdStoreHooks';
-import { useSetAuth } from '../recoil-store/auth/AuthStoreHooks';
-import { getItem, removeItem } from '../utils/storage';
-import { useUser } from '../react-query/hooks';
-import { Loading } from './Loading';
-import { useState } from 'react';
-import { usePagination } from '../context/PaginationContext';
+import { Achievement } from "../ui/Achievement";
+import { FriendCard } from "../ui/FriendCard";
+import { useId, useSetId } from "../recoil-store/auth/IdStoreHooks";
+import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
+import { getItem, removeItem } from "../utils/storage";
+import { useUser } from "../react-query/hooks";
+import { Loading } from "./Loading";
+import { useState } from "react";
+import { usePagination } from "../context/PaginationContext";
 
 export function ProfilePage() {
   const { theme, toggle: toggleTheme, currentTheme } = useTheme();
@@ -30,16 +30,18 @@ export function ProfilePage() {
   const setId = useSetId();
   const setAuth = useSetAuth();
   const userId = useId();
-  const { user, isFetching } = useUser(userId);
-
+  const { user, isFetching, statusCode } = useUser(userId);
   const logout = async () => {
     setId(0);
     setAuth(false);
-    await removeItem('access_token');
-    await removeItem('remember_me');
+    await removeItem("access_token");
+    await removeItem("remember_me");
   };
   if (isFetching) {
     return <Loading />;
+  }
+  if (statusCode === 401) {
+    logout();
   }
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -48,15 +50,15 @@ export function ProfilePage() {
           <View style={themedStyles.imageViewStyle}>
             <Image
               style={themedStyles.imageStyle}
-              source={require('../assets/images/alpImage.png')}
+              source={require("../assets/images/alpImage.png")}
             ></Image>
           </View>
           <View style={themedStyles.middleTopPart}>
             <Text style={themedStyles.name}>
-              {user.name + ' ' + user.surname}
+              {user.name + " " + user.surname}
             </Text>
             <Text style={themedStyles.username}>{user.username}</Text>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: "row" }}>
               <TouchableOpacity
                 activeOpacity={1}
                 onPress={() =>
@@ -65,16 +67,16 @@ export function ProfilePage() {
               >
                 <Image
                   style={themedStyles.mapImageStyle}
-                  source={require('../assets/images/map.png')}
+                  source={require("../assets/images/map.png")}
                 ></Image>
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{ flexDirection: 'column', flex: 0.2 }}>
+          <View style={{ flexDirection: "column", flex: 0.2 }}>
             <View style={themedStyles.gold}>
               <Text style={themedStyles.goldAmount}>{user.coin}</Text>
               <Image
-                source={require('../assets/images/coin.png')}
+                source={require("../assets/images/coin.png")}
                 style={themedStyles.goldImage}
               ></Image>
             </View>
@@ -91,7 +93,7 @@ export function ProfilePage() {
         </View>
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
             marginTop: 16,
             marginLeft: 20,
             flex: 1,
@@ -112,16 +114,16 @@ export function ProfilePage() {
           </View>
           <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
             }}
           >
             <Switch
               style={{ marginLeft: 5 }}
               onValueChange={toggleTheme}
-              value={currentTheme === 'dark'}
-              trackColor={{ false: '#767577', true: colors.blue }}
+              value={currentTheme === "dark"}
+              trackColor={{ false: "#767577", true: colors.blue }}
               thumbColor={colors.white}
             ></Switch>
             <Text
@@ -136,7 +138,7 @@ export function ProfilePage() {
               style={{ marginLeft: 5 }}
               onValueChange={togglePagination}
               value={pagination}
-              trackColor={{ false: '#767577', true: colors.blue }}
+              trackColor={{ false: "#767577", true: colors.blue }}
               thumbColor={colors.white}
             ></Switch>
             <Text
@@ -154,7 +156,7 @@ export function ProfilePage() {
           <View style={themedStyles.achivementsHead}>
             <Text style={themedStyles.achievementText}>Achivements</Text>
             <Image
-              source={require('../assets/images/trophy.png')}
+              source={require("../assets/images/trophy.png")}
               style={themedStyles.trophy}
             ></Image>
           </View>
@@ -186,35 +188,35 @@ const styles = (theme: Theme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      width: '100%',
+      width: "100%",
       backgroundColor: theme.appBackground.backgroundColor,
     },
     scrollViewStyle: {
-      width: '100%',
+      width: "100%",
       flex: 1,
     },
     topPart: {
       flex: 1,
       marginLeft: 24,
       marginTop: 32,
-      flexDirection: 'row',
+      flexDirection: "row",
     },
     imageStyle: {
       width: 96,
       height: 96,
       borderRadius: 60,
-      alignSelf: 'center',
+      alignSelf: "center",
     },
     imageViewStyle: {
       flex: 0.35,
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     middleTopPart: {
       flex: 0.45,
       marginLeft: 24,
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "flex-start",
     },
     mapImageStyle: {
       width: 32,
@@ -232,16 +234,16 @@ const styles = (theme: Theme) => {
     },
     gold: {
       flex: 0.2,
-      flexDirection: 'row',
-      alignItems: 'flex-start',
-      justifyContent: 'center',
+      flexDirection: "row",
+      alignItems: "flex-start",
+      justifyContent: "center",
       marginRight: 16,
     },
     goldAmount: {
       color: theme.text.default.color,
       marginRight: 4,
       fontSize: 18,
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     goldImage: {
       width: 24,
@@ -253,17 +255,17 @@ const styles = (theme: Theme) => {
       marginTop: 30,
     },
     achivementsHead: {
-      justifyContent: 'center',
-      flexDirection: 'row',
+      justifyContent: "center",
+      flexDirection: "row",
     },
     achievementsTitle: {
       flex: 1,
     },
     achievementText: {
       color: theme.text.default.color,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       fontSize: 24,
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     trophy: {
       marginTop: 2.5,
@@ -272,7 +274,7 @@ const styles = (theme: Theme) => {
       height: 24,
     },
     achievementsBody: {
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     friendsWrapper: {
       marginTop: 20,
@@ -281,4 +283,3 @@ const styles = (theme: Theme) => {
     },
   });
 };
-

@@ -16,22 +16,35 @@ import { useState, useMemo } from "react";
 import * as ImagePicker from "expo-image-picker";
 import mime from "mime";
 import { useAccountChangeMutation, useUser } from "../react-query/hooks";
-import { useId } from "../recoil-store/auth/IdStoreHooks";
+import { useId, useSetId } from "../recoil-store/auth/IdStoreHooks";
 import { Loading } from "./Loading";
 import { StateSetter } from "../ui/StateSetter";
 import { authorizedQueryClient } from "../react-query";
+import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
+import { removeItem } from "../utils/storage";
 
 export function EditProfilePage() {
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const [uploading, setUploading] = useState(false);
   const userId = useId();
-  const { user, isFetching } = useUser(userId);
+  const { user, statusCode, isFetching } = useUser(userId);
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
+  const setId = useSetId();
+  const setAuth = useSetAuth();
+  const logout = async () => {
+    setId(0);
+    setAuth(false);
+    await removeItem("access_token");
+    await removeItem("remember_me");
+  };
 
   const AccountChangeMutation = useAccountChangeMutation({
     onSuccess: async (res) => {
+      if (res.status === 401) {
+        logout();
+      }
       authorizedQueryClient.refetchQueries(["user"]);
     },
     onError: (err) => {
@@ -117,7 +130,9 @@ export function EditProfilePage() {
   if (isFetching) {
     return <Loading />;
   }
-
+  if (statusCode === 401) {
+    logout();
+  }
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
