@@ -1,40 +1,40 @@
-import 'react-native-gesture-handler';
-import * as SplashScreen from 'expo-splash-screen';
-import { useAppFonts } from './hooks';
-import { SetStateAction, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { ThemeContextProvider, useTheme } from './theme';
-import { Theme } from './theme/types';
-import { LoginPage } from './pages/LoginPage';
-import { RegisterPage } from './pages/RegisterPage';
-import { NavBar } from './ui/NavBar';
-import { InGamePage } from './pages/InGamePage';
-import { OTP_VerificationPage } from './pages/OTP_VerificationPage';
-import { ProfilePage } from './pages/ProfilePage';
+import "react-native-gesture-handler";
+import * as SplashScreen from "expo-splash-screen";
+import { useAppFonts } from "./hooks";
+import { SetStateAction, useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { ThemeContextProvider, useTheme } from "./theme";
+import { Theme } from "./theme/types";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
+import { NavBar } from "./ui/NavBar";
+import { InGamePage } from "./pages/InGamePage";
+import { OTP_VerificationPage } from "./pages/OTP_VerificationPage";
+import { ProfilePage } from "./pages/ProfilePage";
 import {
   createDrawerNavigator,
   DrawerNavigationOptions,
-} from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { getHeaderStylesByTheme } from './utils/HeaderStyles';
+} from "@react-navigation/drawer";
+import { NavigationContainer } from "@react-navigation/native";
+import { getHeaderStylesByTheme } from "./utils/HeaderStyles";
 
-import { RecoilRoot } from 'recoil';
-import { JoinPage } from './pages/JoinPage';
+import { RecoilRoot } from "recoil";
+import { JoinPage } from "./pages/JoinPage";
 
-import { EditProfilePage } from './pages/EditProfilePage';
+import { EditProfilePage } from "./pages/EditProfilePage";
 
-import { HomePage } from './pages/HomePage';
-import { color } from 'react-native-reanimated';
-import { colors } from './theme/colors';
-import { SettingsPage } from './pages/SettingsPage';
-import { MapPageTries } from './pages/MapPageTries';
-import { FinishedMapsOnMap } from './pages/FinishedTreasuresOnMap';
-import { useAuth } from './recoil-store/auth/AuthStoreHooks';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { authorizedQueryClient, unauthorizedQueryClient } from './react-query';
-import { PaginationContextProvider } from './context/PaginationContext';
-import { ShareTreasure } from './pages/ShareTreasure';
-import * as Linking from 'expo-linking';
+import { HomePage } from "./pages/HomePage";
+import { color } from "react-native-reanimated";
+import { colors } from "./theme/colors";
+import { SettingsPage } from "./pages/SettingsPage";
+import { MapPageTries } from "./pages/MapPageTries";
+import { FinishedMapsOnMap } from "./pages/FinishedTreasuresOnMap";
+import { useAuth } from "./recoil-store/auth/AuthStoreHooks";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { authorizedQueryClient, unauthorizedQueryClient } from "./react-query";
+import { PaginationContextProvider } from "./context/PaginationContext";
+import { ShareTreasure } from "./pages/ShareTreasure";
+import * as Linking from "expo-linking";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -54,7 +54,7 @@ export default function App() {
         setURL(url);
       }
     }
-    const subscription = Linking.addEventListener('url', handleDeepLink);
+    const subscription = Linking.addEventListener("url", handleDeepLink);
     if (!url) {
       getInitialURL();
     }
@@ -81,13 +81,13 @@ export default function App() {
 
 function AppWithRecoil() {
   const auth = useAuth();
-  const prefix = Linking.createURL('/');
+  const prefix = Linking.createURL("/");
   const linking = {
     prefixes: [prefix],
     config: {
       screens: {
         InGame: {
-          path: 'game/:treasureId/:interactionId',
+          path: "game/:treasureId/:interactionId",
           parse: {
             treasureId: (treasureId: string) => `${treasureId}`,
             interactionId: (interactionId: string) => `${interactionId}`,
@@ -117,7 +117,7 @@ function AuthorizedApp() {
     <QueryClientProvider client={authorizedQueryClient}>
       <Drawer1.Navigator
         screenOptions={{
-          drawerType: 'front',
+          drawerType: "front",
           headerTintColor: colors.white,
           drawerStyle: usedStyles.drawerStyle,
           drawerLabelStyle: { color: colors.white },
@@ -125,22 +125,23 @@ function AuthorizedApp() {
         }}
       >
         <Drawer1.Screen
-          name="Profile"
-          component={ProfilePage}
-          options={{ ...navbarHeaderOptions, title: 'Profile Page' }}
-        />
-        <Drawer1.Screen
           name="Home"
           component={HomePage}
-          options={{ ...navbarHeaderOptions, title: 'Home Page' }}
+          options={{ ...navbarHeaderOptions, title: "Home Page" }}
         />
+        <Drawer1.Screen
+          name="Profile"
+          component={ProfilePage}
+          options={{ ...navbarHeaderOptions, title: "Profile Page" }}
+        />
+
         {
           <Drawer1.Screen
             name="InGame"
             component={InGamePage}
             options={{
               ...navbarHeaderOptions,
-              title: 'In Game Page',
+              title: "In Game Page",
               drawerItemStyle: { height: 0 },
             }}
           />
@@ -150,14 +151,14 @@ function AuthorizedApp() {
           component={EditProfilePage}
           options={{
             ...navbarHeaderOptions,
-            title: 'Edit Profile Page',
+            title: "Edit Profile Page",
             drawerItemStyle: { height: 0 },
           }}
         />
         <Drawer1.Screen
           name="Join"
           component={JoinPage}
-          options={{ ...navbarHeaderOptions, title: 'Join Page' }}
+          options={{ ...navbarHeaderOptions, title: "Join Page" }}
         />
         {/*<Drawer1.Screen
           name="SETTINGS"
@@ -169,7 +170,7 @@ function AuthorizedApp() {
           component={MapPageTries}
           options={{
             ...navbarHeaderOptions,
-            title: 'Map Page',
+            title: "Map Page",
             drawerItemStyle: { height: 0 },
           }}
         />
@@ -178,7 +179,7 @@ function AuthorizedApp() {
           component={FinishedMapsOnMap}
           options={{
             ...navbarHeaderOptions,
-            title: 'Completed Treasures',
+            title: "Completed Treasures",
             drawerItemStyle: { height: 0 },
           }}
         />
@@ -187,7 +188,7 @@ function AuthorizedApp() {
           component={ShareTreasure}
           options={{
             ...navbarHeaderOptions,
-            title: 'Share Treasure',
+            title: "Share Treasure",
             drawerItemStyle: { height: 0 },
           }}
         />
@@ -205,7 +206,7 @@ function UnauthorizedApp() {
     <QueryClientProvider client={unauthorizedQueryClient}>
       <Drawer.Navigator
         screenOptions={{
-          drawerType: 'front',
+          drawerType: "front",
           headerTintColor: colors.white,
           drawerStyle: usedStyles.drawerStyle,
           drawerLabelStyle: { color: colors.white },
@@ -215,12 +216,12 @@ function UnauthorizedApp() {
         <Drawer.Screen
           name="Login"
           component={LoginPage}
-          options={{ ...navbarHeaderOptions, title: 'Login Page' }}
+          options={{ ...navbarHeaderOptions, title: "Login Page" }}
         />
         <Drawer.Screen
           name="Register"
           component={RegisterPage}
-          options={{ ...navbarHeaderOptions, title: 'Register Page' }}
+          options={{ ...navbarHeaderOptions, title: "Register Page" }}
         />
       </Drawer.Navigator>
     </QueryClientProvider>
@@ -232,12 +233,11 @@ const styles = (theme: Theme) => {
     container: {
       flex: 1,
       backgroundColor: theme.appBackground.backgroundColor,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
     },
     drawerStyle: {
       backgroundColor: colors.lightRoyalBlue,
     },
   });
 };
-
