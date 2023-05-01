@@ -13,4 +13,6 @@ export const colors: ColorType = {
   mediumRoyalBlue: "#05225A",
   blue: "#0095E0",
   lightPurple: "#8571F1",
+  challengeColor: "#0580E6",
+  goldenYellow: "#E2C507",
 };
