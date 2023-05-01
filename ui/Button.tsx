@@ -25,6 +25,8 @@ interface ButtonProps
   xml?: string;
   iconAtTheRight?: string;
   givenFontSize?: number;
+  anotherBgColor?: string;
+  anotherTextColor?: string;
 }
 
 export function Button({
@@ -38,6 +40,8 @@ export function Button({
   xml,
   iconAtTheRight,
   givenFontSize,
+  anotherBgColor,
+  anotherTextColor,
   ...props
 }: ButtonProps) {
   const { theme } = useTheme();
@@ -48,7 +52,9 @@ export function Button({
     bending,
     disabled,
     xml,
-    givenFontSize
+    givenFontSize,
+    anotherBgColor,
+    anotherTextColor
   );
 
   return (
@@ -81,7 +87,9 @@ const styles = (
   bending: ButtonBending,
   disabled?: boolean,
   xml?: string,
-  givenFontSize?: number
+  givenFontSize?: number,
+  anotherBgColor?: string | undefined,
+  anotherTextColor?: string | undefined
 ) => {
   const { textColor, backgroundColor } = getButtonColorsByThemeAndColorProp(
     theme,
@@ -92,7 +100,11 @@ const styles = (
 
   return StyleSheet.create({
     wrapper: {
-      backgroundColor: isXmlExists ? colors.white : backgroundColor,
+      backgroundColor: isXmlExists
+        ? colors.white
+        : anotherBgColor !== undefined
+        ? anotherBgColor
+        : backgroundColor,
       height: height,
       width: "100%",
       borderRadius: radius,
@@ -100,7 +112,11 @@ const styles = (
       overflow: "hidden",
     },
     text: {
-      color: isXmlExists ? colors.black : textColor,
+      color: isXmlExists
+        ? colors.black
+        : anotherTextColor !== undefined
+        ? anotherTextColor
+        : textColor,
       fontSize: givenFontSize ? givenFontSize : isXmlExists ? 16 : fontSize,
       fontFamily: isXmlExists ? FONTS.PoppinsBold : FONTS.PoppinsSemiBold,
       paddingLeft: isXmlExists ? 4 : 0,
@@ -116,6 +132,8 @@ const styles = (
       alignItems: "center",
       borderColor: isXmlExists
         ? colors.lightGrey
+        : anotherTextColor !== undefined
+        ? anotherTextColor
         : theme.appBackground.backgroundColor,
     },
     rightIcon: {

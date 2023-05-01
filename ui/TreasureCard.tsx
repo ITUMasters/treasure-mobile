@@ -6,6 +6,8 @@ import { Button } from "./Button";
 import { diff } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { PATHS } from "../consts/paths";
+import { Icon } from "./Icon";
+import { standing } from "../icons";
 
 interface TreasureCardProps {
   id: string;
@@ -15,6 +17,7 @@ interface TreasureCardProps {
   difficulty: string;
   treasureId: number;
   joinTreasure: () => void;
+  isWeekly: boolean;
 }
 
 export function TreasureCard({
@@ -25,9 +28,10 @@ export function TreasureCard({
   difficulty,
   treasureId,
   joinTreasure,
+  isWeekly,
 }: TreasureCardProps) {
   const { theme, currentTheme } = useTheme();
-  const themedStyles = styles(theme);
+  const themedStyles = styles(theme, isWeekly);
 
   var difficultyColor;
   if (difficulty == "easy") {
@@ -43,16 +47,30 @@ export function TreasureCard({
   const navigator = useNavigation<any>();
   return (
     <View style={themedStyles.wrapper}>
-      <Image
-        source={require("../assets/images/BeeArea.png")}
-        style={{ width: 75, height: 75, borderRadius: 10 }}
-      />
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <Image
+          source={require("../assets/images/BeeArea.png")}
+          style={{ width: 75, height: 75, borderRadius: 10 }}
+        />
+      </View>
 
       <View style={{ paddingLeft: 10, flex: 5 }}>
         <View style={{ flex: 3 }}>
+          {isWeekly && (
+            <Text
+              style={{
+                fontSize: 22,
+                color: colors.goldenYellow,
+                marginBottom: 4,
+                fontWeight: "500",
+              }}
+            >
+              Weekly Challange
+            </Text>
+          )}
           <Text
             style={{
-              fontSize: 22,
+              fontSize: isWeekly ? 18 : 22,
               color: colors.white,
             }}
           >
@@ -76,22 +94,45 @@ export function TreasureCard({
           >
             {zone}
           </Text>
+          {isWeekly && (
+            <Text style={{ color: colors.white }}>
+              Remaining time: 3d, 2h, 10m
+            </Text>
+          )}
         </View>
       </View>
       <View style={themedStyles.buttonWrapper}>
-        <Button size="large" onPress={joinTreasure}>
-          GO
-        </Button>
+        <View style={{ flexDirection: "column" }}>
+          <Button
+            size="large"
+            onPress={joinTreasure}
+            anotherBgColor={isWeekly ? colors.goldenYellow : undefined}
+            anotherTextColor={isWeekly ? colors.challengeColor : undefined}
+          >
+            GO
+          </Button>
+          {isWeekly && (
+            <View
+              style={{
+                marginTop: 12,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Icon xml={standing} color={colors.goldenYellow} />
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
 }
 
-const styles = (theme: Theme) => {
+const styles = (theme: Theme, isWeekly: undefined | boolean) => {
   return StyleSheet.create({
     wrapper: {
       padding: 10,
-      backgroundColor: colors.lightRoyalBlue,
+      backgroundColor: isWeekly ? colors.challengeColor : colors.lightRoyalBlue,
       flexDirection: "row",
       borderRadius: 10,
       marginTop: 10,

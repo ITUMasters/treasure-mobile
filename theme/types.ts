@@ -11,6 +11,8 @@ export type ColorType = {
   mediumRoyalBlue: string;
   blue: string;
   lightPurple: string;
+  challengeColor: string;
+  goldenYellow: string;
 };
 
 export type Theme = {
@@ -64,7 +66,7 @@ export type Theme = {
   };
 };
 
-export type ThemeOption = 'dark' | 'light';
+export type ThemeOption = "dark" | "light";
 export type ThemeContextProps = {
   currentTheme: ThemeOption;
   toggle: () => void;
@@ -74,4 +76,3 @@ export type PaginationContextProps = {
   pagination: boolean;
   toggle: () => void;
 };
-
