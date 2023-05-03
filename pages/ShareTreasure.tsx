@@ -1,8 +1,8 @@
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import { useTheme } from '../theme';
-import { Theme } from '../theme/types';
-import { NavBar } from '../ui/NavBar';
-import QRCode from 'react-native-qrcode-svg';
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
+import { useTheme } from "../theme";
+import { Theme } from "../theme/types";
+import { NavBar } from "../ui/NavBar";
+import QRCode from "react-native-qrcode-svg";
 
 export function ShareTreasure({ route }: any) {
   const { theme } = useTheme();
@@ -11,9 +11,9 @@ export function ShareTreasure({ route }: any) {
 
   function generateURL(treasureId: number, interactionId: number) {
     return (
-      'exp://192.168.137.78:19000/--/game/' +
+      "exp://192.168.137.78:19000/--/game/" +
       treasureId.toString() +
-      '/' +
+      "/" +
       interactionId.toString()
     );
   }
@@ -37,18 +37,17 @@ const styles = (theme: Theme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      width: '100%',
+      width: "100%",
       backgroundColor: theme.appBackground.backgroundColor,
     },
     scrollViewStyle: {
-      width: '100%',
+      width: "100%",
       flex: 1,
     },
     qr: {
       flex: 200,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
     },
   });
 };
-

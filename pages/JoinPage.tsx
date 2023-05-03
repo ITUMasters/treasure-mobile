@@ -23,7 +23,6 @@ import { useSetId } from "../recoil-store/auth/IdStoreHooks";
 import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { removeItem } from "../utils/storage";
 import { AxiosError } from "axios";
-import { logoutFunction } from "../utils/logoutFunction";
 
 export function JoinPage() {
   const { theme } = useTheme();
@@ -58,7 +57,7 @@ export function JoinPage() {
       const errFormated = err as AxiosError;
       const errorData = (errFormated.response?.data as any).error;
       if (errorData === "jwt expired" || errFormated.response?.status === 401) {
-        logoutFunction();
+        logout();
       }
       showAlert("Join Error", {
         message: getDefaultErrorMessage(err) as any,

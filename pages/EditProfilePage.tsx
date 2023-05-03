@@ -16,12 +16,13 @@ import { useState, useMemo } from "react";
 import * as ImagePicker from "expo-image-picker";
 import mime from "mime";
 import { useAccountChangeMutation, useUser } from "../react-query/hooks";
-import { useId } from "../recoil-store/auth/IdStoreHooks";
+import { useId, useSetId } from "../recoil-store/auth/IdStoreHooks";
 import { Loading } from "./Loading";
 import { StateSetter } from "../ui/StateSetter";
 import { authorizedQueryClient } from "../react-query";
 import { AxiosError } from "axios";
-import { logoutFunction } from "../utils/logoutFunction";
+import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
+import { removeItem } from "../utils/storage";
 
 export function EditProfilePage() {
   const { theme } = useTheme();
@@ -31,6 +32,15 @@ export function EditProfilePage() {
   const { user, isFetching } = useUser(userId);
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
+  const setId = useSetId();
+  const setAuth = useSetAuth();
+
+  const logout = async () => {
+    setId(0);
+    setAuth(false);
+    await removeItem("access_token");
+    await removeItem("remember_me");
+  };
 
   const AccountChangeMutation = useAccountChangeMutation({
     onSuccess: async (res) => {
@@ -40,7 +50,7 @@ export function EditProfilePage() {
       const errFormated = err as AxiosError;
       const errorData = (errFormated.response?.data as any).error;
       if (errorData === "jwt expired" || errFormated.response?.status === 401) {
-        logoutFunction();
+        logout();
       }
       showAlert("Error message", {
         message: getDefaultErrorMessage(err) as any,

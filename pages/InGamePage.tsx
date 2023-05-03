@@ -32,7 +32,9 @@ import { mail } from "../icons";
 import QRCode from "react-native-qrcode-svg";
 import { PATHS } from "../consts/paths";
 import { AxiosError } from "axios";
-import { logoutFunction } from "../utils/logoutFunction";
+import { useSetId } from "../recoil-store/auth/IdStoreHooks";
+import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
+import { removeItem } from "../utils/storage";
 
 export type statusType = "Accepted" | "Wrong" | "Not Solved";
 
@@ -46,6 +48,15 @@ export function InGamePage({ route }: any) {
   const hints = useHintsByTreasureId(treasureId);
   const treasureSubmissions =
     useTreasureSubmissionByInteractionId(interactionId);
+  const setId = useSetId();
+  const setAuth = useSetAuth();
+
+  const logout = async () => {
+    setId(0);
+    setAuth(false);
+    await removeItem("access_token");
+    await removeItem("remember_me");
+  };
   const TreasureSubmissionMutation = useTreasureSubmission({
     onSuccess: async (res) => {
       console.log("Success.");
@@ -58,7 +69,7 @@ export function InGamePage({ route }: any) {
       const errFormated = err as AxiosError;
       const errorData = (errFormated.response?.data as any).error;
       if (errorData === "jwt expired" || errFormated.response?.status === 401) {
-        logoutFunction();
+        logout();
       }
       showAlert("Treasure Submission is failed", {
         message: getDefaultErrorMessage(err) as any,
@@ -103,7 +114,7 @@ export function InGamePage({ route }: any) {
       const errFormated = err as AxiosError;
       const errorData = (errFormated.response?.data as any).error;
       if (errorData === "jwt expired" || errFormated.response?.status === 401) {
-        logoutFunction();
+        logout();
       }
       showAlert("Purchase failed", {
         message: getDefaultErrorMessage(err) as any,

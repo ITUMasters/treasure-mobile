@@ -38,7 +38,6 @@ import * as Linking from "expo-linking";
 import { AuthVerify } from "./utils/AuthVerify";
 import { useSetId } from "./recoil-store/auth/IdStoreHooks";
 import { removeItem } from "./utils/storage";
-import { logoutFunction } from "./utils/logoutFunction";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -129,15 +128,16 @@ function AuthorizedApp() {
         }}
       >
         <Drawer1.Screen
-          name="Profile"
-          component={ProfilePage}
-          options={{ ...navbarHeaderOptions, title: "Profile Page" }}
-        />
-        <Drawer1.Screen
           name="Home"
           component={HomePage}
           options={{ ...navbarHeaderOptions, title: "Home Page" }}
         />
+        <Drawer1.Screen
+          name="Profile"
+          component={ProfilePage}
+          options={{ ...navbarHeaderOptions, title: "Profile Page" }}
+        />
+
         {
           <Drawer1.Screen
             name="InGame"
@@ -196,7 +196,7 @@ function AuthorizedApp() {
           }}
         />
       </Drawer1.Navigator>
-      <AuthVerify logout={logoutFunction} />
+      <AuthVerify />
     </QueryClientProvider>
   );
 }
