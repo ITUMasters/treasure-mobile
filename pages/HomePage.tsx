@@ -35,6 +35,8 @@ import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 import { usePagination } from "../context/PaginationContext";
 import { FlatList } from "react-native-gesture-handler";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { logoutFunction } from "../utils/logoutFunction";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
@@ -78,6 +80,11 @@ export function HomePage({ route }: any) {
       );
     },
     onError: (err) => {
+      const errFormated = err as AxiosError;
+      const errorData = (errFormated.response?.data as any).error;
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
+        logoutFunction();
+      }
       showAlert("Join Error", {
         message: getDefaultErrorMessage(err) as any,
       });

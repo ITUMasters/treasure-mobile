@@ -1,5 +1,5 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useState } from 'react';
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { useState } from "react";
 import {
   Image,
   SafeAreaView,
@@ -7,14 +7,14 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-import { FONTS } from '../consts';
-import { useTheme } from '../theme';
-import { colors } from '../theme/colors';
-import { Theme } from '../theme/types';
-import { Button } from '../ui/Button';
-import { HintCard } from '../ui/HintCard';
-import { NavBar } from '../ui/NavBar';
+} from "react-native";
+import { FONTS } from "../consts";
+import { useTheme } from "../theme";
+import { colors } from "../theme/colors";
+import { Theme } from "../theme/types";
+import { Button } from "../ui/Button";
+import { HintCard } from "../ui/HintCard";
+import { NavBar } from "../ui/NavBar";
 import {
   useHintPurchaseMutation,
   useHintsByTreasureId,
@@ -22,17 +22,19 @@ import {
   useTreasureSubmission,
   useTreasureSubmissionByInteractionId,
   useUser,
-} from '../react-query/hooks';
-import { Loading } from './Loading';
-import * as Location from 'expo-location';
-import { getDefaultErrorMessage, showAlert } from '../utils/alert';
-import { authorizedQueryClient } from '../react-query';
-import { Icon } from '../ui/Icon';
-import { mail } from '../icons';
-import QRCode from 'react-native-qrcode-svg';
-import { PATHS } from '../consts/paths';
+} from "../react-query/hooks";
+import { Loading } from "./Loading";
+import * as Location from "expo-location";
+import { getDefaultErrorMessage, showAlert } from "../utils/alert";
+import { authorizedQueryClient } from "../react-query";
+import { Icon } from "../ui/Icon";
+import { mail } from "../icons";
+import QRCode from "react-native-qrcode-svg";
+import { PATHS } from "../consts/paths";
+import { AxiosError } from "axios";
+import { logoutFunction } from "../utils/logoutFunction";
 
-export type statusType = 'Accepted' | 'Wrong' | 'Not Solved';
+export type statusType = "Accepted" | "Wrong" | "Not Solved";
 
 export function InGamePage({ route }: any) {
   const { theme } = useTheme();
@@ -46,14 +48,19 @@ export function InGamePage({ route }: any) {
     useTreasureSubmissionByInteractionId(interactionId);
   const TreasureSubmissionMutation = useTreasureSubmission({
     onSuccess: async (res) => {
-      console.log('Success.');
+      console.log("Success.");
       authorizedQueryClient.refetchQueries([
-        'TreasureSubmissionByInteractionId',
+        "TreasureSubmissionByInteractionId",
         interactionId,
       ]);
     },
     onError: (err) => {
-      showAlert('Treasure Submission is failed', {
+      const errFormated = err as AxiosError;
+      const errorData = (errFormated.response?.data as any).error;
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
+        logoutFunction();
+      }
+      showAlert("Treasure Submission is failed", {
         message: getDefaultErrorMessage(err) as any,
       });
     },
@@ -71,8 +78,8 @@ export function InGamePage({ route }: any) {
   const submitLocation = () => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        showAlert('You should give permission');
+      if (status !== "granted") {
+        showAlert("You should give permission");
         return;
       }
 
@@ -82,18 +89,23 @@ export function InGamePage({ route }: any) {
         });
         submitTreasure(location.coords.latitude, location.coords.longitude);
       } catch (e) {
-        showAlert('We could not find your location!');
+        showAlert("We could not find your location!");
       }
     })();
   };
 
   const HintPurchaseMutation = useHintPurchaseMutation({
     onSuccess: async (res) => {
-      console.log('Success.');
-      authorizedQueryClient.refetchQueries(['HintsByTreasureId', treasureId]);
+      console.log("Success.");
+      authorizedQueryClient.refetchQueries(["HintsByTreasureId", treasureId]);
     },
     onError: (err) => {
-      showAlert('Purchase failed', {
+      const errFormated = err as AxiosError;
+      const errorData = (errFormated.response?.data as any).error;
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
+        logoutFunction();
+      }
+      showAlert("Purchase failed", {
         message: getDefaultErrorMessage(err) as any,
       });
     },
@@ -123,10 +135,10 @@ export function InGamePage({ route }: any) {
   const treasureSubmits = treasureSubmissions.treasureSubmissions;
   const status: statusType =
     treasureSubmits.length === 0
-      ? 'Not Solved'
+      ? "Not Solved"
       : treasureSubmits[treasureSubmits.length - 1].isSuccess
-      ? 'Accepted'
-      : 'Wrong';
+      ? "Accepted"
+      : "Wrong";
 
   const themedStyles = styles(theme, hardness, status);
 
@@ -134,7 +146,7 @@ export function InGamePage({ route }: any) {
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
         <Text style={themedStyles.questionNameStyle}>
-          {treasure.id.toString() + '. ' + treasure.name}{' '}
+          {treasure.id.toString() + ". " + treasure.name}{" "}
         </Text>
 
         <Text
@@ -147,7 +159,7 @@ export function InGamePage({ route }: any) {
         </Text>
 
         <Text style={themedStyles.hardness}>{hardness}</Text>
-        <View style={{ width: '25%' }}>
+        <View style={{ width: "25%" }}>
           <Button
             size="small"
             onPress={() => {
@@ -165,20 +177,20 @@ export function InGamePage({ route }: any) {
           style={{
             width: 300,
             height: 400,
-            alignSelf: 'center',
+            alignSelf: "center",
             marginRight: 20,
             marginTop: 4,
             borderRadius: 40,
           }}
-          source={require('../assets/images/BeeArea.png')}
+          source={require("../assets/images/BeeArea.png")}
         />
 
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
             marginTop: 20,
             flex: 1,
-            alignItems: 'center',
+            alignItems: "center",
             marginBottom: 20,
           }}
         >
@@ -186,11 +198,11 @@ export function InGamePage({ route }: any) {
           <View
             style={{
               flex: 0.5,
-              width: '100%',
+              width: "100%",
               paddingRight: 24,
-              alignItems: 'flex-end',
+              alignItems: "flex-end",
               paddingLeft: 100,
-              justifyContent: 'center',
+              justifyContent: "center",
             }}
           >
             <Button size="xxlarge" onPress={submitLocation}>
@@ -230,11 +242,11 @@ const styles = (theme: Theme, hardness: string, status: statusType) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      width: '100%',
+      width: "100%",
       backgroundColor: theme.appBackground.backgroundColor,
     },
     scrollViewStyle: {
-      width: '100%',
+      width: "100%",
       flex: 1,
       marginLeft: 20,
       marginRight: 20,
@@ -248,9 +260,9 @@ const styles = (theme: Theme, hardness: string, status: statusType) => {
     },
     hardness: {
       color:
-        hardness === 'Easy'
+        hardness === "Easy"
           ? colors.green
-          : hardness === 'Medium'
+          : hardness === "Medium"
           ? colors.orange
           : colors.red,
       fontFamily: FONTS.PoppinsSemiBold,
@@ -264,17 +276,16 @@ const styles = (theme: Theme, hardness: string, status: statusType) => {
     },
     statusStyle: {
       color:
-        status === 'Accepted'
+        status === "Accepted"
           ? colors.green
-          : status === 'Wrong'
+          : status === "Wrong"
           ? colors.red
           : colors.orange,
       fontFamily: FONTS.PoppinsBold,
       flex: 0.5,
-      justifyContent: 'flex-start',
-      alignSelf: 'center',
-      alignItems: 'center',
+      justifyContent: "flex-start",
+      alignSelf: "center",
+      alignItems: "center",
     },
   });
 };
-

@@ -20,6 +20,8 @@ import { useId } from "../recoil-store/auth/IdStoreHooks";
 import { Loading } from "./Loading";
 import { StateSetter } from "../ui/StateSetter";
 import { authorizedQueryClient } from "../react-query";
+import { AxiosError } from "axios";
+import { logoutFunction } from "../utils/logoutFunction";
 
 export function EditProfilePage() {
   const { theme } = useTheme();
@@ -35,6 +37,11 @@ export function EditProfilePage() {
       authorizedQueryClient.refetchQueries(["user"]);
     },
     onError: (err) => {
+      const errFormated = err as AxiosError;
+      const errorData = (errFormated.response?.data as any).error;
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
+        logoutFunction();
+      }
       showAlert("Error message", {
         message: getDefaultErrorMessage(err) as any,
       });
