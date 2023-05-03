@@ -73,7 +73,9 @@ export function LoginPage() {
       ) {
         try {
           const { _id } = jwtDecode(accessToken) as { _id?: string };
-          if (_id != null) {
+          const { exp } = jwtDecode(accessToken) as { exp?: string };
+          const expirationTime = parseInt(exp as string);
+          if (_id != null && expirationTime > Date.now() / 1000) {
             setAuth(true);
             setId(Number(_id));
           }
