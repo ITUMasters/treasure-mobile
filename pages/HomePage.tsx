@@ -35,6 +35,10 @@ import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 import { usePagination } from "../context/PaginationContext";
 import { FlatList } from "react-native-gesture-handler";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useSetId } from "../recoil-store/auth/IdStoreHooks";
+import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
+import { removeItem } from "../utils/storage";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
@@ -51,6 +55,16 @@ export function HomePage({ route }: any) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const { pagination, toggle: togglePagination } = usePagination();
+
+  const setId = useSetId();
+  const setAuth = useSetAuth();
+
+  const logout = async () => {
+    setId(0);
+    setAuth(false);
+    await removeItem("access_token");
+    await removeItem("remember_me");
+  };
 
   const name2 = route.params ?? route.params;
   useEffect(() => {
@@ -78,6 +92,11 @@ export function HomePage({ route }: any) {
       );
     },
     onError: (err) => {
+      const errFormated = err as AxiosError;
+      const errorData = (errFormated.response?.data as any).error;
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
+        logout();
+      }
       showAlert("Join Error", {
         message: getDefaultErrorMessage(err) as any,
       });
