@@ -119,7 +119,15 @@ export function TreasureCard({
                 alignItems: "center",
               }}
             >
-              <Icon xml={standing} color={colors.goldenYellow} />
+              <Icon
+                xml={standing}
+                color={colors.goldenYellow}
+                onPress={() =>
+                  navigator.navigate(PATHS.LEADERBOARD, {
+                    treasureId: 82, //"DUZELT: NORMALDE BURAYA treasureId: treasureId" demen lazim!!!!
+                  })
+                }
+              />
             </View>
           )}
         </View>
