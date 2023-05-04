@@ -15,26 +15,25 @@ import { Theme } from "../theme/types";
 import { Button } from "../ui/Button";
 import { HintCard } from "../ui/HintCard";
 import { NavBar } from "../ui/NavBar";
+import * as ImagePicker from "expo-image-picker";
 import {
   useHintPurchaseMutation,
   useHintsByTreasureId,
   useTreasureById,
   useTreasureSubmission,
   useTreasureSubmissionByInteractionId,
-  useUser,
+  useUploadImageMutation,
 } from "../react-query/hooks";
 import { Loading } from "./Loading";
 import * as Location from "expo-location";
 import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 import { authorizedQueryClient } from "../react-query";
-import { Icon } from "../ui/Icon";
-import { mail } from "../icons";
-import QRCode from "react-native-qrcode-svg";
 import { PATHS } from "../consts/paths";
 import { AxiosError } from "axios";
 import { useSetId } from "../recoil-store/auth/IdStoreHooks";
 import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { removeItem } from "../utils/storage";
+import { TouchableOpacity } from "react-native";
 
 export type statusType = "Accepted" | "Wrong" | "Not Solved";
 
@@ -44,12 +43,17 @@ export function InGamePage({ route }: any) {
   const treasureId = route.params.treasureId;
   const interactionId = route.params.interactionId;
 
+  const [fileName, setFileName] = useState("");
+  const [formDataObject, setFormDataObject] = useState(undefined);
+
   const treasureById = useTreasureById(treasureId);
   const hints = useHintsByTreasureId(treasureId);
   const treasureSubmissions =
     useTreasureSubmissionByInteractionId(interactionId);
   const setId = useSetId();
   const setAuth = useSetAuth();
+  const [uploading, setUploading] = useState(false);
+  const [imageUri, setImageUri] = useState("");
 
   const logout = async () => {
     setId(0);
@@ -64,9 +68,11 @@ export function InGamePage({ route }: any) {
         "TreasureSubmissionByInteractionId",
         interactionId,
       ]);
+      setUploading(false);
     },
     onError: (err) => {
       const errFormated = err as AxiosError;
+      setUploading(false);
       const errorData = (errFormated.response?.data as any).error;
       if (errorData === "jwt expired" || errFormated.response?.status === 401) {
         logout();
@@ -83,6 +89,7 @@ export function InGamePage({ route }: any) {
       latitude: latitude,
       longitude: longitude,
       altitude: 1,
+      imageName: fileName,
     });
   };
 
@@ -128,10 +135,64 @@ export function InGamePage({ route }: any) {
     });
   };
 
+  const uploadImageMutation = useUploadImageMutation({
+    onSuccess: (res) => {
+      console.log("IMAGE IS SUCCESSFULLY UPLOADED!");
+      setFileName(res.data.fileName);
+      submitLocation();
+    },
+    onError: (error) => {
+      const errFormated = error as AxiosError;
+      const errorData = (errFormated.response?.data as any).error;
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
+        logout();
+      }
+      if (error) {
+        logout();
+      }
+    },
+  });
+
+  const uploadImage = async () => {
+    const result: any = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      aspect: [3, 4],
+      quality: 1,
+    });
+
+    if (result.cancelled) {
+      showAlert("Image choose cancelled");
+      return;
+    }
+
+    const uri: string = result.uri;
+    const fileExtension = uri.slice(uri.lastIndexOf(".") + 1);
+
+    setFormDataObject({
+      name: `image.${fileExtension}`,
+      uri: result.uri,
+      type: "image/${fileExtension}",
+    } as any);
+
+    setImageUri(result.uri);
+  };
+
+  const executeUploadImageMutation = () => {
+    setUploading(true);
+    const formdata = new FormData();
+    formdata.append("image", formDataObject);
+    uploadImageMutation.mutate(formdata);
+  };
+
   if (
     treasureById.isFetching ||
     hints.isFetching ||
-    treasureSubmissions.isFetching
+    treasureSubmissions.isFetching ||
+    uploadImageMutation.isLoading ||
+    HintPurchaseMutation.isLoading ||
+    TreasureSubmissionMutation.isLoading ||
+    uploading
   ) {
     return <Loading />;
   }
@@ -170,7 +231,7 @@ export function InGamePage({ route }: any) {
         </Text>
 
         <Text style={themedStyles.hardness}>{hardness}</Text>
-        <View style={{ width: "25%" }}>
+        <View style={{ width: "25%", marginBottom: 12 }}>
           <Button
             size="small"
             onPress={() => {
@@ -185,16 +246,27 @@ export function InGamePage({ route }: any) {
         </View>
 
         <Image
-          style={{
-            width: 300,
-            height: 400,
-            alignSelf: "center",
-            marginRight: 20,
-            marginTop: 4,
-            borderRadius: 40,
-          }}
+          style={themedStyles.imageStyle}
           source={require("../assets/images/BeeArea.png")}
         />
+        <TouchableOpacity
+          onPress={uploadImage}
+          activeOpacity={0.9}
+          style={{ marginTop: 12, marginBottom: 12 }}
+        >
+          {uploading ? (
+            <Loading />
+          ) : (
+            <Image
+              style={themedStyles.imageStyle}
+              source={
+                imageUri !== ""
+                  ? { uri: imageUri }
+                  : require("../assets/images/PhotoPlaceholder.png")
+              }
+            />
+          )}
+        </TouchableOpacity>
 
         <View
           style={{
@@ -216,7 +288,11 @@ export function InGamePage({ route }: any) {
               justifyContent: "center",
             }}
           >
-            <Button size="xxlarge" onPress={submitLocation}>
+            <Button
+              size="xxlarge"
+              onPress={executeUploadImageMutation}
+              disabled={imageUri === ""}
+            >
               SUBMIT
             </Button>
           </View>
@@ -297,6 +373,14 @@ const styles = (theme: Theme, hardness: string, status: statusType) => {
       justifyContent: "flex-start",
       alignSelf: "center",
       alignItems: "center",
+    },
+    imageStyle: {
+      width: 300,
+      height: 400,
+      alignSelf: "center",
+      marginRight: 20,
+      marginTop: 4,
+      borderRadius: 40,
     },
   });
 };

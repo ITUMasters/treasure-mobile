@@ -40,6 +40,7 @@ export type TreasureSubmission = {
   totalTime?: number | null;
   totalDistance?: number | null;
   isSuccess?: boolean;
+  imageName?: string;
 };
 
 export type Hardness = "easy" | "medium" | "hard" | "insane";

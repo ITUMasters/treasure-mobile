@@ -16,7 +16,7 @@ axios.interceptors.request.use(
     //TODO: Burada bir sorun cikabilir!
     const access_token = await getItem("access_token");
     config.headers["Authorization"] = `Bearer ${access_token}`;
-    config.headers["Content-Type"] = "application/json";
+    //config.headers["Content-Type"] = "application/json";
     return config;
   },
   function (error) {
