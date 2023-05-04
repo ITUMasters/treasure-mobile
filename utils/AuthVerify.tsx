@@ -17,7 +17,6 @@ export const AuthVerify = () => {
           const decodedToken = jwtDecode(accessToken);
           const { exp } = decodedToken as { exp?: string };
           const expirationTime = parseInt(exp as string);
-          console.log(expirationTime - Date.now() / 1000);
           if (expirationTime < Date.now() / 1000) {
             console.log("Girdi mu?");
             setId(0);
@@ -26,7 +25,6 @@ export const AuthVerify = () => {
             await removeItem("remember_me");
           }
         } catch (err) {
-          console.log("Debugla");
           console.error(err);
           setId(0);
           setAuth(false);
