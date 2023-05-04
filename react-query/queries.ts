@@ -79,3 +79,16 @@ export const apiGetTreasureSubmissionByInteractionId = (
     params: { interactionId: interactionId },
   });
 };
+
+export const apiUploadImage = (formData: FormData) => {
+  console.log("FORMDATA: ", formData);
+  return axios({
+    url: "/image/upload",
+    data: formData,
+    method: "post",
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Accept: "multipart/form-data, application/json, */*",
+    },
+  });
+};
