@@ -2,6 +2,7 @@ import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import {
   apiChangeAccountInfo,
   apiGetAllTreasures,
+  apiGetCompletedTreasures,
   apiGetHintsByTreasureId,
   apiGetTreasureById,
   apiGetTreasureByPageId,
@@ -238,4 +239,15 @@ export const useUploadImageMutation = ({
       onError?.(err);
     },
   });
+};
+
+export const useCompletedTreasures = () => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["CompletedTreasures"],
+    queryFn: apiGetCompletedTreasures,
+    ...defaultQueryOptions,
+  });
+  const completedTreasures: any[] = data?.data.entities;
+
+  return { completedTreasures: completedTreasures, ...rest };
 };
