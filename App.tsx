@@ -38,6 +38,7 @@ import * as Linking from "expo-linking";
 import { AuthVerify } from "./utils/AuthVerify";
 import { useSetId } from "./recoil-store/auth/IdStoreHooks";
 import { removeItem } from "./utils/storage";
+import { LeaderboardPage } from "./pages/LeaderboardPage";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -174,6 +175,15 @@ function AuthorizedApp() {
           options={{
             ...navbarHeaderOptions,
             title: "Map Page",
+            drawerItemStyle: { height: 0 },
+          }}
+        />
+        <Drawer1.Screen
+          name="LEADERBOARD"
+          component={LeaderboardPage}
+          options={{
+            ...navbarHeaderOptions,
+            title: "Leaderboard Page",
             drawerItemStyle: { height: 0 },
           }}
         />

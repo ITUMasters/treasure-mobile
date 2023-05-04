@@ -99,3 +99,10 @@ export const apiGetCompletedTreasures = () => {
     method: "get",
   });
 };
+
+export const apiGetLeaderboardByTreasureId = (treasureId: number) => {
+  return axios({
+    url: "/treasure/" + treasureId.toString() + "/leaderboard",
+    method: "get",
+  });
+};
