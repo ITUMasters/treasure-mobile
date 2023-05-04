@@ -155,14 +155,14 @@ export function HomePage({ route }: any) {
         creator={"SIMDILIK FARUK"}
         difficulty={treasure.hardness}
         treasureId={treasure.id}
-        joinTreasure={() => join(treasure.id)}
+        joinTreasure={() => join(treasure.id === -4 ? 82 : treasure.id)} //TODO: Challenge endpointi gelince degiscek!!.
         isWeekly={index === 0}
       />
     );
   }
 
   let mockWeeklyChallenge = treasures[0]; //TODO: bunu farkli endpointten alacagim.
-  mockWeeklyChallenge.id = -5;
+  mockWeeklyChallenge.id = -4;
   return (
     <SafeAreaView style={themedStyles.container}>
       {pagination && (

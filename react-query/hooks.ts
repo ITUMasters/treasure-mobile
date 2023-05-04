@@ -4,6 +4,7 @@ import {
   apiGetAllTreasures,
   apiGetCompletedTreasures,
   apiGetHintsByTreasureId,
+  apiGetLeaderboardByTreasureId,
   apiGetTreasureById,
   apiGetTreasureByPageId,
   apiGetTreasureSubmissionByInteractionId,
@@ -251,4 +252,14 @@ export const useCompletedTreasures = () => {
   const completedTreasures: any[] = data?.data.entities;
 
   return { completedTreasures: completedTreasures, ...rest };
+};
+
+export const useLeaderboard = (treasureId: number) => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["Leaderboard", treasureId],
+    queryFn: () => apiGetLeaderboardByTreasureId(treasureId),
+    ...defaultQueryOptions,
+  });
+  const leaderboard: any = data?.data;
+  return { leaderboard: leaderboard, ...rest };
 };
