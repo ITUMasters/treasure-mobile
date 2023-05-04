@@ -69,7 +69,6 @@ export function EditProfilePage() {
         fullName.length - fullnameParts[partCount - 1].length - 1
       ),
       username: username,
-      id: userId,
     });
   };
 

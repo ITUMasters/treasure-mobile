@@ -261,7 +261,15 @@ export function HomePage({ route }: any) {
             style={themedStyles.wrapper}
             data={[mockWeeklyChallenge, ...treasuresInfinite]}
             renderItem={({ item, index }) => {
-              return renderTreasure(item, index);
+              if (index == treasuresInfinite.length) {
+                return (
+                  <View style={{ marginBottom: 40 }}>
+                    {renderTreasure(item, index)}
+                  </View>
+                );
+              } else {
+                return renderTreasure(item, index);
+              }
             }}
             onEndReached={loadMore}
             ListFooterComponent={
