@@ -115,9 +115,6 @@ export function JoinPage() {
                   JOIN
                 </Button>
               </View>
-              <Button size="small" onPress={logout}>
-                Logout
-              </Button>
             </View>
           </View>
         </View>
