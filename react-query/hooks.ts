@@ -242,6 +242,7 @@ export const useUploadImageMutation = ({
 };
 
 export const useCompletedTreasures = () => {
+  //Github bug!
   const { data, ...rest } = useQuery({
     queryKey: ["CompletedTreasures"],
     queryFn: apiGetCompletedTreasures,
