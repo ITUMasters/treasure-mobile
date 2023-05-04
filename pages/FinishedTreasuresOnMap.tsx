@@ -1,8 +1,10 @@
 import { SafeAreaView, StyleSheet, View, Image } from "react-native";
 import { useTheme } from "../theme";
 import { Theme } from "../theme/types";
-import MapView, { Callout, Circle, Marker } from "react-native-maps";
+import MapView, { Callout, Circle, LatLng, Marker } from "react-native-maps";
 import { Dimensions } from "react-native";
+import { useCompletedTreasures } from "../react-query/hooks";
+import { Loading } from "./Loading";
 
 export function FinishedMapsOnMap() {
   const { theme } = useTheme();
@@ -33,6 +35,11 @@ export function FinishedMapsOnMap() {
       longitude: 36.8606,
     },
   ];
+  const { completedTreasures, isFetching } = useCompletedTreasures();
+  if (isFetching) {
+    <Loading />;
+  }
+
   return (
     <SafeAreaView style={themedStyles.container}>
       <MapView
@@ -46,16 +53,24 @@ export function FinishedMapsOnMap() {
         scrollEnabled={true}
         zoomControlEnabled={true}
       >
-        {mockFinishedTreasures.map((e, index) => (
-          <View key={index}>
-            <Marker coordinate={e}>
-              <Image
-                source={require("../assets/images/treasure.png")}
-                style={themedStyles.markerStyle}
-              />
-            </Marker>
-          </View>
-        ))}
+        {completedTreasures !== undefined &&
+          completedTreasures.map((e, index) => (
+            <View key={index}>
+              <Marker
+                coordinate={
+                  {
+                    latitude: e.location.latitude as number,
+                    longitude: e.location.longitude as number,
+                  } as any
+                }
+              >
+                <Image
+                  source={require("../assets/images/treasure.png")}
+                  style={themedStyles.markerStyle}
+                />
+              </Marker>
+            </View>
+          ))}
       </MapView>
     </SafeAreaView>
   );

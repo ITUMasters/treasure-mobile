@@ -92,3 +92,10 @@ export const apiUploadImage = (formData: FormData) => {
     },
   });
 };
+
+export const apiGetCompletedTreasures = () => {
+  return axios({
+    url: "/treasure/completed",
+    method: "get",
+  });
+};
