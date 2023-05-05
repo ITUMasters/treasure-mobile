@@ -157,6 +157,7 @@ export function HomePage({ route }: any) {
         treasureId={treasure.id}
         joinTreasure={() => join(treasure.id === -4 ? 82 : treasure.id)} //TODO: Challenge endpointi gelince degiscek!!.
         isWeekly={index === 0}
+        photoLink={treasure.photoLink as string | null}
       />
     );
   }
@@ -200,6 +201,7 @@ export function HomePage({ route }: any) {
                 treasureId={mockWeeklyChallenge.id}
                 joinTreasure={() => join(mockWeeklyChallenge.id)}
                 isWeekly={true}
+                photoLink={mockWeeklyChallenge.photoLink as string | null}
               />
             </View>
 
@@ -224,6 +226,7 @@ export function HomePage({ route }: any) {
                     treasureId={element.id}
                     joinTreasure={() => join(element.id)}
                     isWeekly={false}
+                    photoLink={element.photoLink as string | null}
                   />
                 )
               )}

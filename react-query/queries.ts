@@ -106,3 +106,11 @@ export const apiGetLeaderboardByTreasureId = (treasureId: number) => {
     method: "get",
   });
 };
+
+export const apiDownloadImage = (imageName: string) => {
+  return axios({
+    url: "/image/download/" + imageName,
+    method: "get",
+    responseType: "blob",
+  });
+};

@@ -1,6 +1,7 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
@@ -34,6 +35,7 @@ import { useSetId } from "../recoil-store/auth/IdStoreHooks";
 import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { removeItem } from "../utils/storage";
 import { TouchableOpacity } from "react-native";
+import { ImageDownloader } from "../utils/ImageDownloader";
 
 export type statusType = "Accepted" | "Wrong" | "Not Solved";
 
@@ -184,6 +186,7 @@ export function InGamePage({ route }: any) {
     formdata.append("image", formDataObject);
     uploadImageMutation.mutate(formdata);
   };
+  const [treasureImageUri, setTreasureImageUri] = useState("");
 
   if (
     treasureById.isFetching ||
@@ -214,9 +217,17 @@ export function InGamePage({ route }: any) {
 
   const themedStyles = styles(theme, hardness, status);
 
+  const imageName = treasure.photoLink;
+
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
+        {imageName !== null && (
+          <ImageDownloader
+            imageName={imageName as string}
+            setState={(e: string) => setTreasureImageUri(e)}
+          />
+        )}
         <Text style={themedStyles.questionNameStyle}>
           {treasure.id.toString() + ". " + treasure.name}{" "}
         </Text>
@@ -247,7 +258,15 @@ export function InGamePage({ route }: any) {
 
         <Image
           style={themedStyles.imageStyle}
-          source={require("../assets/images/BeeArea.png")}
+          source={
+            imageName === null ? (
+              require("../assets/images/BeeArea.png")
+            ) : treasureImageUri === "" ? (
+              <Loading />
+            ) : (
+              { uri: treasureImageUri }
+            )
+          }
         />
         <TouchableOpacity
           onPress={uploadImage}
