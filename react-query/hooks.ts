@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import {
   apiChangeAccountInfo,
+  apiDownloadImage,
   apiGetAllTreasures,
   apiGetCompletedTreasures,
   apiGetHintsByTreasureId,
@@ -262,4 +263,14 @@ export const useLeaderboard = (treasureId: number) => {
   });
   const leaderboard: any = data?.data;
   return { leaderboard: leaderboard, ...rest };
+};
+
+export const useDownloadedImage = (imageName: string) => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["DownloadedImage", imageName],
+    queryFn: () => apiDownloadImage(imageName),
+    ...defaultQueryOptions,
+  });
+  const image: Blob = data?.data;
+  return { image: image, ...rest };
 };
