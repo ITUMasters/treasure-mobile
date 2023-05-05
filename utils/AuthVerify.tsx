@@ -18,7 +18,6 @@ export const AuthVerify = () => {
           const { exp } = decodedToken as { exp?: string };
           const expirationTime = parseInt(exp as string);
           if (expirationTime < Date.now() / 1000) {
-            console.log("Girdi mu?");
             setId(0);
             setAuth(false);
             await removeItem("access_token");

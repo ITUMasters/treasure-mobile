@@ -1,5 +1,6 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { Theme } from "../theme/types";
+import { useState, useEffect } from "react";
 import { useTheme } from "../theme";
 import { colors } from "../theme/colors";
 import { Button } from "./Button";
@@ -8,6 +9,9 @@ import { useNavigation } from "@react-navigation/native";
 import { PATHS } from "../consts/paths";
 import { Icon } from "./Icon";
 import { standing } from "../icons";
+import { ImageDownloader } from "../utils/ImageDownloader";
+import { Loading } from "../pages/Loading";
+import { StateSetter } from "./StateSetter";
 
 interface TreasureCardProps {
   id: string;
@@ -18,6 +22,7 @@ interface TreasureCardProps {
   treasureId: number;
   joinTreasure: () => void;
   isWeekly: boolean;
+  photoLink: null | string;
 }
 
 export function TreasureCard({
@@ -29,6 +34,7 @@ export function TreasureCard({
   treasureId,
   joinTreasure,
   isWeekly,
+  photoLink,
 }: TreasureCardProps) {
   const { theme, currentTheme } = useTheme();
   const themedStyles = styles(theme, isWeekly);
@@ -44,14 +50,33 @@ export function TreasureCard({
   difficulty =
     difficulty[0].toUpperCase() + difficulty.substring(1, difficulty.length);
 
+  const [treasureImageUri, setTreasureImageUri] = useState("");
   const navigator = useNavigation<any>();
+
+  if (treasureImageUri === "") {
+    return (
+      <View>
+        <ActivityIndicator style={themedStyles.wrapper} />
+        <ImageDownloader
+          imageName={photoLink as string}
+          setState={(e: string) => setTreasureImageUri(e)}
+        />
+      </View>
+    );
+  }
   return (
     <View style={themedStyles.wrapper}>
       <View style={{ alignItems: "center", justifyContent: "center" }}>
-        <Image
-          source={require("../assets/images/BeeArea.png")}
-          style={{ width: 75, height: 75, borderRadius: 10 }}
-        />
+        {treasureImageUri === "" ? (
+          <ActivityIndicator
+            style={{ width: 75, height: 75, borderRadius: 10 }}
+          />
+        ) : (
+          <Image
+            source={{ uri: treasureImageUri }}
+            style={{ width: 75, height: 75, borderRadius: 10 }}
+          />
+        )}
       </View>
 
       <View style={{ paddingLeft: 10, flex: 5 }}>
