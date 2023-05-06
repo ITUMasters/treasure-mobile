@@ -14,9 +14,10 @@ export const apiGetUser = (userId: number) => {
 };
 
 export const apiChangeAccountInfo = (data: {
-  name: string;
-  surname: string;
-  username: string;
+  name?: string;
+  surname?: string;
+  username?: string;
+  photo_link?: string;
   id?: number;
 }) => {
   return axios({ url: "/user/", method: "put", data });
@@ -81,7 +82,6 @@ export const apiGetTreasureSubmissionByInteractionId = (
 };
 
 export const apiUploadImage = (formData: FormData) => {
-  console.log("FORMDATA: ", formData);
   return axios({
     url: "/image/upload",
     data: formData,
