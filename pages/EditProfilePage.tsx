@@ -15,7 +15,11 @@ import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 import { useState, useMemo } from "react";
 import * as ImagePicker from "expo-image-picker";
 import mime from "mime";
-import { useAccountChangeMutation, useUser } from "../react-query/hooks";
+import {
+  useAccountChangeMutation,
+  useUploadImageMutation,
+  useUser,
+} from "../react-query/hooks";
 import { useId, useSetId } from "../recoil-store/auth/IdStoreHooks";
 import { Loading } from "./Loading";
 import { StateSetter } from "../ui/StateSetter";
@@ -23,6 +27,7 @@ import { authorizedQueryClient } from "../react-query";
 import { AxiosError } from "axios";
 import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { removeItem } from "../utils/storage";
+import { ImageDownloader } from "../utils/ImageDownloader";
 
 export function EditProfilePage() {
   const { theme } = useTheme();
@@ -35,6 +40,8 @@ export function EditProfilePage() {
   const setId = useSetId();
   const setAuth = useSetAuth();
 
+  const [imageName, setImageName] = useState("");
+
   const logout = async () => {
     setId(0);
     setAuth(false);
@@ -44,7 +51,8 @@ export function EditProfilePage() {
 
   const AccountChangeMutation = useAccountChangeMutation({
     onSuccess: async (res) => {
-      authorizedQueryClient.refetchQueries(["user"]);
+      authorizedQueryClient.refetchQueries(["user", user.id]);
+      setUploading(false);
     },
     onError: (err) => {
       const errFormated = err as AxiosError;
@@ -72,11 +80,29 @@ export function EditProfilePage() {
     });
   };
 
+  const uploadImageMutation = useUploadImageMutation({
+    onSuccess: (res) => {
+      AccountChangeMutation.mutate({
+        photo_link: res.data.fileName,
+      });
+    },
+    onError: (error) => {
+      const errFormated = error as AxiosError;
+      const errorData = (errFormated.response?.data as any).error;
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
+        logout();
+      }
+      if (error) {
+        logout();
+      }
+    },
+  });
+
   const uploadImage = async () => {
     const result: any = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [3, 4],
       quality: 1,
     });
 
@@ -94,10 +120,11 @@ export function EditProfilePage() {
     formdata.append("image", {
       name: `image.${fileExtension}`,
       uri: result.uri,
-      type: mime.getType(result.uri),
+      type: "image/${fileExtension}",
     } as any);
 
     setUploading(true);
+    uploadImageMutation.mutate(formdata);
   };
 
   const isButtonDisabled = useMemo(() => {
@@ -130,9 +157,15 @@ export function EditProfilePage() {
     return c1 || c2 || c3 || c4;
   }, [fullName, username]);
 
-  if (isFetching) {
+  if (
+    isFetching ||
+    AccountChangeMutation.isLoading ||
+    uploadImageMutation.isLoading
+  ) {
     return <Loading />;
   }
+
+  const photoLink = user.photo_link;
 
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -143,10 +176,23 @@ export function EditProfilePage() {
               setUsername(user.username);
           }}
         />
-        <Image
-          style={themedStyles.imageStyle}
-          source={require("../assets/images/alpImage.png")}
-        ></Image>
+        {photoLink !== null && (
+          <ImageDownloader
+            imageName={photoLink}
+            setState={(e) => setImageName(e)}
+          />
+        )}
+        {!uploading && (photoLink === null || imageName !== "") && (
+          <Image
+            style={themedStyles.imageStyle}
+            source={
+              photoLink !== null
+                ? { uri: imageName }
+                : require("../assets/images/avatar.png")
+            }
+          ></Image>
+        )}
+        {uploading && photoLink !== null && imageName === "" && <Loading />}
         <View style={themedStyles.uploadPhoto}>
           <Button size="small" bending="high" onPress={uploadImage}>
             Upload Photo

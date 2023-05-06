@@ -65,7 +65,7 @@ export const useLoginMutation = ({
 
 export const useUser = (userId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: QUERY_KEYS.user,
+    queryKey: ["user", userId],
     queryFn: () => apiGetUser(userId),
     ...defaultQueryOptions,
   });
