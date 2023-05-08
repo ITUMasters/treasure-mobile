@@ -10,8 +10,6 @@ import { PATHS } from "../consts/paths";
 import { Icon } from "./Icon";
 import { standing } from "../icons";
 import { ImageDownloader } from "../utils/ImageDownloader";
-import { Loading } from "../pages/Loading";
-import { StateSetter } from "./StateSetter";
 
 interface TreasureCardProps {
   id: string;
@@ -23,6 +21,7 @@ interface TreasureCardProps {
   joinTreasure: () => void;
   isWeekly: boolean;
   photoLink: null | string;
+  gift: number;
 }
 
 export function TreasureCard({
@@ -35,6 +34,7 @@ export function TreasureCard({
   joinTreasure,
   isWeekly,
   photoLink,
+  gift,
 }: TreasureCardProps) {
   const { theme, currentTheme } = useTheme();
   const themedStyles = styles(theme, isWeekly);
@@ -149,12 +149,25 @@ export function TreasureCard({
                 color={colors.goldenYellow}
                 onPress={() =>
                   navigator.navigate(PATHS.LEADERBOARD, {
-                    treasureId: 82, //"DUZELT: NORMALDE BURAYA treasureId: treasureId" demen lazim!!!!
+                    treasureId: treasureId, //"DUZELT: NORMALDE BURAYA treasureId: treasureId" demen lazim!!!!
                   })
                 }
               />
             </View>
           )}
+          <View style={themedStyles.goldPart}>
+            <Text style={{ color: colors.white }}>{gift}</Text>
+            <Image
+              style={themedStyles.goldImage}
+              source={require("../assets/images/coin.png")}
+            ></Image>
+            {isWeekly && (
+              <Image
+                style={themedStyles.x2Image}
+                source={require("../assets/images/iconx2.png")}
+              ></Image>
+            )}
+          </View>
         </View>
       </View>
     </View>
@@ -178,6 +191,22 @@ const styles = (theme: Theme, isWeekly: undefined | boolean) => {
       width: 25,
       height: 25,
       borderRadius: 90,
+    },
+    goldImage: {
+      width: 12,
+      height: 12,
+      marginLeft: 4,
+    },
+    goldPart: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 8,
+    },
+    x2Image: {
+      width: 30,
+      height: 30,
+      marginLeft: 4,
     },
   });
 };

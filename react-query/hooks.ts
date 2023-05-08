@@ -10,7 +10,9 @@ import {
   apiGetTreasureByPageId,
   apiGetTreasureSubmissionByInteractionId,
   apiGetUser,
+  apiGetWeeklyChallenge,
   apiJoin,
+  apiJoinToChallenge,
   apiLogin,
   apiPurchaseHint,
   apiRegister,
@@ -273,4 +275,29 @@ export const useDownloadedImage = (imageName: string) => {
   });
   const image: Blob = data?.data;
   return { image: image, ...rest };
+};
+
+export const useWeeklyChallenge = () => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["WeeklyChallenge"],
+    queryFn: apiGetWeeklyChallenge,
+    ...defaultQueryOptions,
+  });
+  const weeklyChallenge: any = data?.data;
+  return { weeklyChallenge: weeklyChallenge, ...rest };
+};
+
+export const useJoinToChallengeMutation = ({
+  onSuccess,
+  onError,
+}: CustomMutationProps = {}) => {
+  return useMutation({
+    mutationFn: apiJoinToChallenge,
+    onSuccess: (data) => {
+      onSuccess?.(data);
+    },
+    onError: (err) => {
+      onError?.(err);
+    },
+  });
 };

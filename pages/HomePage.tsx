@@ -22,7 +22,9 @@ import {
   useAllTreasures,
   useInfiniteTreasureByPageId,
   useJoinMutation,
+  useJoinToChallengeMutation,
   useTreasureByPageId,
+  useWeeklyChallenge,
 } from "../react-query/hooks";
 import { Loading } from "./Loading";
 import { Pagination } from "../ui/Pagination";
@@ -58,6 +60,7 @@ export function HomePage({ route }: any) {
 
   const setId = useSetId();
   const setAuth = useSetAuth();
+  const weeklyChallengeRequest = useWeeklyChallenge();
 
   const logout = async () => {
     setId(0);
@@ -81,6 +84,25 @@ export function HomePage({ route }: any) {
     selectedRegionId !== -1 ? selectedRegionId : null
   );
 
+  const JoinToChallengeMutation = useJoinToChallengeMutation({
+    onSuccess: async (res) => {
+      join(mockWeeklyChallenge2.id);
+    },
+    onError: (err) => {
+      const errFormated = err as AxiosError;
+      const errorData = (errFormated.response?.data as any).error;
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
+        logout();
+      }
+      showAlert("Join To Challenge Error", {
+        message: getDefaultErrorMessage(err) as any,
+      });
+    },
+  });
+
+  const joinToChallenge = () => {
+    JoinToChallengeMutation.mutate({ challengeId: challengeId });
+  };
   const JoinMutation = useJoinMutation({
     onSuccess: async (res) => {
       navigator.navigate(
@@ -127,7 +149,7 @@ export function HomePage({ route }: any) {
     }
   };
 
-  if (isLoading || isLoadingInfinite) {
+  if (isLoading || isLoadingInfinite || weeklyChallengeRequest.isFetching) {
     return <Loading />;
   }
 
@@ -155,15 +177,21 @@ export function HomePage({ route }: any) {
         creator={"SIMDILIK FARUK"}
         difficulty={treasure.hardness}
         treasureId={treasure.id}
-        joinTreasure={() => join(treasure.id === -4 ? 82 : treasure.id)} //TODO: Challenge endpointi gelince degiscek!!.
+        joinTreasure={() => {
+          index === 0 ? joinToChallenge() : join(treasure.id);
+        }} //TODO: Challenge endpointi gelince degiscek!!.
         isWeekly={index === 0}
         photoLink={treasure.photoLink as string | null}
+        gift={treasure.gift}
       />
     );
   }
-
-  let mockWeeklyChallenge = treasures[0]; //TODO: bunu farkli endpointten alacagim.
+  const weeklyChallengeInfo = weeklyChallengeRequest.weeklyChallenge;
+  const mockWeeklyChallenge2 =
+    weeklyChallengeInfo.challengeTreasureLists[0].treasure; //TODO: bunu farkli endpointten alacagim.
+  let mockWeeklyChallenge = treasures[0];
   mockWeeklyChallenge.id = -4;
+  const challengeId = weeklyChallengeInfo.challengeTreasureLists[0].challengeId;
   return (
     <SafeAreaView style={themedStyles.container}>
       {pagination && (
@@ -199,9 +227,10 @@ export function HomePage({ route }: any) {
                 creator={"SIMDILIK FARUK"}
                 difficulty={mockWeeklyChallenge.hardness}
                 treasureId={mockWeeklyChallenge.id}
-                joinTreasure={() => join(mockWeeklyChallenge.id)}
+                joinTreasure={() => joinToChallenge()}
                 isWeekly={true}
                 photoLink={mockWeeklyChallenge.photoLink as string | null}
+                gift={mockWeeklyChallenge.gift}
               />
             </View>
 
@@ -227,6 +256,7 @@ export function HomePage({ route }: any) {
                     joinTreasure={() => join(element.id)}
                     isWeekly={false}
                     photoLink={element.photoLink as string | null}
+                    gift={element.gift}
                   />
                 )
               )}
