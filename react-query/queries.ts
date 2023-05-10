@@ -1,16 +1,16 @@
-import { axios } from "../react-query";
-import { TreasureSubmission, User } from "./types";
+import { axios } from '../react-query';
+import { TreasureSubmission, User } from './types';
 
 export const apiRegister = (data: User) => {
-  return axios({ url: "/user/register", method: "post", data });
+  return axios({ url: '/user/register', method: 'post', data });
 };
 
 export const apiLogin = (data: { email: string; password: string }) => {
-  return axios({ url: "/user/login", method: "post", data });
+  return axios({ url: '/user/login', method: 'post', data });
 };
 
 export const apiGetUser = (userId: number) => {
-  return axios({ url: "/user/" + userId.toString(), method: "get" });
+  return axios({ url: '/user/' + userId.toString(), method: 'get' });
 };
 
 export const apiChangeAccountInfo = (data: {
@@ -20,97 +20,105 @@ export const apiChangeAccountInfo = (data: {
   photo_link?: string;
   id?: number;
 }) => {
-  return axios({ url: "/user/", method: "put", data });
+  return axios({ url: '/user/', method: 'put', data });
 };
 
 export const apiGetAllTreasures = () => {
-  return axios({ url: "/treasure/", method: "get" });
+  return axios({ url: '/treasure/', method: 'get' });
 };
 
 export const apiGetTreasureById = (treasureId: number) => {
-  return axios({ url: "/treasure/" + treasureId.toString(), method: "get" });
+  return axios({ url: '/treasure/' + treasureId.toString(), method: 'get' });
 };
 
 export const apiGetHintsByTreasureId = (treasureId: number) => {
   return axios({
-    url: "/hint/treasure/" + treasureId.toString(),
-    method: "get",
+    url: '/hint/treasure/' + treasureId.toString(),
+    method: 'get',
   });
 };
 
 export const apiGetTreasureByPageId = (
   pageId: number,
-  regionId: number | null
+  regionId: number | null,
 ) => {
   return axios({
-    url: "/treasure/page/" + pageId.toString(),
-    method: "get",
+    url: '/treasure/page/' + pageId.toString(),
+    method: 'get',
     params: { regionId: regionId },
   });
 };
 
 export const apiPurchaseHint = (data: { hintId: number }) => {
   return axios({
-    url: "/hint/" + data.hintId.toString() + "/purchase",
-    method: "post",
+    url: '/hint/' + data.hintId.toString() + '/purchase',
+    method: 'post',
   });
 };
 
 export const apiJoin = (data: { treasureId: number }) => {
   return axios({
-    url: "/treasure/" + data.treasureId.toString() + "/join",
-    method: "post",
+    url: '/treasure/' + data.treasureId.toString() + '/join',
+    method: 'post',
   });
 };
 
 export const apiTreasureSubmission = (data: TreasureSubmission) => {
   return axios({
-    url: "/treasureSubmission",
-    method: "post",
+    url: '/treasureSubmission',
+    method: 'post',
     data,
   });
 };
 
 export const apiGetTreasureSubmissionByInteractionId = (
-  interactionId: number
+  interactionId: number,
 ) => {
   return axios({
-    url: "/treasureSubmission",
-    method: "get",
+    url: '/treasureSubmission',
+    method: 'get',
     params: { interactionId: interactionId },
   });
 };
 
 export const apiUploadImage = (formData: FormData) => {
   return axios({
-    url: "/image/upload",
+    url: '/image/upload',
     data: formData,
-    method: "post",
+    method: 'post',
     headers: {
-      "Content-Type": "multipart/form-data",
-      Accept: "multipart/form-data, application/json, */*",
+      'Content-Type': 'multipart/form-data',
+      Accept: 'multipart/form-data, application/json, */*',
     },
   });
 };
 
 export const apiGetCompletedTreasures = () => {
   return axios({
-    url: "/treasure/completed",
-    method: "get",
+    url: '/treasure/completed',
+    method: 'get',
   });
 };
 
 export const apiGetLeaderboardByTreasureId = (treasureId: number) => {
   return axios({
-    url: "/treasure/" + treasureId.toString() + "/leaderboard",
-    method: "get",
+    url: '/treasure/' + treasureId.toString() + '/leaderboard',
+    method: 'get',
   });
 };
 
 export const apiDownloadImage = (imageName: string) => {
   return axios({
-    url: "/image/download/" + imageName,
-    method: "get",
-    responseType: "blob",
+    url: '/image/download/' + imageName,
+    method: 'get',
+    responseType: 'blob',
   });
 };
+
+export const apiGetLocations = () => {
+  return axios({
+    url: '/region',
+    method: 'get',
+  });
+};
+
