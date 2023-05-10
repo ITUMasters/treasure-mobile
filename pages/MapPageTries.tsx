@@ -21,7 +21,6 @@ export function MapPageTries() {
   var regionColor = '#000000';
 
   const locations = useLocations().locations;
-  console.log(locations);
 
   function randColor() {
     return (regionColor =
@@ -35,11 +34,10 @@ export function MapPageTries() {
       <MapView
         style={themedStyles.map}
         initialRegion={{
-          // Use region property
-          latitude: 41.10826473247252,
-          longitude: 29.02571209390856,
-          latitudeDelta: 0.0422,
-          longitudeDelta: 0.0421,
+          latitude: 38.6264,
+          longitude: 34.7139,
+          latitudeDelta: 20,
+          longitudeDelta: 20,
         }}
         scrollEnabled={true}
         zoomControlEnabled={true}
