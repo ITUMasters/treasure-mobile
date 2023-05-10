@@ -1,17 +1,15 @@
-import { SafeAreaView, StyleSheet, View, Image } from "react-native";
-import { useTheme } from "../theme";
-import { Theme } from "../theme/types";
-import MapView, { Callout, Circle, LatLng, Marker } from "react-native-maps";
-import { Dimensions } from "react-native";
-import { useCompletedTreasures } from "../react-query/hooks";
-import { Loading } from "./Loading";
+import { SafeAreaView, StyleSheet, View, Image } from 'react-native';
+import { useTheme } from '../theme';
+import { Theme } from '../theme/types';
+import MapView, { Callout, Circle, LatLng, Marker } from 'react-native-maps';
+import { Dimensions } from 'react-native';
+import { useCompletedTreasures } from '../react-query/hooks';
+import { Loading } from './Loading';
 
 export function FinishedMapsOnMap() {
   const { theme } = useTheme();
   const themedStyles = styles(theme);
-  const { height, width } = Dimensions.get("window");
-  const LATITUDE_DELTA = 17;
-  const LONGITUDE_DELTA = LATITUDE_DELTA * (width / height);
+  const { height, width } = Dimensions.get('window');
 
   const mockFinishedTreasures = [
     {
@@ -45,10 +43,10 @@ export function FinishedMapsOnMap() {
       <MapView
         style={themedStyles.map}
         initialRegion={{
-          latitude: 39.19574,
-          longitude: 33.41181,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
+          latitude: 38.6264,
+          longitude: 34.7139,
+          latitudeDelta: 20,
+          longitudeDelta: 20,
         }}
         scrollEnabled={true}
         zoomControlEnabled={true}
@@ -65,7 +63,7 @@ export function FinishedMapsOnMap() {
                 }
               >
                 <Image
-                  source={require("../assets/images/treasure.png")}
+                  source={require('../assets/images/treasure.png')}
                   style={themedStyles.markerStyle}
                 />
               </Marker>
@@ -80,21 +78,22 @@ const styles = (theme: Theme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      width: "100%",
+      width: '100%',
       backgroundColor: theme.appBackground.backgroundColor,
     },
     scrollViewStyle: {
-      width: "100%",
+      width: '100%',
       flex: 1,
     },
     map: {
-      width: "100%",
-      height: "100%",
+      width: '100%',
+      height: '100%',
     },
     markerStyle: {
       width: 32,
       height: 32,
-      resizeMode: "contain",
+      resizeMode: 'contain',
     },
   });
 };
+
