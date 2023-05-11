@@ -1,17 +1,17 @@
-import { Image, StyleSheet, Text, View, ActivityIndicator } from "react-native";
-import { Theme } from "../theme/types";
-import { useState, useEffect } from "react";
-import { useTheme } from "../theme";
-import { colors } from "../theme/colors";
-import { Button } from "./Button";
-import { diff } from "react-native-reanimated";
-import { useNavigation } from "@react-navigation/native";
-import { PATHS } from "../consts/paths";
-import { Icon } from "./Icon";
-import { standing } from "../icons";
-import { ImageDownloader } from "../utils/ImageDownloader";
-import { Loading } from "../pages/Loading";
-import { StateSetter } from "./StateSetter";
+import { Image, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { Theme } from '../theme/types';
+import { useState, useEffect } from 'react';
+import { useTheme } from '../theme';
+import { colors } from '../theme/colors';
+import { Button } from './Button';
+import { diff } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+import { PATHS } from '../consts/paths';
+import { Icon } from './Icon';
+import { standing } from '../icons';
+import { ImageDownloader } from '../utils/ImageDownloader';
+import { Loading } from '../pages/Loading';
+import { StateSetter } from './StateSetter';
 
 interface TreasureCardProps {
   id: string;
@@ -40,20 +40,20 @@ export function TreasureCard({
   const themedStyles = styles(theme, isWeekly);
 
   var difficultyColor;
-  if (difficulty == "easy") {
+  if (difficulty == 'easy') {
     difficultyColor = colors.green;
-  } else if (difficulty == "medium") {
+  } else if (difficulty == 'medium') {
     difficultyColor = colors.orange;
-  } else if (difficulty == "hard") {
+  } else if (difficulty == 'hard') {
     difficultyColor = colors.red;
   }
   difficulty =
     difficulty[0].toUpperCase() + difficulty.substring(1, difficulty.length);
 
-  const [treasureImageUri, setTreasureImageUri] = useState("");
+  const [treasureImageUri, setTreasureImageUri] = useState('');
   const navigator = useNavigation<any>();
 
-  if (treasureImageUri === "") {
+  if (treasureImageUri === '') {
     return (
       <View>
         <ActivityIndicator style={themedStyles.wrapper} />
@@ -66,8 +66,8 @@ export function TreasureCard({
   }
   return (
     <View style={themedStyles.wrapper}>
-      <View style={{ alignItems: "center", justifyContent: "center" }}>
-        {treasureImageUri === "" ? (
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        {treasureImageUri === '' ? (
           <ActivityIndicator
             style={{ width: 75, height: 75, borderRadius: 10 }}
           />
@@ -87,7 +87,7 @@ export function TreasureCard({
                 fontSize: 22,
                 color: colors.goldenYellow,
                 marginBottom: 4,
-                fontWeight: "500",
+                fontWeight: '500',
               }}
             >
               Weekly Challange
@@ -99,7 +99,7 @@ export function TreasureCard({
               color: colors.white,
             }}
           >
-            {"#" + id + " " + name}
+            {'#' + id + ' ' + name}
           </Text>
           <Text
             style={{
@@ -127,21 +127,21 @@ export function TreasureCard({
         </View>
       </View>
       <View style={themedStyles.buttonWrapper}>
-        <View style={{ flexDirection: "column" }}>
+        <View style={{ flexDirection: 'column' }}>
           <Button
             size="large"
             onPress={joinTreasure}
-            anotherBgColor={isWeekly ? colors.goldenYellow : undefined}
+            anotherBgColor={isWeekly ? colors.goldenYellow : colors.green}
             anotherTextColor={isWeekly ? colors.challengeColor : undefined}
           >
-            GO
+            ENTER
           </Button>
           {isWeekly && (
             <View
               style={{
                 marginTop: 12,
-                justifyContent: "center",
-                alignItems: "center",
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
               <Icon
@@ -166,13 +166,13 @@ const styles = (theme: Theme, isWeekly: undefined | boolean) => {
     wrapper: {
       padding: 10,
       backgroundColor: isWeekly ? colors.challengeColor : colors.lightRoyalBlue,
-      flexDirection: "row",
+      flexDirection: 'row',
       borderRadius: 10,
       marginTop: 10,
     },
     buttonWrapper: {
       flex: 2,
-      justifyContent: "center",
+      justifyContent: 'center',
     },
     image: {
       width: 25,
@@ -181,3 +181,4 @@ const styles = (theme: Theme, isWeekly: undefined | boolean) => {
     },
   });
 };
+
