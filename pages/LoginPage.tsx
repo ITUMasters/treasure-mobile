@@ -105,6 +105,8 @@ export function LoginPage() {
           >
             <Input
               size="large"
+              autoCapitalize="none"
+              keyboardType="email-address"
               title="Mail"
               xml={mail}
               onChangeText={(e) => setEmail(e)}
@@ -115,6 +117,7 @@ export function LoginPage() {
             <Input
               size="large"
               title="Password"
+              autoCapitalize="none"
               xml={passwordVisibility ? eyeOn : eyeOff}
               value={password}
               onChangeText={setPassword}

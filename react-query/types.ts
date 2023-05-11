@@ -6,7 +6,7 @@ export type User = {
   name: string;
   surname: string;
   password: string;
-  coin: number;
+  coin?: number;
 };
 
 export type Treasure = {
@@ -43,7 +43,7 @@ export type TreasureSubmission = {
   imageName?: string;
 };
 
-export type Hardness = "easy" | "medium" | "hard" | "insane";
+export type Hardness = 'easy' | 'medium' | 'hard' | 'insane';
 
 export type Author = {
   id: number;
@@ -80,3 +80,4 @@ export type QuizResponseData = {
   author: Author;
   questions: Question[];
 };
+

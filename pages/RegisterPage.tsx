@@ -32,6 +32,9 @@ export function RegisterPage() {
 
   const RegisterMutation = useRegisterMutation({
     onSuccess: async (res) => {
+      showAlert('Successfully Registered', {
+        message: undefined,
+      });
       navigator.navigate(PATHS.LOGIN as never);
     },
     onError: (err) => {
@@ -49,7 +52,6 @@ export function RegisterPage() {
       name: name,
       surname: surname,
       password: password1,
-      coin: 0,
     });
   };
 
@@ -108,6 +110,8 @@ export function RegisterPage() {
               title="Mail"
               xml={mail}
               value={email}
+              keyboardType="email-address"
+              autoCapitalize="none"
               onChangeText={(e) => setEmail(e)}
             />
           </View>

@@ -136,11 +136,14 @@ export function HomePage({ route }: any) {
   }
 
   function searchTreasures(input: string) {
-    let filteredTreasures = treasures.filter((element) => {
-      return (
-        element.name.slice(0, input.length).toLowerCase() == input.toLowerCase()
-      );
-    });
+    let filteredTreasures = (pagination ? treasures : treasuresInfinite).filter(
+      (element) => {
+        return (
+          element.name.slice(0, input.length).toLowerCase() ==
+          input.toLowerCase()
+        );
+      },
+    );
     if (filteredTreasures.length === 0) {
       filteredTreasures = treasures;
       setInitializingFlag(false);
@@ -149,6 +152,7 @@ export function HomePage({ route }: any) {
     setFoundTreasures(filteredTreasures);
     setInitializingFlag(true);
   }
+
   function renderTreasure(treasure: Treasure, index: any) {
     return (
       <TreasureCard
@@ -254,6 +258,17 @@ export function HomePage({ route }: any) {
         <View style={themedStyles.scrollViewStyle}>
           <View style={themedStyles.wrapper}>
             <View style={themedStyles.searchBar}>
+              <View style={themedStyles.searchInput}>
+                <Input
+                  size="medium"
+                  title="Search Treasure"
+                  value={searchedText}
+                  onChangeText={(text) => {
+                    setSearchedText(text);
+                    searchTreasures(text);
+                  }}
+                />
+              </View>
               <View style={themedStyles.searchButton}>
                 <Button
                   onPress={() => navigator.navigate(PATHS.MAPS as never)}
@@ -264,10 +279,20 @@ export function HomePage({ route }: any) {
               </View>
             </View>
           </View>
+          {!initializingFlag && (
+            <View>
+              <Text style={themedStyles.notFound}>NOT FOUND!</Text>
+              <Text style={themedStyles.allIsReturned}>
+                SHOWING ALL TREASURES
+              </Text>
+            </View>
+          )}
 
           <FlatList
             style={themedStyles.wrapper}
-            data={[...treasuresInfinite]}
+            data={
+              initializingFlag ? [...foundTreasures] : [...treasuresInfinite]
+            }
             renderItem={({ item, index }) => {
               if (index == treasuresInfinite.length) {
                 return (
@@ -280,16 +305,6 @@ export function HomePage({ route }: any) {
               }
             }}
             onEndReached={loadMore}
-            ListFooterComponent={
-              isFetchingNextPage
-                ? () => (
-                    <ActivityIndicator
-                      style={{ marginTop: 10 }}
-                      size={'large'}
-                    />
-                  )
-                : null
-            }
           />
         </View>
       )}
