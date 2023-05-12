@@ -114,3 +114,23 @@ export const apiDownloadImage = (imageName: string) => {
     responseType: "blob",
   });
 };
+
+export const apiGetWeeklyChallenge = () => {
+  return axios({
+    url: "/challenge/weekly",
+    method: "get",
+  });
+};
+
+export const apiJoinToChallenge = (data: { challengeId: number }) => {
+  return axios({
+    url: "/challenge/" + data.challengeId.toString() + "/join",
+    method: "post",
+  });
+};
+export const apiGetLocations = () => {
+  return axios({
+    url: "/region",
+    method: "get",
+  });
+};

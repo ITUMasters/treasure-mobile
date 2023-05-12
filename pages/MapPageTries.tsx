@@ -9,50 +9,59 @@ import {
 import { useTheme } from "../theme";
 import { Theme } from "../theme/types";
 import { useState } from "react";
-import MapView, { Callout, Circle, Marker } from "react-native-maps";
+import MapView, { Callout, Circle, Marker, Polygon } from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
 import { PATHS } from "../consts/paths";
+import { useLocations } from "../react-query/hooks";
+import { colors } from "../theme/colors";
+import { Icon } from "../ui/Icon";
+import { leftArrow } from "../icons";
 
 export function MapPageTries() {
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const navigator = useNavigation<any>();
-  const mockLocations = [
-    {
-      name: "ITU",
-      latitude: 41.10826473247252,
-      longitude: 29.02571209390856,
-      id: 7,
-    },
-    {
-      name: "METU",
-      latitude: 39.89455861403798,
-      longitude: 32.78077025408293,
-      id: 25,
-    },
-  ];
+  var regionColor = "#000000";
+
+  const locations = useLocations().locations;
+
+  function randColor() {
+    return (regionColor =
+      "#" +
+      ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0") +
+      "aa");
+  }
+
+  const goBack = () => {
+    navigator.navigate(PATHS.HOME as never);
+  };
 
   return (
     <SafeAreaView style={themedStyles.container}>
+      <View style={themedStyles.goBackBar}>
+        <View style={themedStyles.goBackIcon}>
+          <Icon xml={leftArrow} width="28" height="28" onPress={goBack}></Icon>
+        </View>
+      </View>
       <MapView
         style={themedStyles.map}
         initialRegion={{
-          latitude: 41.10826473247252,
-          longitude: 29.02571209390856,
-          latitudeDelta: 0.0422,
-          longitudeDelta: 0.0421,
+          latitude: 38.6264,
+          longitude: 34.7139,
+          latitudeDelta: 20,
+          longitudeDelta: 20,
         }}
         scrollEnabled={true}
         zoomControlEnabled={true}
       >
-        {mockLocations.map((element: any) => (
+        {locations?.entities.map((element: any) => (
           <View key={element.name}>
             <Marker
               coordinate={{
-                latitude: element.latitude,
-                longitude: element.longitude,
+                latitude: element.center.latitude,
+                longitude: element.center.longitude,
               }}
-              pinColor={"red"}
+              pinColor={randColor()}
               onPress={() => {
                 navigator.navigate(PATHS.HOME, {
                   name: element.name,
@@ -60,13 +69,11 @@ export function MapPageTries() {
                 });
               }}
             ></Marker>
-            <Circle
-              center={{
-                latitude: element.latitude,
-                longitude: element.longitude,
-              }}
-              radius={500}
-            />
+            <Polygon
+              coordinates={element.paths}
+              strokeColor={regionColor}
+              fillColor={regionColor}
+            ></Polygon>
           </View>
         ))}
       </MapView>
@@ -88,6 +95,14 @@ const styles = (theme: Theme) => {
     map: {
       width: "100%",
       height: "100%",
+    },
+    goBackBar: {
+      backgroundColor: colors.lightRoyalBlue,
+      width: "100%",
+      height: 28,
+    },
+    goBackIcon: {
+      marginLeft: 15,
     },
   });
 };

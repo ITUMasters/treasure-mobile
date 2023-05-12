@@ -23,6 +23,8 @@ interface TreasureCardProps {
   joinTreasure: () => void;
   isWeekly: boolean;
   photoLink: null | string;
+  gift: number;
+  timeString?: string;
 }
 
 export function TreasureCard({
@@ -35,6 +37,8 @@ export function TreasureCard({
   joinTreasure,
   isWeekly,
   photoLink,
+  gift,
+  timeString,
 }: TreasureCardProps) {
   const { theme, currentTheme } = useTheme();
   const themedStyles = styles(theme, isWeekly);
@@ -120,8 +124,8 @@ export function TreasureCard({
             {zone}
           </Text>
           {isWeekly && (
-            <Text style={{ color: colors.white }}>
-              Remaining time: 3d, 2h, 10m
+            <Text style={{ color: colors.white, fontSize: 10 }}>
+              {timeString}
             </Text>
           )}
         </View>
@@ -131,10 +135,10 @@ export function TreasureCard({
           <Button
             size="large"
             onPress={joinTreasure}
-            anotherBgColor={isWeekly ? colors.goldenYellow : undefined}
+            anotherBgColor={isWeekly ? colors.goldenYellow : colors.green}
             anotherTextColor={isWeekly ? colors.challengeColor : undefined}
           >
-            GO
+            ENTER
           </Button>
           {isWeekly && (
             <View
@@ -149,12 +153,25 @@ export function TreasureCard({
                 color={colors.goldenYellow}
                 onPress={() =>
                   navigator.navigate(PATHS.LEADERBOARD, {
-                    treasureId: 82, //"DUZELT: NORMALDE BURAYA treasureId: treasureId" demen lazim!!!!
+                    treasureId: treasureId, //"DUZELT: NORMALDE BURAYA treasureId: treasureId" demen lazim!!!!
                   })
                 }
               />
             </View>
           )}
+          <View style={themedStyles.goldPart}>
+            <Text style={{ color: colors.white }}>{gift}</Text>
+            <Image
+              style={themedStyles.goldImage}
+              source={require("../assets/images/coin.png")}
+            ></Image>
+            {isWeekly && (
+              <Image
+                style={themedStyles.x2Image}
+                source={require("../assets/images/iconx2.png")}
+              ></Image>
+            )}
+          </View>
         </View>
       </View>
     </View>
@@ -178,6 +195,22 @@ const styles = (theme: Theme, isWeekly: undefined | boolean) => {
       width: 25,
       height: 25,
       borderRadius: 90,
+    },
+    goldImage: {
+      width: 12,
+      height: 12,
+      marginLeft: 4,
+    },
+    goldPart: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 8,
+    },
+    x2Image: {
+      width: 30,
+      height: 30,
+      marginLeft: 4,
     },
   });
 };

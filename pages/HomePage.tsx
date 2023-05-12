@@ -22,7 +22,9 @@ import {
   useAllTreasures,
   useInfiniteTreasureByPageId,
   useJoinMutation,
+  useJoinToChallengeMutation,
   useTreasureByPageId,
+  useWeeklyChallenge,
 } from "../react-query/hooks";
 import { Loading } from "./Loading";
 import { Pagination } from "../ui/Pagination";
@@ -39,6 +41,7 @@ import { AxiosError } from "axios";
 import { useSetId } from "../recoil-store/auth/IdStoreHooks";
 import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { removeItem } from "../utils/storage";
+import { adjustTime } from "../utils/adjustTime";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
@@ -47,17 +50,19 @@ export function HomePage({ route }: any) {
   const [selectedCategory, setSelectedCategory] = useState("MAP");
   const [selectedRegionId, setSelectedRegionId] = useState(-1);
   const setNavbarOpen = useSetNavbarOpen();
-  const navigator = useNavigation();
   const categories = ["ITU", "METU", "Boğaziçi", "Bilkent", "Koç"];
   const [foundTreasures, setFoundTreasures] = useState([] as Treasure[]);
   const [initializingFlag, setInitializingFlag] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [searchedText, setSearchedText] = useState("");
+  const navigator = useNavigation<any>();
 
   const [currentPage, setCurrentPage] = useState(1);
   const { pagination, toggle: togglePagination } = usePagination();
 
   const setId = useSetId();
   const setAuth = useSetAuth();
+  const weeklyChallengeRequest = useWeeklyChallenge();
 
   const logout = async () => {
     setId(0);
@@ -66,21 +71,44 @@ export function HomePage({ route }: any) {
     await removeItem("remember_me");
   };
 
-  const name2 = route.params ?? route.params;
+  const routeParams = route.params;
   useEffect(() => {
     setSelectedCategory(
-      name2 !== undefined && name2.name !== undefined ? name2.name : "MAP"
+      routeParams !== undefined && routeParams.name !== undefined
+        ? routeParams.name
+        : "MAP"
     );
     setSelectedRegionId(
-      name2 !== undefined && name2.regionId !== undefined ? name2.regionId : -1
+      routeParams !== undefined && routeParams.regionId !== undefined
+        ? routeParams.regionId
+        : -1
     );
-  }, [name2]);
+  }, [routeParams]);
 
   let { treasures, pageCount, isFetching, isLoading } = useTreasureByPageId(
     currentPage,
     selectedRegionId !== -1 ? selectedRegionId : null
   );
 
+  const JoinToChallengeMutation = useJoinToChallengeMutation({
+    onSuccess: async (res) => {
+      join(mockWeeklyChallenge2.id);
+    },
+    onError: (err) => {
+      const errFormated = err as AxiosError;
+      const errorData = (errFormated.response?.data as any).error;
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
+        logout();
+      }
+      showAlert("Join To Challenge Error", {
+        message: getDefaultErrorMessage(err) as any,
+      });
+    },
+  });
+
+  const joinToChallenge = () => {
+    JoinToChallengeMutation.mutate({ challengeId: challengeId });
+  };
   const JoinMutation = useJoinMutation({
     onSuccess: async (res) => {
       navigator.navigate(
@@ -127,16 +155,26 @@ export function HomePage({ route }: any) {
     }
   };
 
-  if (isLoading || isLoadingInfinite) {
+  if (isLoading || isLoadingInfinite || weeklyChallengeRequest.isFetching) {
     return <Loading />;
   }
 
+  let counter = 0;
   function searchTreasures(input: string) {
-    let filteredTreasures = treasures.filter((element) => {
-      return (
-        element.name.slice(0, input.length).toLowerCase() == input.toLowerCase()
-      );
-    });
+    if (isFirst) {
+      counter++;
+    }
+    if (counter == 1) {
+      setIsFirst(false);
+    }
+    let filteredTreasures = (pagination ? treasures : treasuresInfinite).filter(
+      (element) => {
+        return (
+          element.name.slice(0, input.length).toLowerCase() ==
+          input.toLowerCase()
+        );
+      }
+    );
     if (filteredTreasures.length === 0) {
       filteredTreasures = treasures;
       setInitializingFlag(false);
@@ -145,6 +183,7 @@ export function HomePage({ route }: any) {
     setFoundTreasures(filteredTreasures);
     setInitializingFlag(true);
   }
+
   function renderTreasure(treasure: Treasure, index: any) {
     return (
       <TreasureCard
@@ -155,15 +194,26 @@ export function HomePage({ route }: any) {
         creator={"SIMDILIK FARUK"}
         difficulty={treasure.hardness}
         treasureId={treasure.id}
-        joinTreasure={() => join(treasure.id === -4 ? 82 : treasure.id)} //TODO: Challenge endpointi gelince degiscek!!.
+        joinTreasure={() => {
+          index === 0 ? joinToChallenge() : join(treasure.id);
+        }}
         isWeekly={index === 0}
         photoLink={treasure.photoLink as string | null}
+        gift={treasure.gift}
+        timeString={remainingTimeText}
       />
     );
   }
+  const weeklyChallengeInfo = weeklyChallengeRequest.weeklyChallenge;
+  const mockWeeklyChallenge2 =
+    weeklyChallengeInfo.challengeTreasureLists[0].treasure; //TODO: bunu farkli endpointten alacagim.
+  let mockWeeklyChallenge = mockWeeklyChallenge2;
+  const challengeId = weeklyChallengeInfo.challengeTreasureLists[0].challengeId;
+  const endTime = new Date(weeklyChallengeInfo.endTime);
+  const currentTime = Date.now();
+  const remainingTime = (endTime.getTime() - currentTime) / 1000; // in seconds
+  const remainingTimeText = adjustTime(remainingTime);
 
-  let mockWeeklyChallenge = treasures[0]; //TODO: bunu farkli endpointten alacagim.
-  mockWeeklyChallenge.id = -4;
   return (
     <SafeAreaView style={themedStyles.container}>
       {pagination && (
@@ -173,6 +223,7 @@ export function HomePage({ route }: any) {
             <View style={themedStyles.searchBar}>
               <View style={themedStyles.searchInput}>
                 <Input
+                  maxLength={50}
                   size="medium"
                   title="Search Treasure"
                   value={searchedText}
@@ -199,13 +250,14 @@ export function HomePage({ route }: any) {
                 creator={"SIMDILIK FARUK"}
                 difficulty={mockWeeklyChallenge.hardness}
                 treasureId={mockWeeklyChallenge.id}
-                joinTreasure={() => join(mockWeeklyChallenge.id)}
+                joinTreasure={() => joinToChallenge()}
                 isWeekly={true}
                 photoLink={mockWeeklyChallenge.photoLink as string | null}
+                gift={mockWeeklyChallenge.gift}
               />
             </View>
 
-            {!initializingFlag && (
+            {!initializingFlag && !isFirst && (
               <View>
                 <Text style={themedStyles.notFound}>NOT FOUND!</Text>
                 <Text style={themedStyles.allIsReturned}>
@@ -227,6 +279,7 @@ export function HomePage({ route }: any) {
                     joinTreasure={() => join(element.id)}
                     isWeekly={false}
                     photoLink={element.photoLink as string | null}
+                    gift={element.gift}
                   />
                 )
               )}
@@ -260,9 +313,46 @@ export function HomePage({ route }: any) {
       )}
       {!pagination && (
         <View style={themedStyles.scrollViewStyle}>
+          <View style={themedStyles.wrapper}>
+            <View style={themedStyles.searchBar}>
+              <View style={themedStyles.searchInput}>
+                <Input
+                  maxLength={50}
+                  size="medium"
+                  title="Search Treasure"
+                  value={searchedText}
+                  onChangeText={(text) => {
+                    setSearchedText(text);
+                    searchTreasures(text);
+                  }}
+                />
+              </View>
+              <View style={themedStyles.searchButton}>
+                <Button
+                  onPress={() => navigator.navigate(PATHS.MAPS as never)}
+                  size="xlarge"
+                >
+                  {selectedCategory}
+                </Button>
+              </View>
+            </View>
+          </View>
+          {!initializingFlag && !isFirst && (
+            <View>
+              <Text style={themedStyles.notFound}>NOT FOUND!</Text>
+              <Text style={themedStyles.allIsReturned}>
+                SHOWING ALL TREASURES
+              </Text>
+            </View>
+          )}
+
           <FlatList
             style={themedStyles.wrapper}
-            data={[mockWeeklyChallenge, ...treasuresInfinite]}
+            data={
+              initializingFlag
+                ? [mockWeeklyChallenge, ...foundTreasures]
+                : [mockWeeklyChallenge, ...treasuresInfinite]
+            }
             renderItem={({ item, index }) => {
               if (index == treasuresInfinite.length) {
                 return (
@@ -275,16 +365,6 @@ export function HomePage({ route }: any) {
               }
             }}
             onEndReached={loadMore}
-            ListFooterComponent={
-              isFetchingNextPage
-                ? () => (
-                    <ActivityIndicator
-                      style={{ marginTop: 10 }}
-                      size={"large"}
-                    />
-                  )
-                : null
-            }
           />
         </View>
       )}
@@ -321,10 +401,10 @@ const styles = (theme: Theme) => {
     },
     searchInput: {
       borderRadius: 10,
+      marginRight: 8,
       flex: 3,
     },
     searchButton: {
-      marginLeft: 10,
       flex: 2,
     },
     treasures: {

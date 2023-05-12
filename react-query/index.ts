@@ -5,7 +5,7 @@ import { getItem } from "../utils/storage";
 export const authorizedQueryClient = new QueryClient();
 export const unauthorizedQueryClient = new QueryClient();
 
-const baseURL = "http://212.64.215.163:8000";
+const baseURL = "http://itumasters.com:8000";
 
 export const axios = Axios.create({
   baseURL,

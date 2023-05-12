@@ -94,6 +94,7 @@ export function JoinPage() {
               onChangeText={(e) => {
                 setPin(e);
               }}
+              maxLength={9}
               value={pin.toString()}
               onFocus={() => {
                 setPlaceholderColor(theme.appBackground.backgroundColor);

@@ -1,30 +1,30 @@
-import { useState, useMemo } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import { FONTS } from "../consts";
-import { eyeOff, eyeOn, google, mail, userIcon } from "../icons";
-import { useTheme } from "../theme";
-import { colors } from "../theme/colors";
-import { Theme } from "../theme/types";
-import { Button } from "../ui/Button";
+import { useState, useMemo } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FONTS } from '../consts';
+import { eyeOff, eyeOn, google, mail, userIcon } from '../icons';
+import { useTheme } from '../theme';
+import { colors } from '../theme/colors';
+import { Theme } from '../theme/types';
+import { Button } from '../ui/Button';
 
-import { Input } from "../ui/Input";
-import { Logo } from "../ui/Logo";
+import { Input } from '../ui/Input';
+import { Logo } from '../ui/Logo';
 
-import { useRegisterMutation } from "../react-query/hooks";
-import { getDefaultErrorMessage, showAlert } from "../utils/alert";
-import { isValidEmail } from "../utils/validators";
-import { useNavigation } from "@react-navigation/native";
-import { PATHS } from "../consts/paths";
+import { useRegisterMutation } from '../react-query/hooks';
+import { getDefaultErrorMessage, showAlert } from '../utils/alert';
+import { isValidEmail } from '../utils/validators';
+import { useNavigation } from '@react-navigation/native';
+import { PATHS } from '../consts/paths';
 
 export function RegisterPage() {
   const [passwordVisibility1, setPasswordVisibility1] = useState(false);
   const [passwordVisibility2, setPasswordVisibility2] = useState(false);
-  const [password1, setPassword1] = useState("");
-  const [password2, setPassword2] = useState("");
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const [password1, setPassword1] = useState('');
+  const [password2, setPassword2] = useState('');
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const defaulTextColor = theme.text.default.color;
@@ -32,10 +32,13 @@ export function RegisterPage() {
 
   const RegisterMutation = useRegisterMutation({
     onSuccess: async (res) => {
+      showAlert('Successfully Registered', {
+        message: undefined,
+      });
       navigator.navigate(PATHS.LOGIN as never);
     },
     onError: (err) => {
-      showAlert("Error happened", {
+      showAlert('Error happened', {
         message: getDefaultErrorMessage(err) as any,
       });
     },
@@ -49,17 +52,16 @@ export function RegisterPage() {
       name: name,
       surname: surname,
       password: password1,
-      coin: 0,
     });
   };
 
   const isButtonDisabled = useMemo(() => {
     const c1 = !isValidEmail(email);
-    const c2 = password1.trim() === "";
+    const c2 = password1.trim() === '';
     const c3 = password1 !== password2;
-    const c4 = name.trim() === "";
-    const c5 = surname.trim() === "";
-    const c6 = username.trim() === "";
+    const c4 = name.trim() === '';
+    const c5 = surname.trim() === '';
+    const c6 = username.trim() === '';
 
     return c1 || c2 || c3 || c4 || c5 || c6;
   }, [email, password1, password2, surname, name, username]);
@@ -68,7 +70,7 @@ export function RegisterPage() {
     <SafeAreaView style={themedStyles.container}>
       <ScrollView
         style={themedStyles.scrollViewStyle}
-        contentContainerStyle={{ alignItems: "center" }}
+        contentContainerStyle={{ alignItems: 'center' }}
       >
         <View style={themedStyles.logoStyle}>
           <Logo />
@@ -84,7 +86,7 @@ export function RegisterPage() {
               setName(e);
             }}
           />
-          <View style={{ marginTop: "1.25%" }}>
+          <View style={{ marginTop: '1.25%' }}>
             <Input
               size="medium"
               title="Surname"
@@ -93,7 +95,7 @@ export function RegisterPage() {
               onChangeText={(e) => setSurname(e)}
             />
           </View>
-          <View style={{ marginTop: "1.25%" }}>
+          <View style={{ marginTop: '1.25%' }}>
             <Input
               size="medium"
               title="Username"
@@ -102,16 +104,18 @@ export function RegisterPage() {
               onChangeText={(e) => setUsername(e)}
             />
           </View>
-          <View style={{ marginTop: "1.25%" }}>
+          <View style={{ marginTop: '1.25%' }}>
             <Input
               size="medium"
               title="Mail"
               xml={mail}
               value={email}
+              keyboardType="email-address"
+              autoCapitalize="none"
               onChangeText={(e) => setEmail(e)}
             />
           </View>
-          <View style={{ marginTop: "1.25%" }}>
+          <View style={{ marginTop: '1.25%' }}>
             <Input
               size="medium"
               title="Password"
@@ -122,7 +126,7 @@ export function RegisterPage() {
               onTouched={() => setPasswordVisibility1(!passwordVisibility1)}
             />
           </View>
-          <View style={{ marginTop: "1.25%" }}>
+          <View style={{ marginTop: '1.25%' }}>
             <Input
               size="medium"
               title="Confirm Password"
@@ -133,7 +137,7 @@ export function RegisterPage() {
               onTouched={() => setPasswordVisibility2(!passwordVisibility2)}
             />
           </View>
-          <View style={{ marginTop: "1.875%" }}>
+          <View style={{ marginTop: '1.875%' }}>
             <Button
               size="xlarge"
               onPress={() => {
@@ -145,28 +149,28 @@ export function RegisterPage() {
             </Button>
           </View>
         </View>
-        <View style={{ marginTop: "3.125%" }}>
+        <View style={{ marginTop: '3.125%' }}>
           <Text style={{ fontSize: 14, color: defaulTextColor }}>
             Or sign in with
           </Text>
         </View>
         <View style={themedStyles.inputContainer}>
-          <View style={{ marginTop: "1.5%", width: "100%" }}>
+          <View style={{ marginTop: '1.5%', width: '100%' }}>
             <Button size="large" xml={google}>
               Google
             </Button>
           </View>
         </View>
-        <View style={{ width: "100%", alignItems: "center" }}>
+        <View style={{ width: '100%', alignItems: 'center' }}>
           <View
             style={{
-              flexDirection: "row",
-              marginTop: "4.48%",
-              alignSelf: "center",
+              flexDirection: 'row',
+              marginTop: '4.48%',
+              alignSelf: 'center',
             }}
           >
             <Text style={{ color: defaulTextColor }}>
-              Don't have an account?{" "}
+              Don't have an account?{' '}
             </Text>
             <Text
               style={{
@@ -178,11 +182,6 @@ export function RegisterPage() {
               Log In
             </Text>
           </View>
-          <Text
-            style={{ color: colors.red, fontFamily: FONTS.PoppinsSemiBold }}
-          >
-            Forgot Password
-          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -193,15 +192,15 @@ const styles = (theme: Theme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      width: "100%",
+      width: '100%',
       backgroundColor: theme.appBackground.backgroundColor,
     },
     logoStyle: {
-      marginTop: "5.83%",
-      alignItems: "center",
+      marginTop: '5.83%',
+      alignItems: 'center',
     },
     scrollViewStyle: {
-      width: "100%",
+      width: '100%',
       flex: 1,
     },
     registerTitle: {
@@ -211,9 +210,10 @@ const styles = (theme: Theme) => {
       color: theme.text.default.color,
     },
     inputContainer: {
-      width: "100%",
-      paddingLeft: "20%",
-      paddingRight: "20%",
+      width: '100%',
+      paddingLeft: '20%',
+      paddingRight: '20%',
     },
   });
 };
+

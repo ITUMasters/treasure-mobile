@@ -170,20 +170,6 @@ export function ProfilePage() {
           </View>
         </View>
 
-        <View style={themedStyles.achievementsWrapper}>
-          <View style={themedStyles.achivementsHead}>
-            <Text style={themedStyles.achievementText}>Achivements</Text>
-            <Image
-              source={require("../assets/images/trophy.png")}
-              style={themedStyles.trophy}
-            ></Image>
-          </View>
-          <View style={themedStyles.achievementsBody}>
-            <Achievement challengeName="Biweekly-1" rank="3rd"></Achievement>
-            <Achievement challengeName="Biweekly-2" rank="1st"></Achievement>
-            <Achievement challengeName="Biweekly-3" rank="2nd"></Achievement>
-          </View>
-        </View>
         <View style={themedStyles.friendsWrapper}>
           <View style={themedStyles.achievementsWrapper}>
             <View style={themedStyles.achivementsHead}>
