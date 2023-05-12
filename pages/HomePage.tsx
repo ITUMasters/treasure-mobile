@@ -22,7 +22,9 @@ import {
   useAllTreasures,
   useInfiniteTreasureByPageId,
   useJoinMutation,
+  useJoinToChallengeMutation,
   useTreasureByPageId,
+  useWeeklyChallenge,
 } from "../react-query/hooks";
 import { Loading } from "./Loading";
 import { Pagination } from "../ui/Pagination";
@@ -39,6 +41,7 @@ import { AxiosError } from "axios";
 import { useSetId } from "../recoil-store/auth/IdStoreHooks";
 import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { removeItem } from "../utils/storage";
+import { adjustTime } from "../utils/adjustTime";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
@@ -59,6 +62,7 @@ export function HomePage({ route }: any) {
 
   const setId = useSetId();
   const setAuth = useSetAuth();
+  const weeklyChallengeRequest = useWeeklyChallenge();
 
   const logout = async () => {
     setId(0);
@@ -86,6 +90,25 @@ export function HomePage({ route }: any) {
     selectedRegionId !== -1 ? selectedRegionId : null
   );
 
+  const JoinToChallengeMutation = useJoinToChallengeMutation({
+    onSuccess: async (res) => {
+      join(mockWeeklyChallenge2.id);
+    },
+    onError: (err) => {
+      const errFormated = err as AxiosError;
+      const errorData = (errFormated.response?.data as any).error;
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
+        logout();
+      }
+      showAlert("Join To Challenge Error", {
+        message: getDefaultErrorMessage(err) as any,
+      });
+    },
+  });
+
+  const joinToChallenge = () => {
+    JoinToChallengeMutation.mutate({ challengeId: challengeId });
+  };
   const JoinMutation = useJoinMutation({
     onSuccess: async (res) => {
       navigator.navigate(
@@ -132,7 +155,7 @@ export function HomePage({ route }: any) {
     }
   };
 
-  if (isLoading || isLoadingInfinite) {
+  if (isLoading || isLoadingInfinite || weeklyChallengeRequest.isFetching) {
     return <Loading />;
   }
 
@@ -171,15 +194,26 @@ export function HomePage({ route }: any) {
         creator={"SIMDILIK FARUK"}
         difficulty={treasure.hardness}
         treasureId={treasure.id}
-        joinTreasure={() => join(treasure.id === -4 ? 82 : treasure.id)} //TODO: Challenge endpointi gelince degiscek!!.
+        joinTreasure={() => {
+          index === 0 ? joinToChallenge() : join(treasure.id);
+        }}
         isWeekly={index === 0}
         photoLink={treasure.photoLink as string | null}
+        gift={treasure.gift}
+        timeString={remainingTimeText}
       />
     );
   }
+  const weeklyChallengeInfo = weeklyChallengeRequest.weeklyChallenge;
+  const mockWeeklyChallenge2 =
+    weeklyChallengeInfo.challengeTreasureLists[0].treasure; //TODO: bunu farkli endpointten alacagim.
+  let mockWeeklyChallenge = mockWeeklyChallenge2;
+  const challengeId = weeklyChallengeInfo.challengeTreasureLists[0].challengeId;
+  const endTime = new Date(weeklyChallengeInfo.endTime);
+  const currentTime = Date.now();
+  const remainingTime = (endTime.getTime() - currentTime) / 1000; // in seconds
+  const remainingTimeText = adjustTime(remainingTime);
 
-  //let mockWeeklyChallenge = treasures[0]; //TODO: bunu farkli endpointten alacagim.
-  //mockWeeklyChallenge.id = -4;
   return (
     <SafeAreaView style={themedStyles.container}>
       {pagination && (
@@ -208,7 +242,20 @@ export function HomePage({ route }: any) {
                 </Button>
               </View>
             </View>
-            <View style={{ marginTop: 15 }}></View>
+            <View style={{ marginTop: 15 }}>
+              <TreasureCard
+                id={mockWeeklyChallenge.id.toString()}
+                name={mockWeeklyChallenge.name}
+                zone={mockWeeklyChallenge.location.region.name}
+                creator={"SIMDILIK FARUK"}
+                difficulty={mockWeeklyChallenge.hardness}
+                treasureId={mockWeeklyChallenge.id}
+                joinTreasure={() => joinToChallenge()}
+                isWeekly={true}
+                photoLink={mockWeeklyChallenge.photoLink as string | null}
+                gift={mockWeeklyChallenge.gift}
+              />
+            </View>
 
             {!initializingFlag && !isFirst && (
               <View>
@@ -232,6 +279,7 @@ export function HomePage({ route }: any) {
                     joinTreasure={() => join(element.id)}
                     isWeekly={false}
                     photoLink={element.photoLink as string | null}
+                    gift={element.gift}
                   />
                 )
               )}
@@ -301,7 +349,9 @@ export function HomePage({ route }: any) {
           <FlatList
             style={themedStyles.wrapper}
             data={
-              initializingFlag ? [...foundTreasures] : [...treasuresInfinite]
+              initializingFlag
+                ? [mockWeeklyChallenge, ...foundTreasures]
+                : [mockWeeklyChallenge, ...treasuresInfinite]
             }
             renderItem={({ item, index }) => {
               if (index == treasuresInfinite.length) {
@@ -351,6 +401,7 @@ const styles = (theme: Theme) => {
     },
     searchInput: {
       borderRadius: 10,
+      marginRight: 8,
       flex: 3,
     },
     searchButton: {

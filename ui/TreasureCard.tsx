@@ -1,17 +1,17 @@
-import { Image, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-import { Theme } from '../theme/types';
-import { useState, useEffect } from 'react';
-import { useTheme } from '../theme';
-import { colors } from '../theme/colors';
-import { Button } from './Button';
-import { diff } from 'react-native-reanimated';
-import { useNavigation } from '@react-navigation/native';
-import { PATHS } from '../consts/paths';
-import { Icon } from './Icon';
-import { standing } from '../icons';
-import { ImageDownloader } from '../utils/ImageDownloader';
-import { Loading } from '../pages/Loading';
-import { StateSetter } from './StateSetter';
+import { Image, StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { Theme } from "../theme/types";
+import { useState, useEffect } from "react";
+import { useTheme } from "../theme";
+import { colors } from "../theme/colors";
+import { Button } from "./Button";
+import { diff } from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
+import { PATHS } from "../consts/paths";
+import { Icon } from "./Icon";
+import { standing } from "../icons";
+import { ImageDownloader } from "../utils/ImageDownloader";
+import { Loading } from "../pages/Loading";
+import { StateSetter } from "./StateSetter";
 
 interface TreasureCardProps {
   id: string;
@@ -23,6 +23,8 @@ interface TreasureCardProps {
   joinTreasure: () => void;
   isWeekly: boolean;
   photoLink: null | string;
+  gift: number;
+  timeString?: string;
 }
 
 export function TreasureCard({
@@ -35,25 +37,27 @@ export function TreasureCard({
   joinTreasure,
   isWeekly,
   photoLink,
+  gift,
+  timeString,
 }: TreasureCardProps) {
   const { theme, currentTheme } = useTheme();
   const themedStyles = styles(theme, isWeekly);
 
   var difficultyColor;
-  if (difficulty == 'easy') {
+  if (difficulty == "easy") {
     difficultyColor = colors.green;
-  } else if (difficulty == 'medium') {
+  } else if (difficulty == "medium") {
     difficultyColor = colors.orange;
-  } else if (difficulty == 'hard') {
+  } else if (difficulty == "hard") {
     difficultyColor = colors.red;
   }
   difficulty =
     difficulty[0].toUpperCase() + difficulty.substring(1, difficulty.length);
 
-  const [treasureImageUri, setTreasureImageUri] = useState('');
+  const [treasureImageUri, setTreasureImageUri] = useState("");
   const navigator = useNavigation<any>();
 
-  if (treasureImageUri === '') {
+  if (treasureImageUri === "") {
     return (
       <View>
         <ActivityIndicator style={themedStyles.wrapper} />
@@ -66,8 +70,8 @@ export function TreasureCard({
   }
   return (
     <View style={themedStyles.wrapper}>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        {treasureImageUri === '' ? (
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
+        {treasureImageUri === "" ? (
           <ActivityIndicator
             style={{ width: 75, height: 75, borderRadius: 10 }}
           />
@@ -87,7 +91,7 @@ export function TreasureCard({
                 fontSize: 22,
                 color: colors.goldenYellow,
                 marginBottom: 4,
-                fontWeight: '500',
+                fontWeight: "500",
               }}
             >
               Weekly Challange
@@ -99,7 +103,7 @@ export function TreasureCard({
               color: colors.white,
             }}
           >
-            {'#' + id + ' ' + name}
+            {"#" + id + " " + name}
           </Text>
           <Text
             style={{
@@ -120,14 +124,14 @@ export function TreasureCard({
             {zone}
           </Text>
           {isWeekly && (
-            <Text style={{ color: colors.white }}>
-              Remaining time: 3d, 2h, 10m
+            <Text style={{ color: colors.white, fontSize: 10 }}>
+              {timeString}
             </Text>
           )}
         </View>
       </View>
       <View style={themedStyles.buttonWrapper}>
-        <View style={{ flexDirection: 'column' }}>
+        <View style={{ flexDirection: "column" }}>
           <Button
             size="large"
             onPress={joinTreasure}
@@ -140,8 +144,8 @@ export function TreasureCard({
             <View
               style={{
                 marginTop: 12,
-                justifyContent: 'center',
-                alignItems: 'center',
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <Icon
@@ -149,12 +153,25 @@ export function TreasureCard({
                 color={colors.goldenYellow}
                 onPress={() =>
                   navigator.navigate(PATHS.LEADERBOARD, {
-                    treasureId: 82, //"DUZELT: NORMALDE BURAYA treasureId: treasureId" demen lazim!!!!
+                    treasureId: treasureId, //"DUZELT: NORMALDE BURAYA treasureId: treasureId" demen lazim!!!!
                   })
                 }
               />
             </View>
           )}
+          <View style={themedStyles.goldPart}>
+            <Text style={{ color: colors.white }}>{gift}</Text>
+            <Image
+              style={themedStyles.goldImage}
+              source={require("../assets/images/coin.png")}
+            ></Image>
+            {isWeekly && (
+              <Image
+                style={themedStyles.x2Image}
+                source={require("../assets/images/iconx2.png")}
+              ></Image>
+            )}
+          </View>
         </View>
       </View>
     </View>
@@ -166,19 +183,34 @@ const styles = (theme: Theme, isWeekly: undefined | boolean) => {
     wrapper: {
       padding: 10,
       backgroundColor: isWeekly ? colors.challengeColor : colors.lightRoyalBlue,
-      flexDirection: 'row',
+      flexDirection: "row",
       borderRadius: 10,
       marginTop: 10,
     },
     buttonWrapper: {
       flex: 2,
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     image: {
       width: 25,
       height: 25,
       borderRadius: 90,
     },
+    goldImage: {
+      width: 12,
+      height: 12,
+      marginLeft: 4,
+    },
+    goldPart: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 8,
+    },
+    x2Image: {
+      width: 30,
+      height: 30,
+      marginLeft: 4,
+    },
   });
 };
-

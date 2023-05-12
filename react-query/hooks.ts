@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import {
   apiChangeAccountInfo,
   apiDownloadImage,
@@ -11,21 +11,23 @@ import {
   apiGetTreasureByPageId,
   apiGetTreasureSubmissionByInteractionId,
   apiGetUser,
+  apiGetWeeklyChallenge,
   apiJoin,
+  apiJoinToChallenge,
   apiLogin,
   apiPurchaseHint,
   apiRegister,
   apiTreasureSubmission,
   apiUploadImage,
-} from './queries';
-import { QUERY_KEYS } from './queryKeys';
+} from "./queries";
+import { QUERY_KEYS } from "./queryKeys";
 import {
   Hint,
   QuizResponseData,
   Treasure,
   TreasureSubmission,
   User,
-} from './types';
+} from "./types";
 
 type CustomMutationProps = {
   onSuccess?: (data: any) => void;
@@ -66,7 +68,7 @@ export const useLoginMutation = ({
 
 export const useUser = (userId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: ['user', userId],
+    queryKey: ["user", userId],
     queryFn: () => apiGetUser(userId),
     ...defaultQueryOptions,
   });
@@ -111,7 +113,7 @@ export const useTreasureById = (treasureId: number) => {
 
 export const useTreasureByPageId = (
   pageId: number,
-  regionId: number | null,
+  regionId: number | null
 ) => {
   const { data, ...rest } = useQuery({
     queryKey: [QUERY_KEYS.treasureByPageId, pageId, regionId],
@@ -126,20 +128,20 @@ export const useTreasureByPageId = (
 
 function parseURL(url: string) {
   let size = url.length;
-  let answer = '';
+  let answer = "";
   for (let i = size - 1; i >= 0; i--) {
-    if (url[i] !== '/') {
+    if (url[i] !== "/") {
       answer += url[i];
     } else {
       break;
     }
   }
-  return Number(answer.split('').reverse());
+  return Number(answer.split("").reverse());
 }
 
 export const useInfiniteTreasureByPageId = (
   pageId: number,
-  regionId: number | null,
+  regionId: number | null
 ) => {
   const { data, ...rest } = useInfiniteQuery({
     queryKey: [QUERY_KEYS.infiniteTreasureByPageId, pageId, regionId],
@@ -164,7 +166,7 @@ export const useInfiniteTreasureByPageId = (
 
 export const useHintsByTreasureId = (treasureId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: ['HintsByTreasureId', treasureId],
+    queryKey: ["HintsByTreasureId", treasureId],
     queryFn: () => apiGetHintsByTreasureId(treasureId),
     ...defaultQueryOptions,
   });
@@ -220,7 +222,7 @@ export const useTreasureSubmission = ({
 
 export const useTreasureSubmissionByInteractionId = (interactionId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: ['TreasureSubmissionByInteractionId', interactionId],
+    queryKey: ["TreasureSubmissionByInteractionId", interactionId],
     queryFn: () => apiGetTreasureSubmissionByInteractionId(interactionId),
     ...defaultQueryOptions,
   });
@@ -247,7 +249,7 @@ export const useUploadImageMutation = ({
 export const useCompletedTreasures = () => {
   //Github bug!
   const { data, ...rest } = useQuery({
-    queryKey: ['CompletedTreasures'],
+    queryKey: ["CompletedTreasures"],
     queryFn: apiGetCompletedTreasures,
     ...defaultQueryOptions,
   });
@@ -258,7 +260,7 @@ export const useCompletedTreasures = () => {
 
 export const useLeaderboard = (treasureId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: ['Leaderboard', treasureId],
+    queryKey: ["Leaderboard", treasureId],
     queryFn: () => apiGetLeaderboardByTreasureId(treasureId),
     ...defaultQueryOptions,
   });
@@ -268,7 +270,7 @@ export const useLeaderboard = (treasureId: number) => {
 
 export const useDownloadedImage = (imageName: string) => {
   const { data, ...rest } = useQuery({
-    queryKey: ['DownloadedImage', imageName],
+    queryKey: ["DownloadedImage", imageName],
     queryFn: () => apiDownloadImage(imageName),
     ...defaultQueryOptions,
   });
@@ -276,13 +278,36 @@ export const useDownloadedImage = (imageName: string) => {
   return { image: image, ...rest };
 };
 
+export const useWeeklyChallenge = () => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["WeeklyChallenge"],
+    queryFn: apiGetWeeklyChallenge,
+    ...defaultQueryOptions,
+  });
+  const weeklyChallenge: any = data?.data;
+  return { weeklyChallenge: weeklyChallenge, ...rest };
+};
+
+export const useJoinToChallengeMutation = ({
+  onSuccess,
+  onError,
+}: CustomMutationProps = {}) => {
+  return useMutation({
+    mutationFn: apiJoinToChallenge,
+    onSuccess: (data) => {
+      onSuccess?.(data);
+    },
+    onError: (err) => {
+      onError?.(err);
+    },
+  });
+};
 export const useLocations = () => {
   const { data, ...rest } = useQuery({
-    queryKey: ['Locations'],
+    queryKey: ["Locations"],
     queryFn: () => apiGetLocations(),
     ...defaultQueryOptions,
   });
   const locations: any = data?.data;
   return { locations: locations, ...rest };
 };
-
