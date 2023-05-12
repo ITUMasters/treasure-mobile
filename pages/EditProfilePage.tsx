@@ -131,6 +131,13 @@ export function EditProfilePage() {
     uploadImageMutation.mutate(formdata);
   };
 
+  const photoLink = user.photo_link;
+
+  const navigator = useNavigation();
+  const goBack = () => {
+    navigator.navigate("Profile" as never, {} as never);
+  };
+
   const isButtonDisabled = useMemo(() => {
     const c1 = username.trim() === "";
     const c2 = fullName.trim().split(/\s+/).length <= 1;
@@ -168,13 +175,6 @@ export function EditProfilePage() {
   ) {
     return <Loading />;
   }
-
-  const photoLink = user.photo_link;
-
-  const navigator = useNavigation();
-  const goBack = () => {
-    navigator.navigate("Profile" as never, {} as never);
-  };
 
   return (
     <SafeAreaView style={themedStyles.container}>
