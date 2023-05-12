@@ -29,6 +29,15 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "treasure"
+    "scheme": "treasure",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends.",
+          "cameraPermission": "Allow Treasure to access your camera"
+        }
+      ]
+    ]
   }
 }

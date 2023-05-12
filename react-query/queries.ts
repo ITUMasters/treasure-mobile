@@ -128,3 +128,9 @@ export const apiJoinToChallenge = (data: { challengeId: number }) => {
     method: "post",
   });
 };
+export const apiGetLocations = () => {
+  return axios({
+    url: "/region",
+    method: "get",
+  });
+};

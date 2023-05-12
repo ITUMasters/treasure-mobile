@@ -49,11 +49,12 @@ export function HomePage({ route }: any) {
   const [selectedCategory, setSelectedCategory] = useState("MAP");
   const [selectedRegionId, setSelectedRegionId] = useState(-1);
   const setNavbarOpen = useSetNavbarOpen();
-  const navigator = useNavigation();
   const categories = ["ITU", "METU", "Boğaziçi", "Bilkent", "Koç"];
   const [foundTreasures, setFoundTreasures] = useState([] as Treasure[]);
   const [initializingFlag, setInitializingFlag] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
   const [searchedText, setSearchedText] = useState("");
+  const navigator = useNavigation<any>();
 
   const [currentPage, setCurrentPage] = useState(1);
   const { pagination, toggle: togglePagination } = usePagination();
@@ -69,15 +70,19 @@ export function HomePage({ route }: any) {
     await removeItem("remember_me");
   };
 
-  const name2 = route.params ?? route.params;
+  const routeParams = route.params;
   useEffect(() => {
     setSelectedCategory(
-      name2 !== undefined && name2.name !== undefined ? name2.name : "MAP"
+      routeParams !== undefined && routeParams.name !== undefined
+        ? routeParams.name
+        : "MAP"
     );
     setSelectedRegionId(
-      name2 !== undefined && name2.regionId !== undefined ? name2.regionId : -1
+      routeParams !== undefined && routeParams.regionId !== undefined
+        ? routeParams.regionId
+        : -1
     );
-  }, [name2]);
+  }, [routeParams]);
 
   let { treasures, pageCount, isFetching, isLoading } = useTreasureByPageId(
     currentPage,
@@ -153,12 +158,22 @@ export function HomePage({ route }: any) {
     return <Loading />;
   }
 
+  let counter = 0;
   function searchTreasures(input: string) {
-    let filteredTreasures = treasures.filter((element) => {
-      return (
-        element.name.slice(0, input.length).toLowerCase() == input.toLowerCase()
-      );
-    });
+    if (isFirst) {
+      counter++;
+    }
+    if (counter == 1) {
+      setIsFirst(false);
+    }
+    let filteredTreasures = (pagination ? treasures : treasuresInfinite).filter(
+      (element) => {
+        return (
+          element.name.slice(0, input.length).toLowerCase() ==
+          input.toLowerCase()
+        );
+      }
+    );
     if (filteredTreasures.length === 0) {
       filteredTreasures = treasures;
       setInitializingFlag(false);
@@ -167,6 +182,7 @@ export function HomePage({ route }: any) {
     setFoundTreasures(filteredTreasures);
     setInitializingFlag(true);
   }
+
   function renderTreasure(treasure: Treasure, index: any) {
     return (
       <TreasureCard
@@ -201,6 +217,7 @@ export function HomePage({ route }: any) {
             <View style={themedStyles.searchBar}>
               <View style={themedStyles.searchInput}>
                 <Input
+                  maxLength={50}
                   size="medium"
                   title="Search Treasure"
                   value={searchedText}
@@ -234,7 +251,7 @@ export function HomePage({ route }: any) {
               />
             </View>
 
-            {!initializingFlag && (
+            {!initializingFlag && !isFirst && (
               <View>
                 <Text style={themedStyles.notFound}>NOT FOUND!</Text>
                 <Text style={themedStyles.allIsReturned}>
@@ -290,9 +307,44 @@ export function HomePage({ route }: any) {
       )}
       {!pagination && (
         <View style={themedStyles.scrollViewStyle}>
+          <View style={themedStyles.wrapper}>
+            <View style={themedStyles.searchBar}>
+              <View style={themedStyles.searchInput}>
+                <Input
+                  maxLength={50}
+                  size="medium"
+                  title="Search Treasure"
+                  value={searchedText}
+                  onChangeText={(text) => {
+                    setSearchedText(text);
+                    searchTreasures(text);
+                  }}
+                />
+              </View>
+              <View style={themedStyles.searchButton}>
+                <Button
+                  onPress={() => navigator.navigate(PATHS.MAPS as never)}
+                  size="xlarge"
+                >
+                  {selectedCategory}
+                </Button>
+              </View>
+            </View>
+          </View>
+          {!initializingFlag && !isFirst && (
+            <View>
+              <Text style={themedStyles.notFound}>NOT FOUND!</Text>
+              <Text style={themedStyles.allIsReturned}>
+                SHOWING ALL TREASURES
+              </Text>
+            </View>
+          )}
+
           <FlatList
             style={themedStyles.wrapper}
-            data={[mockWeeklyChallenge, ...treasuresInfinite]}
+            data={
+              initializingFlag ? [...foundTreasures] : [...treasuresInfinite]
+            }
             renderItem={({ item, index }) => {
               if (index == treasuresInfinite.length) {
                 return (
@@ -305,16 +357,6 @@ export function HomePage({ route }: any) {
               }
             }}
             onEndReached={loadMore}
-            ListFooterComponent={
-              isFetchingNextPage
-                ? () => (
-                    <ActivityIndicator
-                      style={{ marginTop: 10 }}
-                      size={"large"}
-                    />
-                  )
-                : null
-            }
           />
         </View>
       )}
@@ -351,10 +393,10 @@ const styles = (theme: Theme) => {
     },
     searchInput: {
       borderRadius: 10,
+      marginRight: 8,
       flex: 3,
     },
     searchButton: {
-      marginLeft: 10,
       flex: 2,
     },
     treasures: {

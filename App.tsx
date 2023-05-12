@@ -131,60 +131,32 @@ function AuthorizedApp() {
         <Drawer1.Screen
           name="Home"
           component={HomePage}
-          options={{ ...navbarHeaderOptions, title: "Home Page" }}
+          options={{ ...navbarHeaderOptions, title: "HOMEPAGE" }}
         />
         <Drawer1.Screen
           name="Profile"
           component={ProfilePage}
-          options={{ ...navbarHeaderOptions, title: "Profile Page" }}
+          options={{ ...navbarHeaderOptions, title: "PROFILE" }}
         />
-
-        {
-          <Drawer1.Screen
-            name="InGame"
-            component={InGamePage}
-            options={{
-              ...navbarHeaderOptions,
-              title: "In Game Page",
-              drawerItemStyle: { height: 0 },
-            }}
-          />
-        }
         <Drawer1.Screen
           name="EditProfile"
           component={EditProfilePage}
           options={{
             ...navbarHeaderOptions,
-            title: "Edit Profile Page",
-            drawerItemStyle: { height: 0 },
+            title: "EDIT PROFILE",
           }}
         />
         <Drawer1.Screen
           name="Join"
           component={JoinPage}
-          options={{ ...navbarHeaderOptions, title: "Join Page" }}
+          options={{ ...navbarHeaderOptions, title: "JOIN TREASURE" }}
         />
-        {/*<Drawer1.Screen
-          name="SETTINGS"
-          component={SettingsPage}
-          options={{ ...navbarHeaderOptions, title: "Settings Page" }}
-        />*/}
         <Drawer1.Screen
           name="MAPS"
           component={MapPageTries}
           options={{
             ...navbarHeaderOptions,
-            title: "Map Page",
-            drawerItemStyle: { height: 0 },
-          }}
-        />
-        <Drawer1.Screen
-          name="LEADERBOARD"
-          component={LeaderboardPage}
-          options={{
-            ...navbarHeaderOptions,
-            title: "Leaderboard Page",
-            drawerItemStyle: { height: 0 },
+            title: "MAP",
           }}
         />
         <Drawer1.Screen
@@ -192,16 +164,37 @@ function AuthorizedApp() {
           component={FinishedMapsOnMap}
           options={{
             ...navbarHeaderOptions,
-            title: "Completed Treasures",
+            title: "COMPLETED TREASURES",
+          }}
+        />
+        {
+          <Drawer1.Screen
+            name="InGame"
+            component={InGamePage}
+            options={{
+              ...navbarHeaderOptions,
+              title: "TREASURE PAGE",
+              drawerItemStyle: { height: 0 },
+            }}
+          />
+        }
+
+        <Drawer1.Screen
+          name="LEADERBOARD"
+          component={LeaderboardPage}
+          options={{
+            ...navbarHeaderOptions,
+            title: "LEADERBOARD",
             drawerItemStyle: { height: 0 },
           }}
         />
+
         <Drawer1.Screen
           name="SHARE_TREASURE"
           component={ShareTreasure}
           options={{
             ...navbarHeaderOptions,
-            title: "Share Treasure",
+            title: "SHARE TREASURE",
             drawerItemStyle: { height: 0 },
           }}
         />

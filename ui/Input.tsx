@@ -96,12 +96,14 @@ const styles = (
     },
 
     iconStyle: {
+      paddingBottom: 15,
       position: "absolute",
       alignSelf: "center",
       right: 13,
     },
 
     titleStyle: {
+      fontWeight: "bold",
       position: "absolute",
       left: 14,
       fontSize: 13,

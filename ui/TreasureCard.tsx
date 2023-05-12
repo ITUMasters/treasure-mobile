@@ -10,6 +10,8 @@ import { PATHS } from "../consts/paths";
 import { Icon } from "./Icon";
 import { standing } from "../icons";
 import { ImageDownloader } from "../utils/ImageDownloader";
+import { Loading } from "../pages/Loading";
+import { StateSetter } from "./StateSetter";
 
 interface TreasureCardProps {
   id: string;
@@ -131,10 +133,10 @@ export function TreasureCard({
           <Button
             size="large"
             onPress={joinTreasure}
-            anotherBgColor={isWeekly ? colors.goldenYellow : undefined}
+            anotherBgColor={isWeekly ? colors.goldenYellow : colors.green}
             anotherTextColor={isWeekly ? colors.challengeColor : undefined}
           >
-            GO
+            ENTER
           </Button>
           {isWeekly && (
             <View

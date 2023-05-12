@@ -6,6 +6,7 @@ import {
   apiGetCompletedTreasures,
   apiGetHintsByTreasureId,
   apiGetLeaderboardByTreasureId,
+  apiGetLocations,
   apiGetTreasureById,
   apiGetTreasureByPageId,
   apiGetTreasureSubmissionByInteractionId,
@@ -300,4 +301,13 @@ export const useJoinToChallengeMutation = ({
       onError?.(err);
     },
   });
+};
+export const useLocations = () => {
+  const { data, ...rest } = useQuery({
+    queryKey: ["Locations"],
+    queryFn: () => apiGetLocations(),
+    ...defaultQueryOptions,
+  });
+  const locations: any = data?.data;
+  return { locations: locations, ...rest };
 };

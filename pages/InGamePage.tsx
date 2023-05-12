@@ -36,6 +36,9 @@ import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { removeItem } from "../utils/storage";
 import { TouchableOpacity } from "react-native";
 import { ImageDownloader } from "../utils/ImageDownloader";
+import { Camera } from "expo-camera";
+import { Icon } from "../ui/Icon";
+import { leftArrow } from "../icons";
 
 export type statusType = "Accepted" | "Wrong" | "Not Solved";
 
@@ -156,28 +159,36 @@ export function InGamePage({ route }: any) {
   });
 
   const uploadImage = async () => {
-    const result: any = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-      aspect: [3, 4],
-      quality: 1,
-    });
+    try {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      if (status === "granted") {
+        const result: any = await ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: false,
+          aspect: [3, 4],
+          quality: 1,
+        });
 
-    if (result.cancelled) {
-      showAlert("Image choose cancelled");
-      return;
+        if (result.cancelled) {
+          showAlert("Image choose cancelled");
+          return;
+        }
+        const uri: string = result.uri;
+        const fileExtension = uri.slice(uri.lastIndexOf(".") + 1);
+
+        setFormDataObject({
+          name: `image.${fileExtension}`,
+          uri: result.uri,
+          type: "image/${fileExtension}",
+        } as any);
+
+        setImageUri(result.uri);
+      } else {
+        showAlert("Camera access denied!");
+      }
+    } catch (error) {
+      console.log(error);
     }
-
-    const uri: string = result.uri;
-    const fileExtension = uri.slice(uri.lastIndexOf(".") + 1);
-
-    setFormDataObject({
-      name: `image.${fileExtension}`,
-      uri: result.uri,
-      type: "image/${fileExtension}",
-    } as any);
-
-    setImageUri(result.uri);
   };
 
   const executeUploadImageMutation = () => {
@@ -219,125 +230,144 @@ export function InGamePage({ route }: any) {
 
   const imageName = treasure.photoLink;
 
+  const goBack = () => {
+    navigator.navigate(PATHS.HOME as never, {} as never);
+  };
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
-        {imageName !== null && (
-          <ImageDownloader
-            imageName={imageName as string}
-            setState={(e: string) => setTreasureImageUri(e)}
-          />
-        )}
-        <Text style={themedStyles.questionNameStyle}>
-          {treasure.id.toString() + ". " + treasure.name}{" "}
-        </Text>
-
-        <Text
-          style={{
-            fontSize: 20,
-            color: theme.text.default.color,
-          }}
-        >
-          {treasure.location.region.name}
-        </Text>
-
-        <Text style={themedStyles.hardness}>{hardness}</Text>
-        <View style={{ width: "25%", marginBottom: 12 }}>
-          <Button
-            size="small"
-            onPress={() => {
-              navigator.navigate(PATHS.SHARE_TREASURE, {
-                treasureId: treasureId,
-                interactionId: interactionId,
-              });
-            }}
-          >
-            Share
-          </Button>
-        </View>
-
-        <Image
-          style={themedStyles.imageStyle}
-          source={
-            imageName === null ? (
-              require("../assets/images/BeeArea.png")
-            ) : treasureImageUri === "" ? (
-              <Loading />
-            ) : (
-              { uri: treasureImageUri }
-            )
-          }
-        />
-        <TouchableOpacity
-          onPress={uploadImage}
-          activeOpacity={0.9}
-          style={{ marginTop: 12, marginBottom: 12 }}
-        >
-          {uploading ? (
-            <Loading />
-          ) : (
-            <Image
-              style={themedStyles.imageStyle}
-              source={
-                imageUri !== ""
-                  ? { uri: imageUri }
-                  : require("../assets/images/PhotoPlaceholder.png")
-              }
-            />
-          )}
-        </TouchableOpacity>
-
-        <View
-          style={{
-            flexDirection: "row",
-            marginTop: 20,
-            flex: 1,
-            alignItems: "center",
-            marginBottom: 20,
-          }}
-        >
-          <Text style={themedStyles.statusStyle}>Status: {status}</Text>
-          <View
-            style={{
-              flex: 0.5,
-              width: "100%",
-              paddingRight: 24,
-              alignItems: "flex-end",
-              paddingLeft: 100,
-              justifyContent: "center",
-            }}
-          >
-            <Button
-              size="xxlarge"
-              onPress={executeUploadImageMutation}
-              disabled={imageUri === ""}
-            >
-              SUBMIT
-            </Button>
+        <View style={themedStyles.goBackBar}>
+          <View style={themedStyles.goBackIcon}>
+            <Icon
+              xml={leftArrow}
+              width="28"
+              height="28"
+              onPress={goBack}
+            ></Icon>
           </View>
         </View>
-        <Text style={themedStyles.hint}>Hints</Text>
-        {unlockedHints.map((e, index) => (
-          <HintCard
-            key={index}
-            cost={e.cost.toString()}
-            hintNumber={(index + 1).toString()}
-            hintText={e.content as string}
-            isLocked={false}
-          />
-        ))}
-        {lockedHints.map((e, index) => (
-          <>
+        <View style={themedStyles.wrapper}>
+          {imageName !== null && (
+            <ImageDownloader
+              imageName={imageName as string}
+              setState={(e: string) => setTreasureImageUri(e)}
+            />
+          )}
+          <Text style={themedStyles.questionNameStyle}>
+            {treasure.id.toString() + ". " + treasure.name}{" "}
+          </Text>
+
+          <Text
+            style={{
+              fontSize: 20,
+              color: theme.text.default.color,
+            }}
+          >
+            {treasure.location.region.name}
+          </Text>
+
+          <Text style={themedStyles.hardness}>{hardness}</Text>
+          <View style={{ width: "25%", marginBottom: 12 }}>
+            <Button
+              size="small"
+              onPress={() => {
+                navigator.navigate(PATHS.SHARE_TREASURE, {
+                  treasureId: treasureId,
+                  interactionId: interactionId,
+                });
+              }}
+            >
+              Share
+            </Button>
+          </View>
+
+          {imageName === null && (
+            <Image
+              source={require("../assets/images/BeeArea.png")}
+              style={themedStyles.imageStyle}
+            />
+          )}
+
+          {imageName !== null && treasureImageUri !== "" && (
+            <Image
+              source={{ uri: treasureImageUri }}
+              style={themedStyles.imageStyle}
+            />
+          )}
+
+          {imageName !== null && treasureImageUri === "" && <Loading />}
+
+          <TouchableOpacity
+            onPress={uploadImage}
+            activeOpacity={0.9}
+            style={{ marginTop: 12, marginBottom: 12 }}
+          >
+            {uploading ? (
+              <Loading />
+            ) : (
+              <Image
+                source={
+                  imageUri === ""
+                    ? require("../assets/images/PhotoPlaceholder.png")
+                    : { uri: imageUri }
+                }
+                style={themedStyles.imageStyle}
+              />
+            )}
+          </TouchableOpacity>
+
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: 20,
+              flex: 1,
+              alignItems: "center",
+              marginBottom: 20,
+            }}
+          >
+            <Text style={themedStyles.statusStyle}>Status: {status}</Text>
+            <View
+              style={{
+                flex: 0.5,
+                width: "100%",
+                paddingRight: 24,
+                alignItems: "flex-end",
+                paddingLeft: 100,
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                size="xxlarge"
+                onPress={executeUploadImageMutation}
+                disabled={imageUri === ""}
+              >
+                SUBMIT
+              </Button>
+            </View>
+          </View>
+          <Text style={themedStyles.hint}>Hints</Text>
+          {unlockedHints.map((e, index) => (
             <HintCard
               key={index}
               cost={e.cost.toString()}
               hintNumber={(index + 1).toString()}
               hintText={e.content as string}
-              isLocked={true}
-              purchase={() => purchaseHint(e.id)}
-            ></HintCard>
-          </>
-        ))}
+              isLocked={false}
+            />
+          ))}
+          {lockedHints.map((e, index) => (
+            <>
+              <HintCard
+                key={index}
+                cost={e.cost.toString()}
+                hintNumber={(index + 1).toString()}
+                hintText={e.content as string}
+                isLocked={true}
+                purchase={() => purchaseHint(e.id)}
+              ></HintCard>
+            </>
+          ))}
+        </View>
       </ScrollView>
       <NavBar pageNo="3" />
     </SafeAreaView>
@@ -354,10 +384,8 @@ const styles = (theme: Theme, hardness: string, status: statusType) => {
     scrollViewStyle: {
       width: "100%",
       flex: 1,
-      marginLeft: 20,
-      marginRight: 20,
-      paddingRight: 20,
     },
+    wrapper: { marginLeft: 20 },
     questionNameStyle: {
       fontFamily: FONTS.PoppinsBold,
       fontSize: 35,
@@ -400,6 +428,14 @@ const styles = (theme: Theme, hardness: string, status: statusType) => {
       marginRight: 20,
       marginTop: 4,
       borderRadius: 40,
+    },
+    goBackBar: {
+      backgroundColor: colors.lightRoyalBlue,
+      width: "100%",
+      height: 28,
+    },
+    goBackIcon: {
+      marginLeft: 15,
     },
   });
 };
