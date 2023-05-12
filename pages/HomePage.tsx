@@ -189,8 +189,8 @@ export function HomePage({ route }: any) {
   const weeklyChallengeInfo = weeklyChallengeRequest.weeklyChallenge;
   const mockWeeklyChallenge2 =
     weeklyChallengeInfo.challengeTreasureLists[0].treasure; //TODO: bunu farkli endpointten alacagim.
-  let mockWeeklyChallenge = treasures[0];
-  mockWeeklyChallenge.id = -4;
+  let mockWeeklyChallenge = mockWeeklyChallenge2;
+  //mockWeeklyChallenge.id = -4;
   const challengeId = weeklyChallengeInfo.challengeTreasureLists[0].challengeId;
   return (
     <SafeAreaView style={themedStyles.container}>
