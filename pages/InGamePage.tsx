@@ -231,7 +231,7 @@ export function InGamePage({ route }: any) {
   const imageName = treasure.photoLink;
 
   const goBack = () => {
-    navigator.navigate("Profile" as never, {} as never);
+    navigator.navigate(PATHS.HOME as never, {} as never);
   };
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -385,7 +385,7 @@ const styles = (theme: Theme, hardness: string, status: statusType) => {
       width: "100%",
       flex: 1,
     },
-    wrapper: { marginLeft: 20, marginRight: 20, paddingRight: 20 },
+    wrapper: { marginLeft: 20 },
     questionNameStyle: {
       fontFamily: FONTS.PoppinsBold,
       fontSize: 35,

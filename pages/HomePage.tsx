@@ -351,6 +351,7 @@ const styles = (theme: Theme) => {
     },
     searchInput: {
       borderRadius: 10,
+      marginRight: 8,
       flex: 3,
     },
     searchButton: {
