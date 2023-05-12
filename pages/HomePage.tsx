@@ -189,6 +189,7 @@ export function HomePage({ route }: any) {
             <View style={themedStyles.searchBar}>
               <View style={themedStyles.searchInput}>
                 <Input
+                  maxLength={50}
                   size="medium"
                   title="Search Treasure"
                   value={searchedText}
@@ -268,6 +269,7 @@ export function HomePage({ route }: any) {
             <View style={themedStyles.searchBar}>
               <View style={themedStyles.searchInput}>
                 <Input
+                  maxLength={50}
                   size="medium"
                   title="Search Treasure"
                   value={searchedText}

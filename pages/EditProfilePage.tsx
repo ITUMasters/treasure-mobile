@@ -10,7 +10,7 @@ import { Theme } from "../theme/types";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { NavBar } from "../ui/NavBar";
-import { addFriend } from "../icons/index";
+import { addFriend, eyeOff, leftArrow } from "../icons/index";
 import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 import { useState, useMemo } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -28,6 +28,10 @@ import { AxiosError } from "axios";
 import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { removeItem } from "../utils/storage";
 import { ImageDownloader } from "../utils/ImageDownloader";
+import { colors } from "../theme/colors";
+import { Icon } from "../ui/Icon";
+import { useNavigation } from "@react-navigation/native";
+import { PATHS } from "../consts/paths";
 
 export function EditProfilePage() {
   const { theme } = useTheme();
@@ -167,9 +171,24 @@ export function EditProfilePage() {
 
   const photoLink = user.photo_link;
 
+  const navigator = useNavigation();
+  const goBack = () => {
+    navigator.navigate("Profile" as never, {} as never);
+  };
+
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
+        <View style={themedStyles.goBackBar}>
+          <View style={themedStyles.goBackIcon}>
+            <Icon
+              xml={leftArrow}
+              width="28"
+              height="28"
+              onPress={goBack}
+            ></Icon>
+          </View>
+        </View>
         <StateSetter
           setSpecificState={() => {
             setFullName(user.name + " " + user.surname),
@@ -295,6 +314,14 @@ const styles = (theme: Theme) => {
     addFriendButton: {
       flex: 0.35,
       alignSelf: "center",
+    },
+    goBackBar: {
+      backgroundColor: colors.lightRoyalBlue,
+      width: "100%",
+      height: 28,
+    },
+    goBackIcon: {
+      marginLeft: 15,
     },
   });
 };
