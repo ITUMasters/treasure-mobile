@@ -41,6 +41,7 @@ import { AxiosError } from "axios";
 import { useSetId } from "../recoil-store/auth/IdStoreHooks";
 import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
 import { removeItem } from "../utils/storage";
+import { adjustTime } from "../utils/adjustTime";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
@@ -195,10 +196,11 @@ export function HomePage({ route }: any) {
         treasureId={treasure.id}
         joinTreasure={() => {
           index === 0 ? joinToChallenge() : join(treasure.id);
-        }} //TODO: Challenge endpointi gelince degiscek!!.
+        }}
         isWeekly={index === 0}
         photoLink={treasure.photoLink as string | null}
         gift={treasure.gift}
+        timeString={remainingTimeText}
       />
     );
   }
@@ -206,8 +208,12 @@ export function HomePage({ route }: any) {
   const mockWeeklyChallenge2 =
     weeklyChallengeInfo.challengeTreasureLists[0].treasure; //TODO: bunu farkli endpointten alacagim.
   let mockWeeklyChallenge = mockWeeklyChallenge2;
-  //mockWeeklyChallenge.id = -4;
   const challengeId = weeklyChallengeInfo.challengeTreasureLists[0].challengeId;
+  const endTime = new Date(weeklyChallengeInfo.endTime);
+  const currentTime = Date.now();
+  const remainingTime = (endTime.getTime() - currentTime) / 1000; // in seconds
+  const remainingTimeText = adjustTime(remainingTime);
+
   return (
     <SafeAreaView style={themedStyles.container}>
       {pagination && (
@@ -343,7 +349,9 @@ export function HomePage({ route }: any) {
           <FlatList
             style={themedStyles.wrapper}
             data={
-              initializingFlag ? [...foundTreasures] : [...treasuresInfinite]
+              initializingFlag
+                ? [mockWeeklyChallenge, ...foundTreasures]
+                : [mockWeeklyChallenge, ...treasuresInfinite]
             }
             renderItem={({ item, index }) => {
               if (index == treasuresInfinite.length) {

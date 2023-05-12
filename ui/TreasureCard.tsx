@@ -24,6 +24,7 @@ interface TreasureCardProps {
   isWeekly: boolean;
   photoLink: null | string;
   gift: number;
+  timeString?: string;
 }
 
 export function TreasureCard({
@@ -37,6 +38,7 @@ export function TreasureCard({
   isWeekly,
   photoLink,
   gift,
+  timeString,
 }: TreasureCardProps) {
   const { theme, currentTheme } = useTheme();
   const themedStyles = styles(theme, isWeekly);
@@ -122,8 +124,8 @@ export function TreasureCard({
             {zone}
           </Text>
           {isWeekly && (
-            <Text style={{ color: colors.white }}>
-              Remaining time: 3d, 2h, 10m
+            <Text style={{ color: colors.white, fontSize: 10 }}>
+              {timeString}
             </Text>
           )}
         </View>
