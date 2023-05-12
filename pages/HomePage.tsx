@@ -3,54 +3,55 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-} from 'react-native';
-import { useTheme } from '../theme';
-import { View, Image, Text, Switch } from 'react-native';
-import { Theme } from '../theme/types';
-import { Button } from '../ui/Button';
-import { NavBar } from '../ui/NavBar';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Input } from '../ui/Input';
-import { useState } from 'react';
-import { TreasureCard } from '../ui/TreasureCard';
-import { useModal } from '../hooks/useModal';
-import { SearchBottomSheet } from '../ui/SearchBottomSheet';
-import { useSetNavbarOpen } from '../recoil-store/navbar/NavbarStoreHooks';
-import { useEffect } from 'react';
-import { PATHS } from '../consts/paths';
+} from "react-native";
+import { useTheme } from "../theme";
+import { View, Image, Text, Switch } from "react-native";
+import { Theme } from "../theme/types";
+import { Button } from "../ui/Button";
+import { NavBar } from "../ui/NavBar";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { Input } from "../ui/Input";
+import { useState } from "react";
+import { TreasureCard } from "../ui/TreasureCard";
+import { useModal } from "../hooks/useModal";
+import { SearchBottomSheet } from "../ui/SearchBottomSheet";
+import { useSetNavbarOpen } from "../recoil-store/navbar/NavbarStoreHooks";
+import { useEffect } from "react";
+import { PATHS } from "../consts/paths";
 import {
   useAllTreasures,
   useInfiniteTreasureByPageId,
   useJoinMutation,
   useTreasureByPageId,
-} from '../react-query/hooks';
-import { Loading } from './Loading';
-import { Pagination } from '../ui/Pagination';
-import { authorizedQueryClient } from '../react-query';
-import { QUERY_KEYS } from '../react-query/queryKeys';
-import { Treasure } from '../react-query/types';
-import { StateSetter } from '../ui/StateSetter';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { getDefaultErrorMessage, showAlert } from '../utils/alert';
-import { usePagination } from '../context/PaginationContext';
-import { FlatList } from 'react-native-gesture-handler';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-import { useSetId } from '../recoil-store/auth/IdStoreHooks';
-import { useSetAuth } from '../recoil-store/auth/AuthStoreHooks';
-import { removeItem } from '../utils/storage';
+} from "../react-query/hooks";
+import { Loading } from "./Loading";
+import { Pagination } from "../ui/Pagination";
+import { authorizedQueryClient } from "../react-query";
+import { QUERY_KEYS } from "../react-query/queryKeys";
+import { Treasure } from "../react-query/types";
+import { StateSetter } from "../ui/StateSetter";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { getDefaultErrorMessage, showAlert } from "../utils/alert";
+import { usePagination } from "../context/PaginationContext";
+import { FlatList } from "react-native-gesture-handler";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useSetId } from "../recoil-store/auth/IdStoreHooks";
+import { useSetAuth } from "../recoil-store/auth/AuthStoreHooks";
+import { removeItem } from "../utils/storage";
 
 export function HomePage({ route }: any) {
   const { theme } = useTheme();
   const themedStyles = styles(theme);
   const bottomSheetController = useModal();
-  const [selectedCategory, setSelectedCategory] = useState('MAP');
+  const [selectedCategory, setSelectedCategory] = useState("MAP");
   const [selectedRegionId, setSelectedRegionId] = useState(-1);
   const setNavbarOpen = useSetNavbarOpen();
-  const categories = ['ITU', 'METU', 'Boğaziçi', 'Bilkent', 'Koç'];
+  const categories = ["ITU", "METU", "Boğaziçi", "Bilkent", "Koç"];
   const [foundTreasures, setFoundTreasures] = useState([] as Treasure[]);
   const [initializingFlag, setInitializingFlag] = useState(false);
-  const [searchedText, setSearchedText] = useState('');
+  const [isFirst, setIsFirst] = useState(true);
+  const [searchedText, setSearchedText] = useState("");
   const navigator = useNavigation<any>();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,8 +63,8 @@ export function HomePage({ route }: any) {
   const logout = async () => {
     setId(0);
     setAuth(false);
-    await removeItem('access_token');
-    await removeItem('remember_me');
+    await removeItem("access_token");
+    await removeItem("remember_me");
   };
 
   const routeParams = route.params;
@@ -71,18 +72,18 @@ export function HomePage({ route }: any) {
     setSelectedCategory(
       routeParams !== undefined && routeParams.name !== undefined
         ? routeParams.name
-        : 'MAP',
+        : "MAP"
     );
     setSelectedRegionId(
       routeParams !== undefined && routeParams.regionId !== undefined
         ? routeParams.regionId
-        : -1,
+        : -1
     );
   }, [routeParams]);
 
   let { treasures, pageCount, isFetching, isLoading } = useTreasureByPageId(
     currentPage,
-    selectedRegionId !== -1 ? selectedRegionId : null,
+    selectedRegionId !== -1 ? selectedRegionId : null
   );
 
   const JoinMutation = useJoinMutation({
@@ -92,16 +93,16 @@ export function HomePage({ route }: any) {
         {
           treasureId: res.data.treasureId,
           interactionId: res.data.id,
-        } as never,
+        } as never
       );
     },
     onError: (err) => {
       const errFormated = err as AxiosError;
       const errorData = (errFormated.response?.data as any).error;
-      if (errorData === 'jwt expired' || errFormated.response?.status === 401) {
+      if (errorData === "jwt expired" || errFormated.response?.status === 401) {
         logout();
       }
-      showAlert('Join Error', {
+      showAlert("Join Error", {
         message: getDefaultErrorMessage(err) as any,
       });
     },
@@ -122,7 +123,7 @@ export function HomePage({ route }: any) {
     isFetchingNextPage,
   } = useInfiniteTreasureByPageId(
     currentPage,
-    selectedRegionId !== -1 ? selectedRegionId : null,
+    selectedRegionId !== -1 ? selectedRegionId : null
   );
 
   const loadMore = () => {
@@ -135,14 +136,21 @@ export function HomePage({ route }: any) {
     return <Loading />;
   }
 
+  let counter = 0;
   function searchTreasures(input: string) {
+    if (isFirst) {
+      counter++;
+    }
+    if (counter == 1) {
+      setIsFirst(false);
+    }
     let filteredTreasures = (pagination ? treasures : treasuresInfinite).filter(
       (element) => {
         return (
           element.name.slice(0, input.length).toLowerCase() ==
           input.toLowerCase()
         );
-      },
+      }
     );
     if (filteredTreasures.length === 0) {
       filteredTreasures = treasures;
@@ -160,7 +168,7 @@ export function HomePage({ route }: any) {
         id={treasure.id.toString()}
         name={treasure.name}
         zone={treasure.location.region.name}
-        creator={'SIMDILIK FARUK'}
+        creator={"SIMDILIK FARUK"}
         difficulty={treasure.hardness}
         treasureId={treasure.id}
         joinTreasure={() => join(treasure.id === -4 ? 82 : treasure.id)} //TODO: Challenge endpointi gelince degiscek!!.
@@ -201,7 +209,7 @@ export function HomePage({ route }: any) {
             </View>
             <View style={{ marginTop: 15 }}></View>
 
-            {!initializingFlag && (
+            {!initializingFlag && !isFirst && (
               <View>
                 <Text style={themedStyles.notFound}>NOT FOUND!</Text>
                 <Text style={themedStyles.allIsReturned}>
@@ -217,14 +225,14 @@ export function HomePage({ route }: any) {
                     id={element.id.toString()}
                     name={element.name}
                     zone={element.location.region.name}
-                    creator={'SIMDILIK FARUK'}
+                    creator={"SIMDILIK FARUK"}
                     difficulty={element.hardness}
                     treasureId={element.id}
                     joinTreasure={() => join(element.id)}
                     isWeekly={false}
                     photoLink={element.photoLink as string | null}
                   />
-                ),
+                )
               )}
             </View>
             <View style={{ marginTop: 12, marginBottom: 40 }}>
@@ -234,7 +242,7 @@ export function HomePage({ route }: any) {
                 backPage={() => {
                   setCurrentPage(currentPage - 1);
                   authorizedQueryClient.refetchQueries([
-                    'treasureByPageId',
+                    "treasureByPageId",
                     currentPage - 1,
                     selectedRegionId,
                   ]);
@@ -243,7 +251,7 @@ export function HomePage({ route }: any) {
                 nextPage={() => {
                   setCurrentPage(currentPage + 1);
                   authorizedQueryClient.refetchQueries([
-                    'treasureByPageId',
+                    "treasureByPageId",
                     currentPage + 1,
                     selectedRegionId,
                   ]);
@@ -279,7 +287,7 @@ export function HomePage({ route }: any) {
               </View>
             </View>
           </View>
-          {!initializingFlag && (
+          {!initializingFlag && !isFirst && (
             <View>
               <Text style={themedStyles.notFound}>NOT FOUND!</Text>
               <Text style={themedStyles.allIsReturned}>
@@ -325,11 +333,11 @@ const styles = (theme: Theme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      width: '100%',
+      width: "100%",
       backgroundColor: theme.appBackground.backgroundColor,
     },
     scrollViewStyle: {
-      width: '100%',
+      width: "100%",
       flex: 1,
     },
     wrapper: {
@@ -337,7 +345,7 @@ const styles = (theme: Theme) => {
     },
     searchBar: {
       marginTop: 50,
-      flexDirection: 'row',
+      flexDirection: "row",
     },
     searchInput: {
       borderRadius: 10,
@@ -351,15 +359,14 @@ const styles = (theme: Theme) => {
     },
     notFound: {
       color: theme.input.textColor,
-      alignSelf: 'center',
+      alignSelf: "center",
       marginTop: 15,
       fontSize: 20,
     },
     allIsReturned: {
       color: theme.input.textColor,
-      alignSelf: 'center',
+      alignSelf: "center",
       fontSize: 20,
     },
   });
 };
-
