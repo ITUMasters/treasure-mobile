@@ -206,7 +206,7 @@ export function HomePage({ route }: any) {
   }
   const weeklyChallengeInfo = weeklyChallengeRequest.weeklyChallenge;
   const mockWeeklyChallenge2 =
-    weeklyChallengeInfo.challengeTreasureLists[0].treasure; //TODO: bunu farkli endpointten alacagim.
+    weeklyChallengeInfo?.challengeTreasureLists[0].treasure; //TODO: bunu farkli endpointten alacagim.
   let mockWeeklyChallenge = mockWeeklyChallenge2;
   const challengeId = weeklyChallengeInfo.challengeTreasureLists[0].challengeId;
   const endTime = new Date(weeklyChallengeInfo.endTime);
