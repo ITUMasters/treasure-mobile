@@ -5,11 +5,11 @@ import { NavBar } from "../ui/NavBar";
 import QRCode from "react-native-qrcode-svg";
 import { colors } from "../theme/colors";
 import { Icon } from "../ui/Icon";
-import { leftArrow } from "../icons";
+import { leftArrowPurple, leftArrowWhite } from "../icons";
 import { useNavigation } from "@react-navigation/native";
 
 export function ShareTreasure({ route }: any) {
-  const { theme } = useTheme();
+  const { theme, currentTheme } = useTheme();
   const themedStyles = styles(theme);
   const routeParams = route.params ?? route.params;
 
@@ -33,7 +33,7 @@ export function ShareTreasure({ route }: any) {
         <View style={themedStyles.goBackBar}>
           <View style={themedStyles.goBackIcon}>
             <Icon
-              xml={leftArrow}
+              xml={currentTheme === "light" ? leftArrowPurple : leftArrowWhite}
               width="28"
               height="28"
               onPress={goBack}
@@ -72,7 +72,7 @@ const styles = (theme: Theme) => {
       alignItems: "center",
     },
     goBackBar: {
-      backgroundColor: colors.lightRoyalBlue,
+      backgroundColor: theme.appBackground.backgroundColor,
       width: "100%",
       height: 28,
     },

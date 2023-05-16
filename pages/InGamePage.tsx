@@ -38,12 +38,12 @@ import { TouchableOpacity } from "react-native";
 import { ImageDownloader } from "../utils/ImageDownloader";
 import { Camera } from "expo-camera";
 import { Icon } from "../ui/Icon";
-import { leftArrow } from "../icons";
+import { leftArrowPurple, leftArrowWhite } from "../icons";
 
 export type statusType = "Accepted" | "Wrong" | "Not Solved";
 
 export function InGamePage({ route }: any) {
-  const { theme } = useTheme();
+  const { theme, currentTheme } = useTheme();
   const navigator = useNavigation<any>();
   const treasureId = route.params.treasureId;
   const interactionId = route.params.interactionId;
@@ -239,7 +239,7 @@ export function InGamePage({ route }: any) {
         <View style={themedStyles.goBackBar}>
           <View style={themedStyles.goBackIcon}>
             <Icon
-              xml={leftArrow}
+              xml={currentTheme === "light" ? leftArrowPurple : leftArrowWhite}
               width="28"
               height="28"
               onPress={goBack}
@@ -281,6 +281,12 @@ export function InGamePage({ route }: any) {
             </Button>
           </View>
 
+          <View>
+            <Text style={themedStyles.directiveTextForPhotos}>
+              Original Treasure Photo:
+            </Text>
+          </View>
+
           {imageName === null && (
             <Image
               source={require("../assets/images/BeeArea.png")}
@@ -296,6 +302,12 @@ export function InGamePage({ route }: any) {
           )}
 
           {imageName !== null && treasureImageUri === "" && <Loading />}
+
+          <View style={{ marginTop: 35 }}>
+            <Text style={themedStyles.directiveTextForPhotos}>
+              Upload Your Treasure Photo:
+            </Text>
+          </View>
 
           <TouchableOpacity
             onPress={uploadImage}
@@ -421,6 +433,13 @@ const styles = (theme: Theme, hardness: string, status: statusType) => {
       alignSelf: "center",
       alignItems: "center",
     },
+
+    directiveTextForPhotos: {
+      marginTop: 5,
+      fontFamily: FONTS.PoppinsBold,
+      fontSize: 20,
+      color: theme.text.default.color,
+    },
     imageStyle: {
       width: 300,
       height: 400,
@@ -430,7 +449,7 @@ const styles = (theme: Theme, hardness: string, status: statusType) => {
       borderRadius: 40,
     },
     goBackBar: {
-      backgroundColor: colors.lightRoyalBlue,
+      backgroundColor: theme.appBackground.backgroundColor,
       width: "100%",
       height: 28,
     },

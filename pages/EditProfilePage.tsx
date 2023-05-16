@@ -10,7 +10,12 @@ import { Theme } from "../theme/types";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { NavBar } from "../ui/NavBar";
-import { addFriend, eyeOff, leftArrow } from "../icons/index";
+import {
+  addFriend,
+  eyeOff,
+  leftArrowPurple,
+  leftArrowWhite,
+} from "../icons/index";
 import { getDefaultErrorMessage, showAlert } from "../utils/alert";
 import { useState, useMemo } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -34,7 +39,7 @@ import { useNavigation } from "@react-navigation/native";
 import { PATHS } from "../consts/paths";
 
 export function EditProfilePage() {
-  const { theme } = useTheme();
+  const { theme, currentTheme } = useTheme();
   const themedStyles = styles(theme);
   const [uploading, setUploading] = useState(false);
   const userId = useId();
@@ -182,7 +187,7 @@ export function EditProfilePage() {
         <View style={themedStyles.goBackBar}>
           <View style={themedStyles.goBackIcon}>
             <Icon
-              xml={leftArrow}
+              xml={currentTheme === "light" ? leftArrowPurple : leftArrowWhite}
               width="28"
               height="28"
               onPress={goBack}
@@ -306,7 +311,7 @@ const styles = (theme: Theme) => {
       alignSelf: "center",
     },
     goBackBar: {
-      backgroundColor: colors.lightRoyalBlue,
+      backgroundColor: theme.appBackground.backgroundColor,
       width: "100%",
       height: 28,
     },
