@@ -21,6 +21,8 @@ import { Loading } from "./Loading";
 import { useState } from "react";
 import { usePagination } from "../context/PaginationContext";
 import { ImageDownloader } from "../utils/ImageDownloader";
+import { addFriend } from "../icons";
+import { Input } from "../ui/Input";
 
 export function ProfilePage() {
   const { theme, toggle: toggleTheme, currentTheme } = useTheme();
@@ -169,7 +171,16 @@ export function ProfilePage() {
             </Text>
           </View>
         </View>
-
+        <View style={themedStyles.addFriend}>
+          <View style={themedStyles.addFriendInput}>
+            <Input size="medium" title="Friend Name" />
+          </View>
+          <View style={themedStyles.addFriendButton}>
+            <Button size="medium" iconAtTheRight={addFriend}>
+              Add Friend
+            </Button>
+          </View>
+        </View>
         <View style={themedStyles.friendsWrapper}>
           <View style={themedStyles.achievementsWrapper}>
             <View style={themedStyles.achivementsHead}>
@@ -256,7 +267,6 @@ const styles = (theme: Theme) => {
 
     achievementsWrapper: {
       flex: 1,
-      marginTop: 30,
     },
     achivementsHead: {
       justifyContent: "center",
@@ -281,9 +291,25 @@ const styles = (theme: Theme) => {
       justifyContent: "center",
     },
     friendsWrapper: {
-      marginTop: 20,
       flex: 1,
+      marginTop: 16,
       marginBottom: 32,
+    },
+    addFriendButton: {
+      flex: 0.35,
+      alignSelf: "center",
+    },
+    addFriend: {
+      flexDirection: "row",
+      width: "100%",
+      marginTop: 40,
+      flex: 1,
+      paddingLeft: "4%",
+      paddingRight: "4%",
+    },
+    addFriendInput: {
+      flex: 0.65,
+      marginRight: "3%",
     },
   });
 };

@@ -158,6 +158,9 @@ export const standing = `<svg width="204" height="207" viewBox="0 0 204 207" fil
 </svg>
 `;
 
-export const leftArrow = `<svg width="43" height="28" viewBox="0 0 43 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M17.964 3.49999L2.94239 13.9885M2.94239 13.9885L17.964 24.4771M2.94239 13.9885L42.9999 13.9885" stroke="white" stroke-width="3"/>
-</svg> `;
+export const leftArrow = `<svg width="62" height="28" viewBox="0 0 62 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="19" y="8" width="43" height="12" fill="white"/>
+<path d="M0 14L19.5 1.87564L19.5 26.1244L0 14Z" fill="white"/>
+</svg>
+
+`;

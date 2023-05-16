@@ -242,16 +242,6 @@ export function EditProfilePage() {
             Update Changes
           </Button>
         </View>
-        <View style={themedStyles.addFriend}>
-          <View style={themedStyles.addFriendInput}>
-            <Input size="medium" title="Friend Name" />
-          </View>
-          <View style={themedStyles.addFriendButton}>
-            <Button size="medium" iconAtTheRight={addFriend}>
-              Add Friend
-            </Button>
-          </View>
-        </View>
       </ScrollView>
       <NavBar pageNo="0" />
     </SafeAreaView>
