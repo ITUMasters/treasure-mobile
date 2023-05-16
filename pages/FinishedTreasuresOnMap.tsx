@@ -54,8 +54,8 @@ export function FinishedMapsOnMap() {
         <View style={themedStyles.goBackIcon}>
           <Icon
             xml={leftArrowWhite}
-            width="28"
-            height="28"
+            width="40"
+            height="40"
             onPress={goBack}
           ></Icon>
         </View>

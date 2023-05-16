@@ -17,7 +17,7 @@ import {
   leftArrowWhite,
 } from "../icons/index";
 import { getDefaultErrorMessage, showAlert } from "../utils/alert";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import mime from "mime";
 import {
@@ -187,9 +187,9 @@ export function EditProfilePage() {
         <View style={themedStyles.goBackBar}>
           <View style={themedStyles.goBackIcon}>
             <Icon
+              width="40"
+              height="40"
               xml={currentTheme === "light" ? leftArrowPurple : leftArrowWhite}
-              width="28"
-              height="28"
               onPress={goBack}
             ></Icon>
           </View>
