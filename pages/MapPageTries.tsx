@@ -15,7 +15,7 @@ import { PATHS } from "../consts/paths";
 import { useLocations } from "../react-query/hooks";
 import { colors } from "../theme/colors";
 import { Icon } from "../ui/Icon";
-import { leftArrow } from "../icons";
+import { leftArrowWhite } from "../icons";
 
 export function MapPageTries() {
   const { theme } = useTheme();
@@ -40,7 +40,12 @@ export function MapPageTries() {
     <SafeAreaView style={themedStyles.container}>
       <View style={themedStyles.goBackBar}>
         <View style={themedStyles.goBackIcon}>
-          <Icon xml={leftArrow} width="28" height="28" onPress={goBack}></Icon>
+          <Icon
+            xml={leftArrowWhite}
+            width="28"
+            height="28"
+            onPress={goBack}
+          ></Icon>
         </View>
       </View>
       <MapView
