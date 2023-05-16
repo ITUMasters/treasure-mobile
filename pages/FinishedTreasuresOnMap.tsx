@@ -5,7 +5,7 @@ import MapView, { Callout, Circle, LatLng, Marker } from "react-native-maps";
 import { Dimensions } from "react-native";
 import { useCompletedTreasures } from "../react-query/hooks";
 import { Loading } from "./Loading";
-import { leftArrow } from "../icons";
+import { leftArrowWhite } from "../icons";
 import { Icon } from "../ui/Icon";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../theme/colors";
@@ -52,7 +52,12 @@ export function FinishedMapsOnMap() {
     <SafeAreaView style={themedStyles.container}>
       <View style={themedStyles.goBackBar}>
         <View style={themedStyles.goBackIcon}>
-          <Icon xml={leftArrow} width="28" height="28" onPress={goBack}></Icon>
+          <Icon
+            xml={leftArrowWhite}
+            width="28"
+            height="28"
+            onPress={goBack}
+          ></Icon>
         </View>
       </View>
       <MapView

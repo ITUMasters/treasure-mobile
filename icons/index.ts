@@ -158,9 +158,12 @@ export const standing = `<svg width="204" height="207" viewBox="0 0 204 207" fil
 </svg>
 `;
 
-export const leftArrow = `<svg width="62" height="28" viewBox="0 0 62 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const leftArrowWhite = `<svg width="62" height="28" viewBox="0 0 62 28" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="19" y="8" width="43" height="12" fill="white"/>
 <path d="M0 14L19.5 1.87564L19.5 26.1244L0 14Z" fill="white"/>
-</svg>
+</svg>`;
 
-`;
+export const leftArrowPurple = `<svg width="62" height="28" viewBox="0 0 62 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="19" y="8" width="43" height="12" fill="#5B3DF6"/>
+<path d="M0 14L19.5 1.87564L19.5 26.1244L0 14Z" fill="#5B3DF6"/>
+</svg>`;

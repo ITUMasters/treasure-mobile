@@ -7,7 +7,7 @@ import { Loading } from "./Loading";
 import { LeaderboardCard } from "../ui/LeaderboardCard";
 import { colors } from "../theme/colors";
 import { Icon } from "../ui/Icon";
-import { leftArrow } from "../icons";
+import { leftArrowPurple, leftArrowWhite } from "../icons";
 import { useNavigation } from "@react-navigation/native";
 import { PATHS } from "../consts/paths";
 
@@ -34,7 +34,7 @@ const compare = (a: any, b: any) => {
 };
 
 export function LeaderboardPage({ route }: any) {
-  const { theme } = useTheme();
+  const { theme, currentTheme } = useTheme();
   const themedStyles = styles(theme);
   const treasureId = route.params.treasureId;
   const { leaderboard, isFetching } = useLeaderboard(treasureId);
@@ -56,7 +56,7 @@ export function LeaderboardPage({ route }: any) {
         <View style={themedStyles.goBackBar}>
           <View style={themedStyles.goBackIcon}>
             <Icon
-              xml={leftArrow}
+              xml={currentTheme === "light" ? leftArrowPurple : leftArrowWhite}
               width="28"
               height="28"
               onPress={goBack}
@@ -114,7 +114,7 @@ const styles = (theme: Theme) => {
       fontWeight: "bold",
     },
     goBackBar: {
-      backgroundColor: colors.lightRoyalBlue,
+      backgroundColor: theme.appBackground.backgroundColor,
       width: "100%",
       height: 28,
     },
