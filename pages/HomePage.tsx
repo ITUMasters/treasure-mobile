@@ -205,13 +205,21 @@ export function HomePage({ route }: any) {
     );
   }
   const weeklyChallengeInfo = weeklyChallengeRequest.weeklyChallenge;
+
   const mockWeeklyChallenge2 =
-    weeklyChallengeInfo?.challengeTreasureLists[0].treasure; //TODO: bunu farkli endpointten alacagim.
+    weeklyChallengeInfo.challengeTreasureLists[0].treasure;
+  // const mockWeeklyChallenge2 = treasures[0];
+
   let mockWeeklyChallenge = mockWeeklyChallenge2;
+
   const challengeId = weeklyChallengeInfo.challengeTreasureLists[0].challengeId;
+  // const challengeId = 83;
+
   const endTime = new Date(weeklyChallengeInfo.endTime);
+  // const endTime = Date.now();
   const currentTime = Date.now();
   const remainingTime = (endTime.getTime() - currentTime) / 1000; // in seconds
+  // const remainingTime = 1000;
   const remainingTimeText = adjustTime(remainingTime);
 
   return (

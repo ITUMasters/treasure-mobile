@@ -5,6 +5,11 @@ import { NavBar } from "../ui/NavBar";
 import { useLeaderboard } from "../react-query/hooks";
 import { Loading } from "./Loading";
 import { LeaderboardCard } from "../ui/LeaderboardCard";
+import { colors } from "../theme/colors";
+import { Icon } from "../ui/Icon";
+import { leftArrow } from "../icons";
+import { useNavigation } from "@react-navigation/native";
+import { PATHS } from "../consts/paths";
 
 const adjustTime = (time: number) => {
   const day = Math.floor(time / (24 * 60 * 60));
@@ -34,6 +39,11 @@ export function LeaderboardPage({ route }: any) {
   const treasureId = route.params.treasureId;
   const { leaderboard, isFetching } = useLeaderboard(treasureId);
 
+  const navigator = useNavigation();
+  const goBack = () => {
+    navigator.navigate(PATHS.HOME as never, route.params as never);
+  };
+
   if (isFetching) {
     return <Loading />;
   }
@@ -43,6 +53,16 @@ export function LeaderboardPage({ route }: any) {
   return (
     <SafeAreaView style={themedStyles.container}>
       <ScrollView style={themedStyles.scrollViewStyle}>
+        <View style={themedStyles.goBackBar}>
+          <View style={themedStyles.goBackIcon}>
+            <Icon
+              xml={leftArrow}
+              width="28"
+              height="28"
+              onPress={goBack}
+            ></Icon>
+          </View>
+        </View>
         <Text style={themedStyles.titleStyle}>
           {"Leaderboard of " +
             treasureId.toString() +
@@ -92,6 +112,14 @@ const styles = (theme: Theme) => {
       marginTop: 12,
       fontSize: 20,
       fontWeight: "bold",
+    },
+    goBackBar: {
+      backgroundColor: colors.lightRoyalBlue,
+      width: "100%",
+      height: 28,
+    },
+    goBackIcon: {
+      marginLeft: 15,
     },
   });
 };
