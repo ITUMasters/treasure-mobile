@@ -34,8 +34,8 @@ export function ShareTreasure({ route }: any) {
           <View style={themedStyles.goBackIcon}>
             <Icon
               xml={currentTheme === "light" ? leftArrowPurple : leftArrowWhite}
-              width="28"
-              height="28"
+              width="40"
+              height="40"
               onPress={goBack}
             ></Icon>
           </View>

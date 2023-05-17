@@ -39,6 +39,9 @@ import { AuthVerify } from "./utils/AuthVerify";
 import { useSetId } from "./recoil-store/auth/IdStoreHooks";
 import { removeItem } from "./utils/storage";
 import { LeaderboardPage } from "./pages/LeaderboardPage";
+import { Button } from "./ui/Button";
+import { notification } from "./icons";
+import { Icon } from "./ui/Icon";
 
 export default function App() {
   const [fontsLoaded] = useAppFonts();
@@ -114,7 +117,17 @@ function AppWithRecoil() {
 const Drawer1 = createDrawerNavigator();
 function AuthorizedApp() {
   const { theme } = useTheme();
+  const themedStyles = styles(theme);
   const navbarHeaderOptions = getHeaderStylesByTheme(theme);
+
+  const [isNotificationDropdownVisible, setIsNotifactionDropdownVisible] =
+    useState(false);
+  const openNotificationDropdown = () => {
+    setIsNotifactionDropdownVisible(true);
+    if (isNotificationDropdownVisible) {
+      return <View style={themedStyles.notificationDropdown}></View>;
+    }
+  };
 
   const usedStyles = styles(theme);
   return (
@@ -126,6 +139,20 @@ function AuthorizedApp() {
           drawerStyle: usedStyles.drawerStyle,
           drawerLabelStyle: { color: colors.white },
           unmountOnBlur: true,
+          headerRight: () => (
+            <View
+              style={{
+                marginRight: 15,
+              }}
+            >
+              <Icon
+                height="24"
+                width="24"
+                onPress={openNotificationDropdown}
+                xml={notification}
+              ></Icon>
+            </View>
+          ),
         }}
       >
         <Drawer1.Screen
@@ -137,14 +164,6 @@ function AuthorizedApp() {
           name="Profile"
           component={ProfilePage}
           options={{ ...navbarHeaderOptions, title: "Profile" }}
-        />
-        <Drawer1.Screen
-          name="EditProfile"
-          component={EditProfilePage}
-          options={{
-            ...navbarHeaderOptions,
-            title: "Edit Profile",
-          }}
         />
         <Drawer1.Screen
           name="Join"
@@ -167,17 +186,26 @@ function AuthorizedApp() {
             title: "Completed Treasures",
           }}
         />
-        {
-          <Drawer1.Screen
-            name="InGame"
-            component={InGamePage}
-            options={{
-              ...navbarHeaderOptions,
-              title: "TREASURE PAGE",
-              drawerItemStyle: { height: 0 },
-            }}
-          />
-        }
+
+        <Drawer1.Screen
+          name="InGame"
+          component={InGamePage}
+          options={{
+            ...navbarHeaderOptions,
+            title: "TREASURE PAGE",
+            drawerItemStyle: { height: 0 },
+          }}
+        />
+
+        <Drawer1.Screen
+          name="EditProfile"
+          component={EditProfilePage}
+          options={{
+            ...navbarHeaderOptions,
+            title: "EDIT PROFILE",
+            drawerItemStyle: { height: 0 },
+          }}
+        />
 
         <Drawer1.Screen
           name="LEADERBOARD"
@@ -246,5 +274,6 @@ const styles = (theme: Theme) => {
     drawerStyle: {
       backgroundColor: colors.lightRoyalBlue,
     },
+    notificationDropdown: { borderWidth: 1, width: 50, height: 200 },
   });
 };
