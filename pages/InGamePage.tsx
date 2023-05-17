@@ -421,6 +421,7 @@ const styles = (theme: Theme, hardness: string, status: statusType) => {
       marginTop: 8,
     },
     statusStyle: {
+      width: "100%",
       color:
         status === "Accepted"
           ? colors.green
