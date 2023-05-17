@@ -131,32 +131,32 @@ function AuthorizedApp() {
         <Drawer1.Screen
           name="Home"
           component={HomePage}
-          options={{ ...navbarHeaderOptions, title: "HOMEPAGE" }}
+          options={{ ...navbarHeaderOptions, title: "Home Page" }}
         />
         <Drawer1.Screen
           name="Profile"
           component={ProfilePage}
-          options={{ ...navbarHeaderOptions, title: "PROFILE" }}
+          options={{ ...navbarHeaderOptions, title: "Profile" }}
         />
         <Drawer1.Screen
           name="EditProfile"
           component={EditProfilePage}
           options={{
             ...navbarHeaderOptions,
-            title: "EDIT PROFILE",
+            title: "Edit Profile",
           }}
         />
         <Drawer1.Screen
           name="Join"
           component={JoinPage}
-          options={{ ...navbarHeaderOptions, title: "JOIN TREASURE" }}
+          options={{ ...navbarHeaderOptions, title: "Join Treasure" }}
         />
         <Drawer1.Screen
           name="MAPS"
           component={MapPageTries}
           options={{
             ...navbarHeaderOptions,
-            title: "MAP",
+            title: "Map",
           }}
         />
         <Drawer1.Screen
@@ -164,7 +164,7 @@ function AuthorizedApp() {
           component={FinishedMapsOnMap}
           options={{
             ...navbarHeaderOptions,
-            title: "COMPLETED TREASURES",
+            title: "Completed Treasures",
           }}
         />
         {
