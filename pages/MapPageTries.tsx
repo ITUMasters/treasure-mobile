@@ -9,7 +9,13 @@ import {
 import { useTheme } from "../theme";
 import { Theme } from "../theme/types";
 import { useState } from "react";
-import MapView, { Callout, Circle, Marker, Polygon } from "react-native-maps";
+import MapView, {
+  Callout,
+  Circle,
+  Marker,
+  Polygon,
+  PROVIDER_GOOGLE,
+} from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
 import { PATHS } from "../consts/paths";
 import { useLocations } from "../react-query/hooks";
@@ -49,6 +55,7 @@ export function MapPageTries() {
         </View>
       </View>
       <MapView
+        provider={PROVIDER_GOOGLE}
         style={themedStyles.map}
         initialRegion={{
           latitude: 38.6264,

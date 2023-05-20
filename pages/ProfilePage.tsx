@@ -113,14 +113,53 @@ export function ProfilePage() {
         <View
           style={{
             flexDirection: "row",
-            marginTop: 16,
-            marginLeft: 20,
-            flex: 1,
             alignItems: "center",
+            justifyContent: "center",
+            marginTop: 12,
           }}
         >
-          <View>
-            <View style={{ width: 112 }}>
+          <Switch
+            style={{ marginLeft: 5 }}
+            onValueChange={toggleTheme}
+            value={currentTheme === "dark"}
+            trackColor={{ false: "#767577", true: colors.blue }}
+            thumbColor={colors.white}
+          ></Switch>
+          <Text
+            style={{
+              color: theme.text.default.color,
+              fontFamily: FONTS.PoppinsMedium,
+            }}
+          >
+            Dark Mode
+          </Text>
+          <Switch
+            style={{ marginLeft: 5 }}
+            onValueChange={togglePagination}
+            value={pagination}
+            trackColor={{ false: "#767577", true: colors.blue }}
+            thumbColor={colors.white}
+          ></Switch>
+          <Text
+            style={{
+              color: theme.text.default.color,
+              fontFamily: FONTS.PoppinsMedium,
+            }}
+          >
+            Pagination
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: 12,
+            marginLeft: 20,
+            flex: 1,
+            alignSelf: "center",
+          }}
+        >
+          <View style={{ width: "35%" }}>
+            <View style={{ width: "100%" }}>
               <Button
                 size="small"
                 bending="high"
@@ -132,47 +171,9 @@ export function ProfilePage() {
               </Button>
             </View>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Switch
-              style={{ marginLeft: 5 }}
-              onValueChange={toggleTheme}
-              value={currentTheme === "dark"}
-              trackColor={{ false: "#767577", true: colors.blue }}
-              thumbColor={colors.white}
-            ></Switch>
-            <Text
-              style={{
-                color: theme.text.default.color,
-                fontFamily: FONTS.PoppinsMedium,
-              }}
-            >
-              Dark Mode
-            </Text>
-            <Switch
-              style={{ marginLeft: 5 }}
-              onValueChange={togglePagination}
-              value={pagination}
-              trackColor={{ false: "#767577", true: colors.blue }}
-              thumbColor={colors.white}
-            ></Switch>
-            <Text
-              style={{
-                color: theme.text.default.color,
-                fontFamily: FONTS.PoppinsMedium,
-              }}
-            >
-              Pagination
-            </Text>
-          </View>
         </View>
-
         {/*
+
         <View style={themedStyles.addFriend}>
           <View style={themedStyles.addFriendInput}>
             <Input size="medium" title="Friend Name" />
