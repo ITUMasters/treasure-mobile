@@ -15,7 +15,7 @@ export function ShareTreasure({ route }: any) {
 
   function generateURL(treasureId: number, interactionId: number) {
     return (
-      "exp://192.168.137.78:19000/--/game/" +
+      "treasure://game/" +
       treasureId.toString() +
       "/" +
       interactionId.toString()
