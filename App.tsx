@@ -139,7 +139,7 @@ function AuthorizedApp() {
           drawerStyle: usedStyles.drawerStyle,
           drawerLabelStyle: { color: colors.white },
           unmountOnBlur: true,
-          headerRight: () => (
+          /*headerRight: () => (
             <View
               style={{
                 marginRight: 15,
@@ -153,6 +153,7 @@ function AuthorizedApp() {
               ></Icon>
             </View>
           ),
+          */
         }}
       >
         <Drawer1.Screen

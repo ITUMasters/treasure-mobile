@@ -114,7 +114,8 @@ const styles = (theme: Theme) => {
       height: 28,
     },
     goBackIcon: {
-      marginLeft: 15,
+      marginTop: -6,
+      marginLeft: 6,
     },
   });
 };

@@ -172,6 +172,7 @@ export function ProfilePage() {
             </View>
           </View>
         </View>
+        {/*
 
         <View style={themedStyles.addFriend}>
           <View style={themedStyles.addFriendInput}>
@@ -195,6 +196,7 @@ export function ProfilePage() {
             </View>
           </View>
         </View>
+        */}
       </ScrollView>
       <NavBar pageNo="0" />
     </SafeAreaView>
