@@ -94,7 +94,7 @@ export function TreasureCard({
                 fontWeight: "500",
               }}
             >
-              Weekly Challange
+              Weekly Challenge
             </Text>
           )}
           <Text
