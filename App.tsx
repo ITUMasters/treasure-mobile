@@ -139,20 +139,6 @@ function AuthorizedApp() {
           drawerStyle: usedStyles.drawerStyle,
           drawerLabelStyle: { color: colors.white },
           unmountOnBlur: true,
-          headerRight: () => (
-            <View
-              style={{
-                marginRight: 15,
-              }}
-            >
-              <Icon
-                height="24"
-                width="24"
-                onPress={openNotificationDropdown}
-                xml={notification}
-              ></Icon>
-            </View>
-          ),
         }}
       >
         <Drawer1.Screen

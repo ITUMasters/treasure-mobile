@@ -172,29 +172,6 @@ export function ProfilePage() {
             </View>
           </View>
         </View>
-
-        <View style={themedStyles.addFriend}>
-          <View style={themedStyles.addFriendInput}>
-            <Input size="medium" title="Friend Name" />
-          </View>
-          <View style={themedStyles.addFriendButton}>
-            <Button size="medium" iconAtTheRight={addFriend}>
-              Add Friend
-            </Button>
-          </View>
-        </View>
-        <View style={themedStyles.friendsWrapper}>
-          <View style={themedStyles.achievementsWrapper}>
-            <View style={themedStyles.achivementsHead}>
-              <Text style={themedStyles.achievementText}>Friends</Text>
-            </View>
-            <View style={themedStyles.achievementsBody}>
-              <FriendCard name="Punisher"></FriendCard>
-              <FriendCard name="Warchere"></FriendCard>
-              <FriendCard name="MkaanTheKing"></FriendCard>
-            </View>
-          </View>
-        </View>
       </ScrollView>
       <NavBar pageNo="0" />
     </SafeAreaView>

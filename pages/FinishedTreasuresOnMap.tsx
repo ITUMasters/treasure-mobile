@@ -117,7 +117,7 @@ const styles = (theme: Theme) => {
     goBackBar: {
       backgroundColor: colors.lightRoyalBlue,
       width: "100%",
-      height: 28,
+      height: 36,
     },
     goBackIcon: {
       marginLeft: 15,

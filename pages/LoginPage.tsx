@@ -157,25 +157,7 @@ export function LoginPage() {
             Sign in
           </Button>
         </View>
-        <View
-          style={{
-            width: "100%",
-            alignItems: "center",
-            paddingLeft: "20%",
-            paddingRight: "20%",
-          }}
-        >
-          <View style={{ marginBottom: "1.2%" }}>
-            <Text style={{ fontSize: 14, color: defaulTextColor }}>
-              Or sign in with
-            </Text>
-          </View>
-          <View style={{ marginTop: "1.5%", width: "100%" }}>
-            <Button size="large" xml={google}>
-              Google
-            </Button>
-          </View>
-        </View>
+
         <View style={{ width: "100%", alignItems: "center" }}>
           <View
             style={{

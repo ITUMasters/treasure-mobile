@@ -358,27 +358,29 @@ export function InGamePage({ route }: any) {
             </View>
           </View>
           <Text style={themedStyles.hint}>Hints</Text>
-          {unlockedHints.map((e, index) => (
-            <HintCard
-              key={index}
-              cost={e.cost.toString()}
-              hintNumber={(index + 1).toString()}
-              hintText={e.content as string}
-              isLocked={false}
-            />
-          ))}
-          {lockedHints.map((e, index) => (
-            <>
+          <View style={{ marginBottom: 20 }}>
+            {unlockedHints.map((e, index) => (
               <HintCard
                 key={index}
                 cost={e.cost.toString()}
                 hintNumber={(index + 1).toString()}
                 hintText={e.content as string}
-                isLocked={true}
-                purchase={() => purchaseHint(e.id)}
-              ></HintCard>
-            </>
-          ))}
+                isLocked={false}
+              />
+            ))}
+            {lockedHints.map((e, index) => (
+              <>
+                <HintCard
+                  key={index}
+                  cost={e.cost.toString()}
+                  hintNumber={(index + 1).toString()}
+                  hintText={e.content as string}
+                  isLocked={true}
+                  purchase={() => purchaseHint(e.id)}
+                ></HintCard>
+              </>
+            ))}
+          </View>
         </View>
       </ScrollView>
       <NavBar pageNo="3" />
